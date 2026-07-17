@@ -40,6 +40,15 @@ export class Audio {
     if (this.onVisible) document.removeEventListener('visibilitychange', this.onVisible);
   }
 
+  /** True when the browser has no Mandarin voice at all — nothing to hear, ever. */
+  hasChineseVoice(): boolean {
+    if (typeof speechSynthesis === 'undefined') return false;
+    const vs = speechSynthesis.getVoices() || [];
+    // An empty list usually means the voices simply haven't loaded yet, so don't
+    // accuse the browser of missing Chinese until it has told us what it has.
+    return !vs.length || vs.some((v) => /^zh/i.test(v.lang));
+  }
+
   private pickVoice(): SpeechSynthesisVoice | null {
     if (this.voice) return this.voice;
     if (typeof speechSynthesis === 'undefined') return null;

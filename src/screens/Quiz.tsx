@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Bar } from '../components/Bar';
 import { SongPlayer, type SongPlayerHandle } from '../components/SongPlayer';
 import { isChoiceQ, isTileQ, isTypeQ } from '../engine/types';
@@ -28,6 +28,16 @@ export function Quiz() {
   const engine = useEngine();
   const st = useGameState();
   const playerRef = useRef<SongPlayerHandle | null>(null);
+  const [voiceOk, setVoiceOk] = useState(true);
+
+  // The voice list is empty until the browser fills it in, so ask again on its event.
+  useEffect(() => {
+    const check = () => setVoiceOk(engine.audio.hasChineseVoice());
+    check();
+    if (typeof speechSynthesis === 'undefined') return;
+    speechSynthesis.addEventListener('voiceschanged', check);
+    return () => speechSynthesis.removeEventListener('voiceschanged', check);
+  }, [engine]);
 
   // The engine drives playback (seek to this line, stop at its end) but must not
   // know about YouTube, so it gets plain functions to call.
@@ -114,14 +124,29 @@ export function Quiz() {
             🔥 ×{st.combo}
           </span>
         )}
+        {/* Muting is sticky and easy to hit by accident — a 🔊 here looked exactly like
+            the "listen again" 🔊 on the card. When off, say so in words. */}
         <button
           onClick={engine.toggleMute}
-          title="Bật/tắt âm thanh"
-          aria-label="Bật/tắt âm thanh"
+          title={st.muted ? 'Đang TẮT tiếng — bấm để bật lại' : 'Tắt tiếng'}
+          aria-label={st.muted ? 'Đang tắt tiếng — bấm để bật lại' : 'Tắt tiếng'}
           aria-pressed={st.muted}
-          style={{ ...iconBtn, fontSize: 15 }}
+          style={{
+            ...iconBtn,
+            width: 'auto',
+            padding: '0 12px',
+            fontSize: 13,
+            fontWeight: 800,
+            gap: 6,
+            display: 'flex',
+            alignItems: 'center',
+            whiteSpace: 'nowrap',
+            background: st.muted ? C.red : C.card,
+            color: st.muted ? '#fff' : C.muted,
+            borderColor: C.ink,
+          }}
         >
-          {st.muted ? '🔇' : '🔊'}
+          {st.muted ? '🔇 Đang tắt tiếng' : '🔈'}
         </button>
         <span
           style={{
@@ -137,6 +162,29 @@ export function Quiz() {
           +{st.sessionXp} XP
         </span>
       </div>
+
+      {/* Silence with no explanation reads as a broken app; say which of the two it is. */}
+      {(st.muted || !voiceOk) && (
+        <div
+          role="status"
+          style={{
+            marginTop: 12,
+            background: C.soft,
+            border: `2px dashed ${C.red}`,
+            borderRadius: 14,
+            padding: '8px 16px',
+            fontSize: 13,
+            fontWeight: 700,
+            color: C.badInk,
+            textAlign: 'center',
+            maxWidth: 800,
+          }}
+        >
+          {st.muted
+            ? '🔇 Âm thanh đang tắt — bấm nút đỏ ở trên để bật lại'
+            : '🔇 Trình duyệt này không có giọng tiếng Trung. Dùng Chrome/Edge, hoặc cài giọng zh-CN trong Cài đặt hệ thống → Nội dung đọc.'}
+        </div>
+      )}
 
       <div style={{ marginTop: 20, animation: 'pop .3s ease' }}>
         <span
