@@ -131,6 +131,7 @@ export class GameEngine {
   dispose(): void {
     this.clearTimers();
     this.audio.hush();
+    this.audio.destroy();
   }
 
   setSettings(patch: Partial<Settings>): void {

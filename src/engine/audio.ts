@@ -10,7 +10,9 @@ export class Audio {
   /** Only the newest utterance is allowed to speak; older ones are dropped. */
   private seq = 0;
   private timer: ReturnType<typeof setTimeout> | undefined;
+  private watchdog: ReturnType<typeof setTimeout> | undefined;
   private ctx: AudioContext | null = null;
+  private onVisible: (() => void) | undefined;
 
   constructor() {
     if (typeof speechSynthesis === 'undefined') return;
@@ -18,6 +20,24 @@ export class Audio {
     speechSynthesis.onvoiceschanged = () => {
       this.voice = null;
     };
+    // Coming back to a hidden tab is the usual way Chrome's queue ends up stuck
+    // paused; nudging it here means the next word speaks instead of vanishing.
+    this.onVisible = () => {
+      if (document.hidden) return;
+      try {
+        speechSynthesis.resume();
+      } catch {
+        /* ignore */
+      }
+    };
+    document.addEventListener('visibilitychange', this.onVisible);
+  }
+
+  /** Detaches listeners — pair with `GameEngine.dispose`. */
+  destroy(): void {
+    clearTimeout(this.timer);
+    clearTimeout(this.watchdog);
+    if (this.onVisible) document.removeEventListener('visibilitychange', this.onVisible);
   }
 
   private pickVoice(): SpeechSynthesisVoice | null {
@@ -38,23 +58,59 @@ export class Audio {
     const seq = this.seq;
     try {
       clearTimeout(this.timer);
+      clearTimeout(this.watchdog);
       speechSynthesis.cancel();
       // A short delay lets the cancel settle; Chrome drops utterances queued too soon after.
       this.timer = setTimeout(() => {
         if (seq !== this.seq) return;
-        try {
-          speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(text);
-          const v = this.pickVoice();
-          if (v) u.voice = v;
-          u.lang = 'zh-CN';
-          u.rate = this.rate;
-          u.pitch = 1;
-          speechSynthesis.speak(u);
-        } catch {
-          /* ignore */
-        }
+        this.utter(text, seq, true);
       }, 200);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  /**
+   * Hands one utterance to the synth and watches that it actually starts.
+   *
+   * Chrome drops utterances on the floor in two known ways: the queue can be left
+   * `paused` (typically after the tab was hidden mid-speech), swallowing everything
+   * queued after it; and a `speak()` issued too close to a `cancel()` can vanish
+   * without firing any event. `resume()` covers the first. The watchdog covers the
+   * second — if nothing is speaking or pending shortly after, the utterance was lost,
+   * so try once more. Without this the app just goes quiet until a reload.
+   */
+  private utter(text: string, seq: number, mayRetry: boolean): void {
+    try {
+      // Harmless when not paused, and the only way back when it is.
+      speechSynthesis.resume();
+
+      const u = new SpeechSynthesisUtterance(text);
+      const v = this.pickVoice();
+      if (v) u.voice = v;
+      u.lang = 'zh-CN';
+      u.rate = this.rate;
+      u.pitch = 1;
+
+      let started = false;
+      u.onstart = () => (started = true);
+      // "interrupted"/"canceled" are our own cancel() — expected, not a failure.
+      u.onerror = (e) => {
+        if (mayRetry && seq === this.seq && e.error !== 'interrupted' && e.error !== 'canceled') {
+          this.utter(text, seq, false);
+        }
+      };
+
+      speechSynthesis.speak(u);
+
+      this.watchdog = setTimeout(() => {
+        if (!mayRetry || seq !== this.seq || started) return;
+        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+          // Silently swallowed — one retry, and never loop on it.
+          speechSynthesis.cancel();
+          this.utter(text, seq, false);
+        }
+      }, 400);
     } catch {
       /* ignore */
     }
@@ -64,7 +120,11 @@ export class Audio {
   hush(): void {
     this.seq += 1;
     clearTimeout(this.timer);
+    clearTimeout(this.watchdog);
     try {
+      // cancel() on a paused queue leaves it paused, and the next speak() would be
+      // swallowed — resume first so the synth is left in a usable state.
+      speechSynthesis.resume();
       speechSynthesis.cancel();
     } catch {
       /* ignore */
