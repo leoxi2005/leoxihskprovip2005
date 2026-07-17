@@ -1,0 +1,4765 @@
+{
+ "vocab": [
+  {
+   "h": "短信",
+   "p": "duǎnxìn",
+   "pos": "Danh từ",
+   "m": "tin nhắn",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "高级",
+   "p": "gāojí",
+   "pos": "Tính từ",
+   "m": "cao cấp, hảo hạng",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "计算机",
+   "p": "jìsuànjī",
+   "pos": "Danh từ",
+   "m": "máy vi tính",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "科学",
+   "p": "kēxué",
+   "pos": "Danh từ",
+   "m": "khoa học",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "技术",
+   "p": "jìshù",
+   "pos": "Danh từ",
+   "m": "công nghệ, kỹ thuật",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "力气",
+   "p": "lìqi",
+   "pos": "Danh từ",
+   "m": "sức lực, hơi sức",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "密码",
+   "p": "mìmǎ",
+   "pos": "Danh từ",
+   "m": "mật mã, mật khẩu",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "世纪",
+   "p": "shìjì",
+   "pos": "Danh từ",
+   "m": "thế kỷ",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "数字",
+   "p": "shùzì",
+   "pos": "Danh từ",
+   "m": "con số",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "网站",
+   "p": "wǎngzhàn",
+   "pos": "Danh từ",
+   "m": "trang web, website",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "材料",
+   "p": "cáiliào",
+   "pos": "Danh từ",
+   "m": "tài liệu, tư liệu",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "各",
+   "p": "gè",
+   "pos": "Đại từ",
+   "m": "các, mọi",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "降低",
+   "p": "jiàngdī",
+   "pos": "Động từ",
+   "m": "giảm, hạ",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "教授",
+   "p": "jiàoshòu",
+   "pos": "Danh từ",
+   "m": "giáo sư",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "研究",
+   "p": "yánjiū",
+   "pos": "Động từ",
+   "m": "nghiên cứu, tìm hiểu",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "社会",
+   "p": "shèhuì",
+   "pos": "Danh từ",
+   "m": "xã hội",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "专门",
+   "p": "zhuānmén",
+   "pos": "Phó từ",
+   "m": "đặc biệt, riêng biệt",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "讨论",
+   "p": "tǎolùn",
+   "pos": "Động từ",
+   "m": "bàn bạc, thảo luận",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "互联网",
+   "p": "hùliánwǎng",
+   "pos": "Danh từ",
+   "m": "mạng internet",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "受不了",
+   "p": "shòubuliǎo",
+   "pos": "Động từ",
+   "m": "không chịu nổi",
+   "t": "Chủ đề 22"
+  },
+  {
+   "h": "擦",
+   "p": "cā",
+   "pos": "Động từ",
+   "m": "lau, chùi, cọ",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "餐厅",
+   "p": "cāntīng",
+   "pos": "Danh từ",
+   "m": "phòng ăn, nhà ăn, hiệu ăn",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "客厅",
+   "p": "kètīng",
+   "pos": "Danh từ",
+   "m": "phòng khách",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "厕所",
+   "p": "cèsuǒ",
+   "pos": "Danh từ",
+   "m": "nhà vệ sinh",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "吵",
+   "p": "chǎo",
+   "pos": "Tính từ/Động từ",
+   "m": "ồn ào; tranh cãi, cãi lộn",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "破",
+   "p": "pò",
+   "pos": "Tính từ",
+   "m": "vỡ, rách",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "窗户",
+   "p": "chuānghu",
+   "pos": "Danh từ",
+   "m": "cửa sổ",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "存",
+   "p": "cún",
+   "pos": "Động từ",
+   "m": "để dành, gửi tiền, tiết kiệm",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "租",
+   "p": "zū",
+   "pos": "Động từ",
+   "m": "thuê",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "地址",
+   "p": "dìzhǐ",
+   "pos": "Danh từ",
+   "m": "địa chỉ",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "对面",
+   "p": "duìmiàn",
+   "pos": "Danh từ",
+   "m": "đối diện; trước mặt",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "房东",
+   "p": "fángdōng",
+   "pos": "Danh từ",
+   "m": "chủ cho thuê nhà; chủ nhà",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "费用",
+   "p": "fèiyòng",
+   "pos": "Danh từ",
+   "m": "phí tổn; chi phí; chi tiêu",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "郊区",
+   "p": "jiāoqū",
+   "pos": "Danh từ",
+   "m": "vùng ngoại thành, ngoại ô",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "抬",
+   "p": "tái",
+   "pos": "Động từ",
+   "m": "bế; giơ lên; đưa lên; ngẩng",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "修理",
+   "p": "xiūlǐ",
+   "pos": "Động từ",
+   "m": "sửa chữa; tu sửa",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "轻",
+   "p": "qīng",
+   "pos": "Tính từ",
+   "m": "nhẹ",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "重",
+   "p": "zhòng",
+   "pos": "Tính từ",
+   "m": "nặng",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "转",
+   "p": "zhuǎn",
+   "pos": "Động từ",
+   "m": "quay; xoay, rẽ",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "钥匙",
+   "p": "yàoshi",
+   "pos": "Danh từ",
+   "m": "chìa khóa",
+   "t": "Chủ đề 21"
+  },
+  {
+   "h": "笨",
+   "p": "bèn",
+   "pos": "Tính từ",
+   "m": "ngốc, ngốc nghếch",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "得意",
+   "p": "déyì",
+   "pos": "Tính từ",
+   "m": "đắc ý, hài lòng",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "反对",
+   "p": "fǎnduì",
+   "pos": "Động từ",
+   "m": "phản đối, không tán thành",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "放弃",
+   "p": "fàngqì",
+   "pos": "Động từ",
+   "m": "buông bỏ; từ bỏ",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "过程",
+   "p": "guòchéng",
+   "pos": "Danh từ",
+   "m": "quá trình",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "汗",
+   "p": "hàn",
+   "pos": "Danh từ",
+   "m": "mồ hôi",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "坚持",
+   "p": "jiānchí",
+   "pos": "Động từ",
+   "m": "kiên trì, cố gắng",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "结果",
+   "p": "jiéguǒ",
+   "pos": "Danh từ/Liên từ",
+   "m": "kết quả",
+   "t": "Chủ đề 23",
+   "ex": "考试结果出来了。",
+   "exVi": "Kết quả thi đã ra rồi."
+  },
+  {
+   "h": "经历",
+   "p": "jīnglì",
+   "pos": "Danh từ/Động từ",
+   "m": "trải nghiệm; từng trải, trải qua",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "判断",
+   "p": "pànduàn",
+   "pos": "Động từ/Danh từ",
+   "m": "phán đoán, nhận xét",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "区别",
+   "p": "qūbié",
+   "pos": "Danh từ",
+   "m": "khác biệt; sự khác biệt",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "失败",
+   "p": "shībài",
+   "pos": "Danh từ/Động từ",
+   "m": "thất bại, bị đánh bại",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "赢",
+   "p": "yíng",
+   "pos": "Động từ",
+   "m": "thắng",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "勇敢",
+   "p": "yǒnggǎn",
+   "pos": "Tính từ",
+   "m": "dũng cảm",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "暂时",
+   "p": "zànshí",
+   "pos": "Tính từ",
+   "m": "tạm thời",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "至少",
+   "p": "zhìshǎo",
+   "pos": "Phó từ",
+   "m": "chí ít, ít nhất, ít ra",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "准确",
+   "p": "zhǔnquè",
+   "pos": "Tính từ",
+   "m": "chuẩn xác, đúng đắn",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "总结",
+   "p": "zǒngjié",
+   "pos": "Động từ",
+   "m": "tóm tắt, tổng kết",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "经过",
+   "p": "jīngguò",
+   "pos": "Động từ/Danh từ",
+   "m": "kinh qua, trải qua, đi qua; quá trình",
+   "t": "Chủ đề 23"
+  },
+  {
+   "h": "挂",
+   "p": "guà",
+   "pos": "Động từ",
+   "m": "treo, móc",
+   "t": "Bài 1"
+  },
+  {
+   "h": "空",
+   "p": "kōng",
+   "pos": "Tính từ",
+   "m": "trống; không; trống rỗng",
+   "t": "Bài 1"
+  },
+  {
+   "h": "竞争",
+   "p": "jìngzhēng",
+   "pos": "Động từ",
+   "m": "cạnh tranh",
+   "t": "Bài 1"
+  },
+  {
+   "h": "内容",
+   "p": "nèiróng",
+   "pos": "Danh từ",
+   "m": "nội dung",
+   "t": "Bài 1"
+  },
+  {
+   "h": "厚",
+   "p": "hòu",
+   "pos": "Tính từ / Danh từ",
+   "m": "dày; độ dày",
+   "t": "Bài 1"
+  },
+  {
+   "h": "老虎",
+   "p": "lǎohǔ",
+   "pos": "Danh từ",
+   "m": "con hổ",
+   "t": "Bài 1"
+  },
+  {
+   "h": "儿童",
+   "p": "értóng",
+   "pos": "Danh từ",
+   "m": "nhi đồng; thiếu nhi; trẻ em",
+   "t": "Bài 1"
+  },
+  {
+   "h": "毛",
+   "p": "máo",
+   "pos": "Danh từ / Lượng từ",
+   "m": "lông; tóc; hào (1 hào = 1/10 tệ)",
+   "t": "Bài 1"
+  },
+  {
+   "h": "掉",
+   "p": "diào",
+   "pos": "Động từ",
+   "m": "rơi; rớt",
+   "t": "Bài 1"
+  },
+  {
+   "h": "提",
+   "p": "tí",
+   "pos": "Động từ",
+   "m": "xách; nhấc; cầm; đề ra; đưa ra; nêu ra",
+   "t": "Bài 1"
+  },
+  {
+   "h": "好像",
+   "p": "hǎoxiàng",
+   "pos": "Phó từ",
+   "m": "dường như; giống như",
+   "t": "Bài 1"
+  },
+  {
+   "h": "丢",
+   "p": "diū",
+   "pos": "Động từ",
+   "m": "mất, đánh rơi",
+   "t": "Bài 1"
+  },
+  {
+   "h": "举办",
+   "p": "jǔbàn",
+   "pos": "Động từ",
+   "m": "tổ chức; cử hành; tiến hành",
+   "t": "Bài 1"
+  },
+  {
+   "h": "邀请",
+   "p": "yāoqǐng",
+   "pos": "Động từ",
+   "m": "mời",
+   "t": "Bài 1"
+  },
+  {
+   "h": "篇",
+   "p": "piān",
+   "pos": "Lượng từ",
+   "m": "trang; tờ; bài; phần (dùng cho bài viết, trang giấy, trang sách)",
+   "t": "Bài 1"
+  },
+  {
+   "h": "取",
+   "p": "qǔ",
+   "pos": "Động từ",
+   "m": "lấy; rút; lĩnh",
+   "t": "Bài 1"
+  },
+  {
+   "h": "理发",
+   "p": "lǐfà",
+   "pos": "Động từ",
+   "m": "cắt tóc",
+   "t": "Bài 1"
+  },
+  {
+   "h": "干杯",
+   "p": "gānbēi",
+   "pos": "Động từ",
+   "m": "cạn ly",
+   "t": "Bài 1"
+  },
+  {
+   "h": "许多",
+   "p": "xǔduō",
+   "pos": "Số từ",
+   "m": "nhiều; rất nhiều",
+   "t": "Bài 1"
+  },
+  {
+   "h": "抱",
+   "p": "bào",
+   "pos": "Động từ",
+   "m": "bế, bồng, ẵm, ôm",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "抱歉",
+   "p": "bàoqiàn",
+   "pos": "Tính từ",
+   "m": "xin lỗi",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "吃惊",
+   "p": "chījīng",
+   "pos": "Động từ li hợp",
+   "m": "giật mình, kinh ngạc, sửng sốt",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "父亲",
+   "p": "fùqīn",
+   "pos": "Danh từ",
+   "m": "bố, cha, ba",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "将来",
+   "p": "jiānglái",
+   "pos": "Danh từ",
+   "m": "tương lai, sau này, mai sau",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "骄傲",
+   "p": "jiāo'ào",
+   "pos": "Tính từ",
+   "m": "tự hào, kiêu hãnh, kiêu ngạo",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "教育",
+   "p": "jiàoyù",
+   "pos": "Động từ / Danh từ",
+   "m": "dạy dỗ, giáo dục",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "接受",
+   "p": "jiēshòu",
+   "pos": "Động từ",
+   "m": "tiếp thu, tiếp nhận, chấp nhận",
+   "t": "Bài 4–5",
+   "ex": "他接受了这个工作。",
+   "exVi": "Anh ấy đã chấp nhận công việc này."
+  },
+  {
+   "h": "开心",
+   "p": "kāixīn",
+   "pos": "Tính từ",
+   "m": "vui vẻ, hạnh phúc, vui sướng",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "可怜",
+   "p": "kělián",
+   "pos": "Tính từ",
+   "m": "đáng thương, thảm thương",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "礼貌",
+   "p": "lǐmào",
+   "pos": "Danh từ",
+   "m": "lễ phép, lễ độ, lịch sự, phép tắc",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "律师",
+   "p": "lǜshī",
+   "pos": "Danh từ",
+   "m": "luật sư",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "母亲",
+   "p": "mǔqīn",
+   "pos": "Danh từ",
+   "m": "mẹ, má",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "脾气",
+   "p": "píqi",
+   "pos": "Danh từ",
+   "m": "tính tình, tính cách, tính khí",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "普遍",
+   "p": "pǔbiàn",
+   "pos": "Tính từ",
+   "m": "phổ biến, rộng rãi",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "敲",
+   "p": "qiāo",
+   "pos": "Động từ",
+   "m": "gõ",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "亲戚",
+   "p": "qīnqi",
+   "pos": "Danh từ",
+   "m": "họ hàng, thân thích",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "失望",
+   "p": "shīwàng",
+   "pos": "Động từ / Tính từ",
+   "m": "thất vọng",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "安全",
+   "p": "ānquán",
+   "pos": "Danh từ / Tính từ",
+   "m": "sự an toàn, an toàn",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "标准",
+   "p": "biāozhǔn",
+   "pos": "Danh từ / Tính từ",
+   "m": "tiêu chuẩn, mẫu mực, chuẩn mực",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "打折",
+   "p": "dǎzhé",
+   "pos": "Động từ li hợp",
+   "m": "giảm giá, chiết khấu",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "付款",
+   "p": "fùkuǎn",
+   "pos": "Động từ",
+   "m": "trả tiền, thanh toán",
+   "t": "Bài 4–5",
+   "ex": "请在这里付款。",
+   "exVi": "Vui lòng thanh toán ở đây."
+  },
+  {
+   "h": "购物",
+   "p": "gòuwù",
+   "pos": "Động từ li hợp",
+   "m": "mua sắm",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "顾客",
+   "p": "gùkè",
+   "pos": "Danh từ",
+   "m": "khách hàng",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "广告",
+   "p": "guǎnggào",
+   "pos": "Danh từ",
+   "m": "quảng cáo",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "寄",
+   "p": "jì",
+   "pos": "Động từ",
+   "m": "gửi",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "家具",
+   "p": "jiājù",
+   "pos": "Danh từ",
+   "m": "nội thất, đồ gia dụng",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "价格",
+   "p": "jiàgé",
+   "pos": "Danh từ",
+   "m": "giá cả",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "假",
+   "p": "jiǎ",
+   "pos": "Tính từ",
+   "m": "giả, không thật",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "考虑",
+   "p": "kǎolǜ",
+   "pos": "Động từ",
+   "m": "suy xét, cân nhắc",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "肯定",
+   "p": "kěndìng",
+   "pos": "Phó từ",
+   "m": "chắc chắn",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "浪费",
+   "p": "làngfèi",
+   "pos": "Động từ",
+   "m": "lãng phí",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "零钱",
+   "p": "língqián",
+   "pos": "Danh từ",
+   "m": "tiền lẻ",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "流行",
+   "p": "liúxíng",
+   "pos": "Tính từ",
+   "m": "thịnh hành, phổ biến",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "毛巾",
+   "p": "máojīn",
+   "pos": "Danh từ",
+   "m": "khăn, khăn mặt",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "年龄",
+   "p": "niánlíng",
+   "pos": "Danh từ",
+   "m": "tuổi tác, độ tuổi",
+   "t": "Bài 4–5"
+  },
+  {
+   "h": "参观",
+   "p": "cānguān",
+   "pos": "Động từ",
+   "m": "tham quan",
+   "t": "Bài 6"
+  },
+  {
+   "h": "长城",
+   "p": "chángchéng",
+   "pos": "Danh từ",
+   "m": "Trường Thành, Vạn Lý Trường Thành",
+   "t": "Bài 6"
+  },
+  {
+   "h": "长江",
+   "p": "chángjiāng",
+   "pos": "Danh từ",
+   "m": "sông Trường Giang",
+   "t": "Bài 6"
+  },
+  {
+   "h": "出发",
+   "p": "chūfā",
+   "pos": "Động từ",
+   "m": "xuất phát, rời đi",
+   "t": "Bài 6"
+  },
+  {
+   "h": "导游",
+   "p": "dǎoyóu",
+   "pos": "Danh từ",
+   "m": "hướng dẫn viên",
+   "t": "Bài 6",
+   "ex": "导游给我们介绍这个地方。",
+   "exVi": "Hướng dẫn viên giới thiệu cho chúng tôi nơi này."
+  },
+  {
+   "h": "景色",
+   "p": "jǐngsè",
+   "pos": "Danh từ",
+   "m": "phong cảnh, cảnh vật",
+   "t": "Bài 6",
+   "ex": "这里的景色非常美丽。",
+   "exVi": "Phong cảnh ở đây rất đẹp."
+  },
+  {
+   "h": "大使馆",
+   "p": "dàshǐguǎn",
+   "pos": "Danh từ",
+   "m": "Đại sứ quán",
+   "t": "Bài 6"
+  },
+  {
+   "h": "逛",
+   "p": "guàng",
+   "pos": "Động từ",
+   "m": "đi dạo, dạo chơi",
+   "t": "Bài 6",
+   "ex": "我们去公园逛逛吧。",
+   "exVi": "Chúng ta đi dạo công viên đi."
+  },
+  {
+   "h": "友好",
+   "p": "yǒuhǎo",
+   "pos": "Tính từ",
+   "m": "thân thiện, hữu hảo",
+   "t": "Bài 6"
+  },
+  {
+   "h": "小吃",
+   "p": "xiǎochī",
+   "pos": "Danh từ",
+   "m": "đồ ăn vặt",
+   "t": "Bài 6"
+  },
+  {
+   "h": "暖和",
+   "p": "nuǎnhuo",
+   "pos": "Tính từ",
+   "m": "ấm áp",
+   "t": "Bài 6"
+  },
+  {
+   "h": "气候",
+   "p": "qìhòu",
+   "pos": "Danh từ",
+   "m": "khí hậu",
+   "t": "Bài 6"
+  },
+  {
+   "h": "寒假",
+   "p": "hánjià",
+   "pos": "Danh từ",
+   "m": "kỳ nghỉ đông",
+   "t": "Bài 6"
+  },
+  {
+   "h": "旅行",
+   "p": "lǚxíng",
+   "pos": "Động từ",
+   "m": "du lịch",
+   "t": "Bài 6"
+  },
+  {
+   "h": "凉快",
+   "p": "liángkuai",
+   "pos": "Tính từ",
+   "m": "mát mẻ",
+   "t": "Bài 6"
+  },
+  {
+   "h": "放暑假",
+   "p": "fàngshǔjià",
+   "pos": "Cụm từ",
+   "m": "kỳ nghỉ hè",
+   "t": "Bài 6"
+  },
+  {
+   "h": "活动",
+   "p": "huódòng",
+   "pos": "Danh từ / Động từ",
+   "m": "hoạt động, sự kiện; vận động",
+   "t": "Bài 6"
+  },
+  {
+   "h": "举行",
+   "p": "jǔxíng",
+   "pos": "Động từ",
+   "m": "tiến hành, tổ chức",
+   "t": "Bài 6"
+  },
+  {
+   "h": "云",
+   "p": "yún",
+   "pos": "Danh từ",
+   "m": "mây",
+   "t": "Bài 6"
+  },
+  {
+   "h": "成为",
+   "p": "chéngwéi",
+   "pos": "Động từ",
+   "m": "trở thành",
+   "t": "Bài 7"
+  },
+  {
+   "h": "发生",
+   "p": "fāshēng",
+   "pos": "Động từ",
+   "m": "xảy ra",
+   "t": "Bài 7"
+  },
+  {
+   "h": "放松",
+   "p": "fàngsōng",
+   "pos": "Động từ",
+   "m": "thả lỏng, thư giãn",
+   "t": "Bài 7",
+   "ex": "周末我喜欢放松一下。",
+   "exVi": "Cuối tuần tôi thích thư giãn một chút."
+  },
+  {
+   "h": "复杂",
+   "p": "fùzá",
+   "pos": "Tính từ",
+   "m": "phức tạp",
+   "t": "Bài 7"
+  },
+  {
+   "h": "故意",
+   "p": "gùyì",
+   "pos": "Phó từ",
+   "m": "cố ý, cố tình",
+   "t": "Bài 7"
+  },
+  {
+   "h": "后悔",
+   "p": "hòuhuǐ",
+   "pos": "Động từ",
+   "m": "hối hận, ân hận, hối tiếc",
+   "t": "Bài 7"
+  },
+  {
+   "h": "积极",
+   "p": "jījí",
+   "pos": "Tính từ",
+   "m": "tích cực, hăng hái",
+   "t": "Bài 7"
+  },
+  {
+   "h": "镜子",
+   "p": "jìngzi",
+   "pos": "Danh từ",
+   "m": "gương",
+   "t": "Bài 7"
+  },
+  {
+   "h": "轻松",
+   "p": "qīngsōng",
+   "pos": "Tính từ",
+   "m": "nhẹ nhàng, dễ dàng",
+   "t": "Bài 7"
+  },
+  {
+   "h": "伤心",
+   "p": "shāngxīn",
+   "pos": "Tính từ",
+   "m": "đau lòng",
+   "t": "Bài 7"
+  },
+  {
+   "h": "商量",
+   "p": "shāngliang",
+   "pos": "Động từ",
+   "m": "thương lượng, bàn bạc, trao đổi",
+   "t": "Bài 7"
+  },
+  {
+   "h": "生活",
+   "p": "shēnghuó",
+   "pos": "Danh từ",
+   "m": "cuộc sống",
+   "t": "Bài 7"
+  },
+  {
+   "h": "态度",
+   "p": "tàidù",
+   "pos": "Danh từ",
+   "m": "thái độ",
+   "t": "Bài 7"
+  },
+  {
+   "h": "特点",
+   "p": "tèdiǎn",
+   "pos": "Danh từ",
+   "m": "đặc điểm",
+   "t": "Bài 7"
+  },
+  {
+   "h": "心情",
+   "p": "xīnqíng",
+   "pos": "Danh từ",
+   "m": "tâm tình, tâm trạng",
+   "t": "Bài 7",
+   "ex": "今天我的心情很好。",
+   "exVi": "Hôm nay tâm trạng tôi rất tốt."
+  },
+  {
+   "h": "阳光",
+   "p": "yángguāng",
+   "pos": "Danh từ",
+   "m": "ánh nắng",
+   "t": "Bài 7"
+  },
+  {
+   "h": "愉快",
+   "p": "yúkuài",
+   "pos": "Tính từ",
+   "m": "vui sướng, hớn hở",
+   "t": "Bài 7"
+  },
+  {
+   "h": "原谅",
+   "p": "yuánliàng",
+   "pos": "Động từ",
+   "m": "tha thứ, thứ lỗi",
+   "t": "Bài 7"
+  },
+  {
+   "h": "证明",
+   "p": "zhèngmíng",
+   "pos": "Động từ",
+   "m": "chứng minh, chứng tỏ",
+   "t": "Bài 7"
+  },
+  {
+   "h": "仔细",
+   "p": "zǐxì",
+   "pos": "Tính từ",
+   "m": "tỉ mỉ, kỹ lưỡng, cẩn thận",
+   "t": "Bài 7"
+  },
+  {
+   "h": "饼干",
+   "p": "bǐnggān",
+   "pos": "Danh từ",
+   "m": "bánh quy",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "粗心",
+   "p": "cūxīn",
+   "pos": "Tính từ",
+   "m": "sơ suất, cẩu thả",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "戴",
+   "p": "dài",
+   "pos": "Động từ",
+   "m": "đội, đeo",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "眼镜",
+   "p": "yǎnjìng",
+   "pos": "Danh từ",
+   "m": "kính (mắt)",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "道歉",
+   "p": "dàoqiàn",
+   "pos": "Động từ ly hợp",
+   "m": "xin lỗi",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "底",
+   "p": "dǐ",
+   "pos": "Danh từ",
+   "m": "đáy; cuối (tháng, năm)",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "地点",
+   "p": "dìdiǎn",
+   "pos": "Danh từ",
+   "m": "nơi, chỗ, địa điểm",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "海洋",
+   "p": "hǎiyáng",
+   "pos": "Danh từ",
+   "m": "hải dương, biển cả",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "留",
+   "p": "liú",
+   "pos": "Động từ",
+   "m": "lưu lại, giữ lại, ở lại",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "民族",
+   "p": "mínzú",
+   "pos": "Danh từ",
+   "m": "dân tộc",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "首都",
+   "p": "shǒudū",
+   "pos": "Danh từ",
+   "m": "thủ đô",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "随便",
+   "p": "suíbiàn",
+   "pos": "Tính từ",
+   "m": "thoải mái, tùy tiện, tùy ý",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "亚洲",
+   "p": "yàzhōu",
+   "pos": "Danh từ",
+   "m": "châu Á",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "笑话",
+   "p": "xiàohuà",
+   "pos": "Danh từ / Động từ",
+   "m": "chuyện cười; cười nhạo, châm biếm",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "文章",
+   "p": "wénzhāng",
+   "pos": "Danh từ",
+   "m": "tác phẩm, bài văn",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "推",
+   "p": "tuī",
+   "pos": "Động từ",
+   "m": "đẩy; hoãn lại",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "稍微",
+   "p": "shāowēi",
+   "pos": "Phó từ",
+   "m": "hơi, một chút",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "内",
+   "p": "nèi",
+   "pos": "Danh từ",
+   "m": "bên trong; trong vòng",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "实在",
+   "p": "shízài",
+   "pos": "Tính từ / Phó từ",
+   "m": "thành thật; quả thực, thực sự",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "收",
+   "p": "shōu",
+   "pos": "Động từ",
+   "m": "thu, nhận, lấy",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "受到",
+   "p": "shòudào",
+   "pos": "Động từ",
+   "m": "nhận được; chịu",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "售货员",
+   "p": "shòuhuòyuán",
+   "pos": "Danh từ",
+   "m": "nhân viên bán hàng",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "顺便",
+   "p": "shùnbiàn",
+   "pos": "Phó từ",
+   "m": "thuận tiện, tiện thể",
+   "t": "Bài 10–11",
+   "ex": "顺便买点水果回来。",
+   "exVi": "Tiện thể mua ít trái cây về."
+  },
+  {
+   "h": "提供",
+   "p": "tígōng",
+   "pos": "Động từ",
+   "m": "cung cấp, đáp ứng",
+   "t": "Bài 10–11",
+   "ex": "公司提供午餐。",
+   "exVi": "Công ty cung cấp bữa trưa."
+  },
+  {
+   "h": "味道",
+   "p": "wèidao",
+   "pos": "Danh từ",
+   "m": "hương vị, mùi vị",
+   "t": "Bài 10–11",
+   "ex": "这道菜的味道很好。",
+   "exVi": "Mùi vị món này rất ngon."
+  },
+  {
+   "h": "吸引",
+   "p": "xīyǐn",
+   "pos": "Động từ",
+   "m": "hấp dẫn, thu hút",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "现金",
+   "p": "xiànjīn",
+   "pos": "Danh từ",
+   "m": "tiền mặt",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "牙膏",
+   "p": "yágāo",
+   "pos": "Danh từ",
+   "m": "kem đánh răng",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "样子",
+   "p": "yàngzi",
+   "pos": "Danh từ",
+   "m": "hình dạng, kiểu dáng, vẻ",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "优点",
+   "p": "yōudiǎn",
+   "pos": "Danh từ",
+   "m": "ưu điểm, điểm mạnh",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "原因",
+   "p": "yuányīn",
+   "pos": "Danh từ",
+   "m": "nguyên nhân, lý do",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "质量",
+   "p": "zhìliàng",
+   "pos": "Danh từ",
+   "m": "chất lượng",
+   "t": "Bài 10–11",
+   "ex": "这个商品的质量很好。",
+   "exVi": "Chất lượng hàng hóa này rất tốt."
+  },
+  {
+   "h": "数量",
+   "p": "shùliàng",
+   "pos": "Danh từ",
+   "m": "số lượng",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "入口",
+   "p": "rùkǒu",
+   "pos": "Danh từ",
+   "m": "cửa vào, lối vào",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "沙发",
+   "p": "shāfā",
+   "pos": "Danh từ",
+   "m": "ghế sofa",
+   "t": "Bài 10–11"
+  },
+  {
+   "h": "保护",
+   "p": "bǎohù",
+   "pos": "Động từ",
+   "m": "bảo vệ, giữ gìn",
+   "t": "Môi trường"
+  },
+  {
+   "h": "地球",
+   "p": "dìqiú",
+   "pos": "Danh từ",
+   "m": "trái đất",
+   "t": "Môi trường"
+  },
+  {
+   "h": "盒子",
+   "p": "hézi",
+   "pos": "Danh từ",
+   "m": "cái hộp",
+   "t": "Môi trường"
+  },
+  {
+   "h": "减少",
+   "p": "jiǎnshǎo",
+   "pos": "Động từ",
+   "m": "giảm bớt, cắt giảm",
+   "t": "Môi trường"
+  },
+  {
+   "h": "节约",
+   "p": "jiéyuē",
+   "pos": "Động từ",
+   "m": "tiết kiệm",
+   "t": "Môi trường"
+  },
+  {
+   "h": "拒绝",
+   "p": "jùjué",
+   "pos": "Động từ",
+   "m": "từ chối",
+   "t": "Môi trường"
+  },
+  {
+   "h": "棵",
+   "p": "kē",
+   "pos": "Lượng từ",
+   "m": "cây, ngọn (lượng từ cho thực vật)",
+   "t": "Môi trường"
+  },
+  {
+   "h": "空气",
+   "p": "kōngqì",
+   "pos": "Danh từ",
+   "m": "không khí",
+   "t": "Môi trường"
+  },
+  {
+   "h": "矿泉水",
+   "p": "kuàngquánshuǐ",
+   "pos": "Danh từ",
+   "m": "nước khoáng, nước suối",
+   "t": "Môi trường"
+  },
+  {
+   "h": "垃圾桶",
+   "p": "lājītǒng",
+   "pos": "Danh từ",
+   "m": "thùng rác",
+   "t": "Môi trường"
+  },
+  {
+   "h": "乱",
+   "p": "luàn",
+   "pos": "Tính từ",
+   "m": "loạn, lộn xộn, rối bời",
+   "t": "Môi trường"
+  },
+  {
+   "h": "免费",
+   "p": "miǎnfèi",
+   "pos": "Tính từ",
+   "m": "miễn phí",
+   "t": "Môi trường"
+  },
+  {
+   "h": "瓶子",
+   "p": "píngzi",
+   "pos": "Danh từ",
+   "m": "cái lọ, cái bình",
+   "t": "Môi trường"
+  },
+  {
+   "h": "扔",
+   "p": "rēng",
+   "pos": "Động từ",
+   "m": "ném, quăng, vứt",
+   "t": "Môi trường"
+  },
+  {
+   "h": "森林",
+   "p": "sēnlín",
+   "pos": "Danh từ",
+   "m": "rừng rậm",
+   "t": "Môi trường"
+  },
+  {
+   "h": "省",
+   "p": "shěng",
+   "pos": "Danh từ / Động từ",
+   "m": "tỉnh; tiết kiệm",
+   "t": "Môi trường"
+  },
+  {
+   "h": "温度",
+   "p": "wēndù",
+   "pos": "Danh từ",
+   "m": "nhiệt độ",
+   "t": "Môi trường"
+  },
+  {
+   "h": "污染",
+   "p": "wūrǎn",
+   "pos": "Động từ",
+   "m": "ô nhiễm",
+   "t": "Môi trường"
+  },
+  {
+   "h": "脏",
+   "p": "zāng",
+   "pos": "Tính từ",
+   "m": "bẩn",
+   "t": "Môi trường"
+  },
+  {
+   "h": "自然",
+   "p": "zìrán",
+   "pos": "Danh từ",
+   "m": "tự nhiên, thiên nhiên",
+   "t": "Môi trường"
+  },
+  {
+   "h": "脱",
+   "p": "tuō",
+   "pos": "Động từ",
+   "m": "cởi ra",
+   "t": "Môi trường"
+  },
+  {
+   "h": "袜子",
+   "p": "wàzi",
+   "pos": "Danh từ",
+   "m": "tất, vớ",
+   "t": "Môi trường"
+  },
+  {
+   "h": "一切",
+   "p": "yíqiè",
+   "pos": "Đại từ",
+   "m": "mọi, toàn bộ, tất cả",
+   "t": "Môi trường"
+  },
+  {
+   "h": "骗",
+   "p": "piàn",
+   "pos": "Động từ",
+   "m": "lừa gạt, lừa đảo",
+   "t": "Môi trường"
+  },
+  {
+   "h": "正确",
+   "p": "zhèngquè",
+   "pos": "Tính từ",
+   "m": "đúng, chính xác, đúng đắn",
+   "t": "Môi trường"
+  },
+  {
+   "h": "完全",
+   "p": "wánquán",
+   "pos": "Phó từ",
+   "m": "hoàn toàn",
+   "t": "Môi trường"
+  },
+  {
+   "h": "尝",
+   "p": "cháng",
+   "pos": "Động từ",
+   "m": "nếm, thử",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "刀",
+   "p": "dāo",
+   "pos": "Danh từ",
+   "m": "con dao",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "勺子",
+   "p": "sháozi",
+   "pos": "Danh từ",
+   "m": "thìa, muỗng",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "汤",
+   "p": "tāng",
+   "pos": "Danh từ",
+   "m": "canh",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "咸",
+   "p": "xián",
+   "pos": "Tính từ",
+   "m": "mặn",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "倒",
+   "p": "dǎo",
+   "pos": "Động từ",
+   "m": "đổ, ngã",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "功夫",
+   "p": "gōngfu",
+   "pos": "Danh từ",
+   "m": "Kung fu, võ thuật",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "酸",
+   "p": "suān",
+   "pos": "Tính từ",
+   "m": "chua",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "盐",
+   "p": "yán",
+   "pos": "Danh từ",
+   "m": "muối",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "苦",
+   "p": "kǔ",
+   "pos": "Tính từ",
+   "m": "đắng",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "辣",
+   "p": "là",
+   "pos": "Tính từ",
+   "m": "cay",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "礼拜天",
+   "p": "lǐbàitiān",
+   "pos": "Danh từ",
+   "m": "ngày chủ nhật",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "香",
+   "p": "xiāng",
+   "pos": "Tính từ",
+   "m": "thơm",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "呀",
+   "p": "ya",
+   "pos": "Thán từ",
+   "m": "a, ô (biểu thị kinh ngạc)",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "植物",
+   "p": "zhíwù",
+   "pos": "Danh từ",
+   "m": "thực vật, cây cối",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "叶子",
+   "p": "yèzi",
+   "pos": "Danh từ",
+   "m": "lá cây",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "全部",
+   "p": "quánbù",
+   "pos": "Danh từ",
+   "m": "toàn bộ, tất cả",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "打针",
+   "p": "dǎzhēn",
+   "pos": "Động từ",
+   "m": "tiêm",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "大夫",
+   "p": "dàifu",
+   "pos": "Danh từ",
+   "m": "bác sĩ",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "护士",
+   "p": "hùshi",
+   "pos": "Danh từ",
+   "m": "y tá",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "咳嗽",
+   "p": "késou",
+   "pos": "Động từ",
+   "m": "ho",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "生命",
+   "p": "shēngmìng",
+   "pos": "Danh từ",
+   "m": "sinh mạng, sự sống",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "危险",
+   "p": "wēixiǎn",
+   "pos": "Tính từ",
+   "m": "nguy hiểm",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "醒",
+   "p": "xǐng",
+   "pos": "Động từ",
+   "m": "tỉnh (dậy)",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "肚子",
+   "p": "dùzi",
+   "pos": "Danh từ",
+   "m": "bụng",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "卫生间",
+   "p": "wèishēngjiān",
+   "pos": "Danh từ",
+   "m": "nhà vệ sinh",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "烦恼",
+   "p": "fánnǎo",
+   "pos": "Tính từ",
+   "m": "phiền não",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "减肥",
+   "p": "jiǎnféi",
+   "pos": "Động từ",
+   "m": "giảm cân",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "厉害",
+   "p": "lìhai",
+   "pos": "Tính từ",
+   "m": "lợi hại, giỏi, ghê gớm",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "难受",
+   "p": "nánshòu",
+   "pos": "Tính từ",
+   "m": "khó chịu, khổ sở",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "说明",
+   "p": "shuōmíng",
+   "pos": "Động từ",
+   "m": "giải thích, thuyết minh",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "辛苦",
+   "p": "xīnkǔ",
+   "pos": "Tính từ",
+   "m": "vất vả, khổ cực",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "严重",
+   "p": "yánzhòng",
+   "pos": "Tính từ",
+   "m": "nghiêm trọng",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "指",
+   "p": "zhǐ",
+   "pos": "Động từ",
+   "m": "chỉ (trỏ)",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "秒",
+   "p": "miǎo",
+   "pos": "Danh từ",
+   "m": "giây (s)",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "h": "堵车",
+   "p": "dǔchē",
+   "pos": "Động từ",
+   "m": "tắc đường, kẹt xe",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "法律",
+   "p": "fǎlǜ",
+   "pos": "Danh từ",
+   "m": "pháp luật",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "方向",
+   "p": "fāngxiàng",
+   "pos": "Danh từ",
+   "m": "hướng, phương hướng; định hướng",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "赶",
+   "p": "gǎn",
+   "pos": "Động từ",
+   "m": "đuổi, đuổi theo; vội, gấp rút",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "高速公路",
+   "p": "gāosù gōnglù",
+   "pos": "Danh từ",
+   "m": "đường cao tốc",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "公里",
+   "p": "gōnglǐ",
+   "pos": "Lượng từ",
+   "m": "kilomet, cây số",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "加油站",
+   "p": "jiāyóuzhàn",
+   "pos": "Danh từ",
+   "m": "trạm xăng dầu, cây xăng",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "交通",
+   "p": "jiāotōng",
+   "pos": "Danh từ",
+   "m": "giao thông",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "禁止",
+   "p": "jìnzhǐ",
+   "pos": "Động từ",
+   "m": "cấm",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "警察",
+   "p": "jǐngchá",
+   "pos": "Danh từ",
+   "m": "cảnh sát",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "桥",
+   "p": "qiáo",
+   "pos": "Danh từ",
+   "m": "cầu",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "师傅",
+   "p": "shīfu",
+   "pos": "Danh từ",
+   "m": "sư phụ, bác tài",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "停",
+   "p": "tíng",
+   "pos": "Động từ",
+   "m": "ngừng, cúp, cắt, mất; dừng, đỗ (xe)",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "速度",
+   "p": "sùdù",
+   "pos": "Danh từ",
+   "m": "tốc độ",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "迷路",
+   "p": "mílù",
+   "pos": "Động từ",
+   "m": "lạc đường",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "响",
+   "p": "xiǎng",
+   "pos": "Động từ",
+   "m": "reo, vang lên",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "顺序",
+   "p": "shùnxù",
+   "pos": "Danh từ",
+   "m": "trật tự, thứ tự",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "邮局",
+   "p": "yóujú",
+   "pos": "Danh từ",
+   "m": "bưu điện",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "信封",
+   "p": "xìnfēng",
+   "pos": "Danh từ",
+   "m": "phong thư, bì thư",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "h": "实际上",
+   "p": "shíjì shàng",
+   "pos": "",
+   "m": "thực ra, trên thực tế",
+   "t": "HSK4 nâng cao",
+   "ex": "实际上,我不太喜欢逛街。",
+   "exVi": "Thực ra, tôi không thích đi dạo phố lắm."
+  },
+  {
+   "h": "逛街",
+   "p": "guàng jiē",
+   "pos": "",
+   "m": "đi dạo phố, đi shopping",
+   "t": "HSK4 nâng cao",
+   "ex": "周末我喜欢和朋友去逛街。",
+   "exVi": "Cuối tuần tôi thích đi dạo phố với bạn."
+  },
+  {
+   "h": "陪",
+   "p": "péi",
+   "pos": "",
+   "m": "đi cùng, bầu bạn",
+   "t": "HSK4 nâng cao",
+   "ex": "她陪妈妈去医院。",
+   "exVi": "Cô ấy đi cùng mẹ đến bệnh viện."
+  },
+  {
+   "h": "恐怕",
+   "p": "kǒngpà",
+   "pos": "",
+   "m": "e rằng, sợ là",
+   "t": "HSK4 nâng cao",
+   "ex": "恐怕他今天不来了。",
+   "exVi": "E rằng hôm nay anh ấy không đến."
+  },
+  {
+   "h": "商品",
+   "p": "shāngpǐn",
+   "pos": "",
+   "m": "hàng hóa",
+   "t": "HSK4 nâng cao",
+   "ex": "商店里的商品很多。",
+   "exVi": "Hàng hóa trong cửa hàng rất nhiều."
+  },
+  {
+   "h": "注重",
+   "p": "zhùzhòng",
+   "pos": "",
+   "m": "chú trọng",
+   "t": "HSK4 nâng cao",
+   "ex": "我买东西很注重质量。",
+   "exVi": "Khi mua đồ tôi rất chú trọng chất lượng."
+  },
+  {
+   "h": "有趣",
+   "p": "yǒuqù",
+   "pos": "",
+   "m": "thú vị",
+   "t": "HSK4 nâng cao",
+   "ex": "这是一个有趣的故事。",
+   "exVi": "Đây là một câu chuyện thú vị."
+  },
+  {
+   "h": "品尝",
+   "p": "pǐncháng",
+   "pos": "",
+   "m": "nếm thử",
+   "t": "HSK4 nâng cao",
+   "ex": "我想品尝这里的小吃。",
+   "exVi": "Tôi muốn nếm thử món ăn vặt ở đây."
+  },
+  {
+   "h": "地方小吃",
+   "p": "dìfāng xiǎochī",
+   "pos": "",
+   "m": "món ăn vặt địa phương",
+   "t": "HSK4 nâng cao",
+   "ex": "每个城市都有自己的地方小吃。",
+   "exVi": "Mỗi thành phố đều có món ăn vặt riêng."
+  },
+  {
+   "h": "故事",
+   "p": "gùshì",
+   "pos": "",
+   "m": "câu chuyện",
+   "t": "HSK4 nâng cao",
+   "ex": "导游讲了一个有趣的故事。",
+   "exVi": "Hướng dẫn viên kể một câu chuyện thú vị."
+  },
+  {
+   "h": "美丽",
+   "p": "měilì",
+   "pos": "",
+   "m": "xinh đẹp",
+   "t": "HSK4 nâng cao",
+   "ex": "她是一个美丽的女孩。",
+   "exVi": "Cô ấy là một cô gái xinh đẹp."
+  },
+  {
+   "h": "尝试",
+   "p": "chángshì",
+   "pos": "",
+   "m": "thử, thử nghiệm",
+   "t": "HSK4 nâng cao",
+   "ex": "你应该尝试新的东西。",
+   "exVi": "Bạn nên thử những điều mới."
+  },
+  {
+   "h": "积累",
+   "p": "jīlěi",
+   "pos": "",
+   "m": "tích lũy",
+   "t": "HSK4 nâng cao",
+   "ex": "学习要慢慢积累。",
+   "exVi": "Học tập phải tích lũy dần dần."
+  },
+  {
+   "h": "建议",
+   "p": "jiànyì",
+   "pos": "",
+   "m": "đề nghị, kiến nghị",
+   "t": "HSK4 nâng cao",
+   "ex": "我建议你多读书。",
+   "exVi": "Tôi đề nghị bạn đọc sách nhiều hơn."
+  },
+  {
+   "h": "小说",
+   "p": "xiǎoshuō",
+   "pos": "",
+   "m": "tiểu thuyết",
+   "t": "HSK4 nâng cao",
+   "ex": "我喜欢看中国小说。",
+   "exVi": "Tôi thích đọc tiểu thuyết Trung Quốc."
+  },
+  {
+   "h": "页",
+   "p": "yè",
+   "pos": "",
+   "m": "trang",
+   "t": "HSK4 nâng cao",
+   "ex": "这本书有三百页。",
+   "exVi": "Quyển sách này có 300 trang."
+  },
+  {
+   "h": "作家",
+   "p": "zuòjiā",
+   "pos": "",
+   "m": "nhà văn",
+   "t": "HSK4 nâng cao",
+   "ex": "他是一位有名的作家。",
+   "exVi": "Ông ấy là một nhà văn nổi tiếng."
+  },
+  {
+   "h": "写作方式",
+   "p": "xiězuò fāngshì",
+   "pos": "",
+   "m": "cách viết, phong cách viết",
+   "t": "HSK4 nâng cao",
+   "ex": "每个作家的写作方式都不同。",
+   "exVi": "Phong cách viết của mỗi nhà văn đều khác nhau."
+  },
+  {
+   "h": "发现",
+   "p": "fāxiàn",
+   "pos": "",
+   "m": "phát hiện",
+   "t": "HSK4 nâng cao",
+   "ex": "我发现了一个秘密。",
+   "exVi": "Tôi đã phát hiện một bí mật."
+  },
+  {
+   "h": "杂志",
+   "p": "zázhì",
+   "pos": "",
+   "m": "tạp chí",
+   "t": "HSK4 nâng cao",
+   "ex": "我每个月买一本杂志。",
+   "exVi": "Mỗi tháng tôi mua một quyển tạp chí."
+  },
+  {
+   "h": "变",
+   "p": "biàn",
+   "pos": "",
+   "m": "thay đổi, biến đổi",
+   "t": "HSK4 nâng cao",
+   "ex": "天气变冷了。",
+   "exVi": "Thời tiết đã trở lạnh."
+  },
+  {
+   "h": "紧张",
+   "p": "jǐnzhāng",
+   "pos": "",
+   "m": "căng thẳng, hồi hộp",
+   "t": "HSK4 nâng cao",
+   "ex": "面试的时候我很紧张。",
+   "exVi": "Lúc phỏng vấn tôi rất hồi hộp."
+  },
+  {
+   "h": "有精神",
+   "p": "yǒu jīngshén",
+   "pos": "",
+   "m": "có tinh thần, hăng hái",
+   "t": "HSK4 nâng cao",
+   "ex": "运动让人有精神。",
+   "exVi": "Vận động làm người ta có tinh thần."
+  },
+  {
+   "h": "招聘",
+   "p": "zhāopìn",
+   "pos": "",
+   "m": "tuyển dụng",
+   "t": "HSK4 nâng cao",
+   "ex": "公司正在招聘员工。",
+   "exVi": "Công ty đang tuyển dụng nhân viên."
+  },
+  {
+   "h": "消息",
+   "p": "xiāoxi",
+   "pos": "",
+   "m": "tin tức",
+   "t": "HSK4 nâng cao",
+   "ex": "我听到了一个好消息。",
+   "exVi": "Tôi nghe được một tin tốt."
+  },
+  {
+   "h": "申请",
+   "p": "shēnqǐng",
+   "pos": "",
+   "m": "đăng ký, xin",
+   "t": "HSK4 nâng cao",
+   "ex": "我想申请这个工作。",
+   "exVi": "Tôi muốn xin công việc này."
+  },
+  {
+   "h": "详细",
+   "p": "xiángxì",
+   "pos": "",
+   "m": "chi tiết, tỉ mỉ",
+   "t": "HSK4 nâng cao",
+   "ex": "请详细介绍一下。",
+   "exVi": "Vui lòng giới thiệu chi tiết."
+  },
+  {
+   "h": "申请信",
+   "p": "shēnqǐng xìn",
+   "pos": "",
+   "m": "đơn xin (việc)",
+   "t": "HSK4 nâng cao",
+   "ex": "我写了一封申请信。",
+   "exVi": "Tôi đã viết một lá đơn xin việc."
+  },
+  {
+   "h": "应聘",
+   "p": "yìngpìn",
+   "pos": "",
+   "m": "ứng tuyển",
+   "t": "HSK4 nâng cao",
+   "ex": "我要去应聘那个职位。",
+   "exVi": "Tôi sẽ đi ứng tuyển chức vụ đó."
+  },
+  {
+   "h": "职位",
+   "p": "zhíwèi",
+   "pos": "",
+   "m": "chức vụ, vị trí",
+   "t": "HSK4 nâng cao",
+   "ex": "这是一个很好的职位。",
+   "exVi": "Đây là một vị trí rất tốt."
+  },
+  {
+   "h": "谈",
+   "p": "tán",
+   "pos": "",
+   "m": "nói chuyện, đàm phán",
+   "t": "HSK4 nâng cao",
+   "ex": "我们谈一谈这个问题。",
+   "exVi": "Chúng ta hãy nói về vấn đề này."
+  },
+  {
+   "h": "了解",
+   "p": "liǎojiě",
+   "pos": "",
+   "m": "tìm hiểu, hiểu rõ",
+   "t": "HSK4 nâng cao",
+   "ex": "我想了解一下情况。",
+   "exVi": "Tôi muốn tìm hiểu tình hình."
+  },
+  {
+   "h": "机会",
+   "p": "jīhuì",
+   "pos": "",
+   "m": "cơ hội",
+   "t": "HSK4 nâng cao",
+   "ex": "这是一个好机会。",
+   "exVi": "Đây là một cơ hội tốt."
+  },
+  {
+   "h": "成功",
+   "p": "chénggōng",
+   "pos": "",
+   "m": "thành công",
+   "t": "HSK4 nâng cao",
+   "ex": "祝你成功!",
+   "exVi": "Chúc bạn thành công!"
+  },
+  {
+   "h": "传真",
+   "p": "chuánzhēn",
+   "pos": "",
+   "m": "fax",
+   "t": "HSK4 nâng cao",
+   "ex": "请把传真发过来。",
+   "exVi": "Vui lòng gửi fax sang đây."
+  },
+  {
+   "h": "情况",
+   "p": "qíngkuàng",
+   "pos": "",
+   "m": "tình hình",
+   "t": "HSK4 nâng cao",
+   "ex": "请说明一下情况。",
+   "exVi": "Vui lòng nói rõ tình hình."
+  },
+  {
+   "h": "员工",
+   "p": "yuángōng",
+   "pos": "",
+   "m": "nhân viên",
+   "t": "HSK4 nâng cao",
+   "ex": "公司有100个员工。",
+   "exVi": "Công ty có 100 nhân viên."
+  },
+  {
+   "h": "诚实",
+   "p": "chéngshí",
+   "pos": "",
+   "m": "thành thật, trung thực",
+   "t": "HSK4 nâng cao",
+   "ex": "做人要诚实。",
+   "exVi": "Làm người phải thành thật."
+  },
+  {
+   "h": "按时",
+   "p": "ànshí",
+   "pos": "",
+   "m": "đúng giờ",
+   "t": "HSK4 nâng cao",
+   "ex": "请按时来上班。",
+   "exVi": "Vui lòng đi làm đúng giờ."
+  },
+  {
+   "h": "加班费",
+   "p": "jiābān fèi",
+   "pos": "",
+   "m": "tiền tăng ca",
+   "t": "HSK4 nâng cao",
+   "ex": "周末加班有加班费。",
+   "exVi": "Tăng ca cuối tuần có tiền tăng ca."
+  },
+  {
+   "h": "年底",
+   "p": "niándǐ",
+   "pos": "",
+   "m": "cuối năm",
+   "t": "HSK4 nâng cao",
+   "ex": "年底我们都很忙。",
+   "exVi": "Cuối năm chúng tôi đều rất bận."
+  },
+  {
+   "h": "任务",
+   "p": "rènwu",
+   "pos": "",
+   "m": "nhiệm vụ",
+   "t": "HSK4 nâng cao",
+   "ex": "这是我的任务。",
+   "exVi": "Đây là nhiệm vụ của tôi."
+  },
+  {
+   "h": "顺利",
+   "p": "shùnlì",
+   "pos": "",
+   "m": "thuận lợi",
+   "t": "HSK4 nâng cao",
+   "ex": "工作进行得很顺利。",
+   "exVi": "Công việc tiến hành rất thuận lợi."
+  },
+  {
+   "h": "发奖金",
+   "p": "fā jiǎngjīn",
+   "pos": "",
+   "m": "phát tiền thưởng",
+   "t": "HSK4 nâng cao",
+   "ex": "年底公司发奖金。",
+   "exVi": "Cuối năm công ty phát tiền thưởng."
+  },
+  {
+   "h": "奖金",
+   "p": "jiǎngjīn",
+   "pos": "",
+   "m": "tiền thưởng",
+   "t": "HSK4 nâng cao",
+   "ex": "我拿到了奖金。",
+   "exVi": "Tôi đã nhận được tiền thưởng."
+  },
+  {
+   "h": "挺努力",
+   "p": "tǐng nǔlì",
+   "pos": "",
+   "m": "khá nỗ lực",
+   "t": "HSK4 nâng cao",
+   "ex": "他工作挺努力的。",
+   "exVi": "Anh ấy làm việc khá nỗ lực."
+  },
+  {
+   "h": "只好",
+   "p": "zhǐhǎo",
+   "pos": "",
+   "m": "đành phải, chỉ còn cách",
+   "t": "HSK4 nâng cao",
+   "ex": "下雨了,我只好回家。",
+   "exVi": "Trời mưa rồi, tôi đành phải về nhà."
+  },
+  {
+   "h": "乒乓球",
+   "p": "pīngpāng qiú",
+   "pos": "",
+   "m": "bóng bàn",
+   "t": "HSK4 nâng cao",
+   "ex": "我喜欢打乒乓球。",
+   "exVi": "Tôi thích chơi bóng bàn."
+  },
+  {
+   "h": "羽毛球",
+   "p": "yǔmáo qiú",
+   "pos": "",
+   "m": "cầu lông",
+   "t": "HSK4 nâng cao",
+   "ex": "周末我们去打羽毛球。",
+   "exVi": "Cuối tuần chúng ta đi đánh cầu lông."
+  },
+  {
+   "h": "排球",
+   "p": "páiqiú",
+   "pos": "",
+   "m": "bóng chuyền",
+   "t": "HSK4 nâng cao",
+   "ex": "学校有排球比赛。",
+   "exVi": "Trường có giải bóng chuyền."
+  },
+  {
+   "h": "安排",
+   "p": "ānpái",
+   "pos": "",
+   "m": "sắp xếp",
+   "t": "HSK4 nâng cao",
+   "ex": "请安排一下时间。",
+   "exVi": "Vui lòng sắp xếp thời gian."
+  },
+  {
+   "h": "散步",
+   "p": "sànbù",
+   "pos": "",
+   "m": "đi bộ, đi dạo",
+   "t": "HSK4 nâng cao",
+   "ex": "晚饭后我喜欢散步。",
+   "exVi": "Sau bữa tối tôi thích đi dạo."
+  },
+  {
+   "h": "聊聊",
+   "p": "liáo liáo",
+   "pos": "",
+   "m": "tán gẫu, trò chuyện",
+   "t": "HSK4 nâng cao",
+   "ex": "我们聊聊吧。",
+   "exVi": "Chúng ta trò chuyện một chút đi."
+  }
+ ],
+ "grammar": [
+  {
+   "id": "g:g1",
+   "a": "是否",
+   "opts": [
+    "是否",
+    "什么的",
+    "相反",
+    "把"
+   ],
+   "sent": "怎么样才能看出一个人____喜欢你？",
+   "full": "怎么样才能看出一个人是否喜欢你？",
+   "pin": "Zěnmeyàng cái néng kànchū yí ge rén shìfǒu xǐhuan nǐ?",
+   "vi": "Làm thế nào để nhìn ra một người có thích bạn hay không?",
+   "name": "Phó từ 是否 — \"có... hay không\"",
+   "t": "Chủ đề 22–23"
+  },
+  {
+   "id": "g:g2",
+   "a": "随着",
+   "opts": [
+    "随着",
+    "把",
+    "却",
+    "是否"
+   ],
+   "sent": "____社会的发展，人们的生活越来越好。",
+   "full": "随着社会的发展，人们的生活越来越好。",
+   "pin": "Suízhe shèhuì de fāzhǎn, rénmen de shēnghuó yuèláiyuè hǎo.",
+   "vi": "Cùng với sự phát triển của xã hội, cuộc sống của con người ngày càng tốt hơn.",
+   "name": "Giới từ 随着 — \"cùng với, theo\"",
+   "t": "Chủ đề 22–23"
+  },
+  {
+   "id": "g:g3",
+   "a": "把",
+   "opts": [
+    "把",
+    "被",
+    "对",
+    "给"
+   ],
+   "sent": "他____那个新发明叫作\"智能手机\"。",
+   "full": "他把那个新发明叫作\"智能手机\"。",
+   "pin": "Tā bǎ nàge xīn fāmíng jiàozuò \"zhìnéng shǒujī\".",
+   "vi": "Anh ấy gọi phát minh mới đó là \"điện thoại thông minh\".",
+   "name": "Cấu trúc 把 A 叫作 B — \"gọi A là B\"",
+   "t": "Chủ đề 22–23"
+  },
+  {
+   "id": "g:g4",
+   "a": "却",
+   "opts": [
+    "却",
+    "相反",
+    "是否",
+    "就"
+   ],
+   "sent": "虽然外面很冷，房间里____很暖和。",
+   "full": "虽然外面很冷，房间里却很暖和。",
+   "pin": "Suīrán wàimiàn hěn lěng, fángjiān lǐ què hěn nuǎnhuo.",
+   "vi": "Mặc dù bên ngoài rất lạnh nhưng trong phòng lại rất ấm áp.",
+   "name": "Phó từ 却 — \"lại, nhưng lại\"",
+   "t": "Chủ đề 22–23"
+  },
+  {
+   "id": "g:g5",
+   "a": "相反",
+   "opts": [
+    "相反",
+    "结果",
+    "经过",
+    "至少"
+   ],
+   "sent": "大家以为他会失败，____，他取得了很大的成功。",
+   "full": "大家以为他会失败，相反，他取得了很大的成功。",
+   "pin": "Dàjiā yǐwéi tā huì shībài, xiāngfǎn, tā qǔdé le hěn dà de chénggōng.",
+   "vi": "Mọi người nghĩ rằng anh ấy sẽ thất bại, nhưng ngược lại, anh ấy đã đạt được thành công lớn.",
+   "name": "Tính từ/Liên từ 相反 — \"ngược lại\"",
+   "t": "Chủ đề 22–23"
+  },
+  {
+   "id": "g:g6",
+   "a": "什么的",
+   "opts": [
+    "什么的",
+    "是否",
+    "至少",
+    "却"
+   ],
+   "sent": "他喜欢运动，比如跑步、游泳、篮球____。",
+   "full": "他喜欢运动，比如跑步、游泳、篮球什么的。",
+   "pin": "Tā xǐhuan yùndòng, bǐrú pǎobù, yóuyǒng, lánqiú shénmede.",
+   "vi": "Anh ấy thích thể thao, ví dụ như chạy bộ, bơi lội, bóng rổ, v.v.",
+   "name": "Cách biểu đạt 什么的 — \"…gì đó, vân vân\"",
+   "t": "Chủ đề 22–23"
+  },
+  {
+   "id": "fg0",
+   "a": "倍",
+   "opts": [
+    "倍",
+    "可",
+    "敢",
+    "同时"
+   ],
+   "sent": "这条裙子的价格是那条裙子的三____。",
+   "full": "这条裙子的价格是那条裙子的三倍。",
+   "pin": "Zhè tiáo qúnzi de jiàgé shì nà tiáo qúnzi de sān bèi.",
+   "vi": "Giá chiếc váy này gấp ba lần chiếc váy kia.",
+   "name": "Lượng từ 倍 (bèi) — \"lần / gấp\"",
+   "expl": "Mẫu \"A 是 B 的 N___\" cần lượng từ 倍 để diễn đạt \"gấp N lần\".",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "fg1",
+   "a": "尤其",
+   "opts": [
+    "尤其",
+    "究竟",
+    "总的来说",
+    "于是"
+   ],
+   "sent": "这家店的面条很好吃，____牛肉面。",
+   "full": "这家店的面条很好吃，尤其牛肉面。",
+   "pin": "Zhè jiā diàn de miàntiáo zuò de hěn hǎochī, yóuqí niúròumiàn.",
+   "vi": "Mì ở quán này rất ngon, đặc biệt là mì bò.",
+   "name": "Phó từ 尤其 (yóuqí) — \"đặc biệt, nhất là\"",
+   "expl": "尤其 dùng để nêu bật một thứ tiêu biểu trong nhóm (mì bò trong các loại mì).",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "fg2",
+   "a": "值得",
+   "opts": [
+    "值得",
+    "着",
+    "究竟",
+    "拿……来说"
+   ],
+   "sent": "你的努力____表扬。",
+   "full": "你的努力值得表扬。",
+   "pin": "Nǐ de nǔlì zhídé biǎoyáng.",
+   "vi": "Nỗ lực của bạn đáng được khen ngợi.",
+   "name": "Động từ 值得 (zhídé) — \"đáng, đáng để\"",
+   "expl": "值得 + 表扬 = \"đáng được khen ngợi\".",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "fg3",
+   "a": "就",
+   "opts": [
+    "就",
+    "在于",
+    "百闻不如一见",
+    "拿……来说"
+   ],
+   "sent": "我一紧张____脸红。",
+   "full": "我一紧张就脸红。",
+   "pin": "Wǒ yì jǐnzhāng jiù liǎnhóng.",
+   "vi": "Cứ hồi hộp là tôi đỏ mặt.",
+   "name": "Cấu trúc 一……就…… — \"vừa… đã… / cứ… là…\"",
+   "expl": "Cấu trúc 一…就…: vế sau dùng 就 để nối \"cứ hồi hộp là (就) đỏ mặt\".",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "fg4",
+   "a": "究竟",
+   "opts": [
+    "究竟",
+    "比……贵/便宜",
+    "植树造林",
+    "除此以外"
+   ],
+   "sent": "都十点了，你____来不来？",
+   "full": "都十点了，你究竟来不来？",
+   "pin": "Dōu shí diǎn le, nǐ jiūjìng lái bu lái?",
+   "vi": "Mười giờ rồi, rốt cuộc anh có đến không?",
+   "name": "Phó từ 究竟 (jiūjìng) — \"rốt cuộc, cuối cùng\"",
+   "expl": "究竟 nhấn mạnh sự truy vấn \"rốt cuộc có… hay không?\".",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "fg5",
+   "a": "可",
+   "opts": [
+    "可",
+    "总的来说",
+    "值得",
+    "既"
+   ],
+   "sent": "丽江____是中国有名的旅游城市。",
+   "full": "丽江可是中国有名的旅游城市。",
+   "pin": "Lìjiāng kě shì Zhōngguó yǒumíng de lǚyóu chéngshì.",
+   "vi": "Lệ Giang quả là thành phố du lịch nổi tiếng của Trung Quốc.",
+   "name": "Phó từ 可 (kě) — \"thật là, quả là\"",
+   "expl": "可是 ở đây = \"quả thật là\", nhấn mạnh chứ không mang nghĩa \"nhưng\".",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "fg6",
+   "a": "拿",
+   "opts": [
+    "拿",
+    "值得",
+    "饭后百步走",
+    "总的来说"
+   ],
+   "sent": "____四川人来说，他们比较喜欢吃辣的。",
+   "full": "拿四川人来说，他们比较喜欢吃辣的。",
+   "pin": "Zhōngguó měi ge dìfang de rén xǐhuan chī de wèidao bù yíyàng. Ná Sìchuān rén láishuō, yìbān bǐjiào xǐhuan chī là de.",
+   "vi": "Người ở mỗi vùng Trung Quốc thích vị khác nhau. Lấy người Tứ Xuyên làm ví dụ, họ thường thích ăn cay.",
+   "name": "Cấu trúc 拿……来说 — \"lấy… làm ví dụ\"",
+   "expl": "Mẫu 拿…来说: bắt đầu bằng 拿 để dẫn ra ví dụ (người Tứ Xuyên).",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "fg7",
+   "a": "见",
+   "opts": [
+    "见",
+    "百闻不如一见",
+    "敢",
+    "民以食为天"
+   ],
+   "sent": "百闻不如一____",
+   "full": "百闻不如一见",
+   "pin": "Zhè cì lǚxíng ràng wǒ míngbai le \"bǎi wén bù rú yí jiàn\".",
+   "vi": "Chuyến đi này khiến tôi hiểu ra \"trăm nghe không bằng một thấy\".",
+   "name": "Thành ngữ 百闻不如一见",
+   "expl": "百闻不如一见: 闻 = nghe, 见 = thấy. Vế cuối là 一见 (một lần thấy).",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "fg8",
+   "a": "比",
+   "opts": [
+    "比",
+    "在于",
+    "可",
+    "倍"
+   ],
+   "sent": "这条裙子____那条贵一倍。",
+   "full": "这条裙子比那条贵一倍。",
+   "pin": "Zhè jiàn yīfu bǐ nà jiàn piányi yìdiǎnr.",
+   "vi": "Bộ đồ này rẻ hơn bộ kia một chút.",
+   "name": "So sánh giá: 比 + … + 贵/便宜",
+   "expl": "So sánh hơn kém dùng giới từ 比: \"A 比 B + tính từ\".",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "fg17",
+   "a": "着",
+   "opts": [
+    "着",
+    "了",
+    "过",
+    "的"
+   ],
+   "sent": "他唱____唱着就忘了歌词。",
+   "full": "他唱着唱着就忘了歌词。",
+   "pin": "Tā chàng zhe chàng zhe jiù wàng le gēcí.",
+   "vi": "Anh ấy hát hát thì quên mất lời.",
+   "name": "V + 着 + V + 着",
+   "expl": "Cấu trúc V+着+V+着 diễn tả: trong lúc một hành động đang diễn ra liên tục thì bất chợt xảy ra hành động/tình huống khác. Thường đi kèm với 就 ở mệnh đề sau.",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "id": "fg18",
+   "a": "在于",
+   "opts": [
+    "在于",
+    "对于",
+    "关于",
+    "属于"
+   ],
+   "sent": "成功也____一个人做事的态度。",
+   "full": "成功也在于一个人做事的态度。",
+   "pin": "Chénggōng yě zàiyú yí ge rén zuò shì de tàidù.",
+   "vi": "Thành công cũng phụ thuộc vào thái độ làm việc của một người.",
+   "name": "在于",
+   "expl": "在于 (zàiyú) là động từ, nghĩa \"phụ thuộc vào / nằm ở / mấu chốt là\". Phía sau là yếu tố then chốt/nguyên nhân.",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "id": "fg19",
+   "a": "除此以外",
+   "opts": [
+    "除此以外",
+    "另外说",
+    "以为",
+    "再说一下"
+   ],
+   "sent": "我妹妹每天就是玩儿手机, ____, 她什么都不做。",
+   "full": "我妹妹每天就是玩儿手机, 除此以外, 她什么都不做。",
+   "pin": "Wǒ mèimei měi tiān jiù shì wánr shǒujī, chú cǐ yǐwài, tā shénme dōu bù zuò.",
+   "vi": "Em gái tôi ngày nào cũng lướt điện thoại, ngoài điều đó ra nó chẳng làm gì.",
+   "name": "除此以外",
+   "expl": "除此以外 = \"ngoài điều này / ngoài điều đó ra\". Đứng đầu mệnh đề thứ hai, dùng để bổ sung hoặc giới hạn.",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "id": "fg20",
+   "a": "总的来说",
+   "opts": [
+    "总的来说",
+    "不过",
+    "可是",
+    "所以呢"
+   ],
+   "sent": "这个房子厨房和卫生间很大, 周围还很安静。____, 这个房子他很满意。",
+   "full": "这个房子厨房和卫生间很大, 周围还很安静。总的来说, 这个房子他很满意。",
+   "pin": "Zǒng de lái shuō, zhè ge fángzi tā hěn mǎnyì.",
+   "vi": "Tóm lại, anh ấy rất hài lòng với căn nhà này.",
+   "name": "总的来说",
+   "expl": "总的来说 dùng để tổng kết / khái quát lại ý đã trình bày phía trước, tương đương \"tóm lại, nhìn chung\".",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "id": "fg21",
+   "a": "民以食为天",
+   "opts": [
+    "民以食为天",
+    "一日三餐",
+    "天天吃饭",
+    "吃喝玩乐"
+   ],
+   "sent": "____, 吃饭对中国人来说非常重要。",
+   "full": "民以食为天, 吃饭对中国人来说非常重要。",
+   "pin": "Mín yǐ shí wéi tiān.",
+   "vi": "Dân lấy việc ăn làm trời (cái ăn là quan trọng nhất với dân).",
+   "name": "民以食为天",
+   "expl": "Ngạn ngữ 民以食为天: với người dân, ăn là việc quan trọng bậc nhất — phản ánh văn hoá ẩm thực Trung Hoa.",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "id": "fg22",
+   "a": "其中",
+   "opts": [
+    "其中",
+    "其实",
+    "其他",
+    "其次"
+   ],
+   "sent": "你没有做过生意，不知道____的辛苦。",
+   "full": "你没有做过生意，不知道其中的辛苦。",
+   "pin": "Nǐ méiyǒu zuò guò shēngyi, bù zhīdao qízhōng de xīnkǔ.",
+   "vi": "Bạn chưa từng kinh doanh nên không biết được những khó khăn trong đó.",
+   "name": "其中 (Danh từ)",
+   "expl": "其中 (qízhōng) = \"trong đó, trong số đó\". Thường đứng sau danh từ/sự việc vừa được nhắc tới, chỉ về một phần/khía cạnh của nó.",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "id": "fg23",
+   "a": "既",
+   "opts": [
+    "既",
+    "就",
+    "才",
+    "只"
+   ],
+   "sent": "她____聪明又努力。",
+   "full": "她既聪明又努力。",
+   "pin": "Tā jì cōngmíng yòu nǔlì.",
+   "vi": "Cô ấy vừa thông minh vừa chăm chỉ.",
+   "name": "既……又/还/也……",
+   "expl": "Cấu trúc 既…又/还/也… nối 2 tính chất/hành động cùng tồn tại ở một chủ thể. 既 đứng trước, 又/还/也 đứng trước vế sau.",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "id": "fg24",
+   "a": "估计",
+   "opts": [
+    "估计",
+    "以为",
+    "觉得",
+    "应该"
+   ],
+   "sent": "这件衣服____要两百块钱。",
+   "full": "这件衣服估计要两百块钱。",
+   "pin": "Zhè jiàn yīfu gūjì yào liǎ bǎi kuài qián.",
+   "vi": "Bộ quần áo này đoán chừng phải tốn 200 tệ.",
+   "name": "估计 (Động từ)",
+   "expl": "估计 (gūjì) = \"ước tính / đoán chừng\". Dùng khi người nói đưa ra ước lượng dựa trên cơ sở có sẵn, không phải đoán mò cảm tính như 猜.",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "id": "fg25",
+   "a": "饭后百步走",
+   "opts": [
+    "饭后百步走",
+    "饭前不吃药",
+    "每天跑步",
+    "早睡早起"
+   ],
+   "sent": "人们说 “____，活到九十九”，所以饭后要走一走。",
+   "full": "人们说 “饭后百步走，活到九十九”，所以饭后要走一走。",
+   "pin": "Fàn hòu bǎi bù zǒu, huó dào jiǔshíjiǔ.",
+   "vi": "Sau bữa ăn đi bộ trăm bước, sống đến 99 tuổi.",
+   "name": "饭后百步走，活到九十九",
+   "expl": "Tục ngữ dân gian Trung Quốc về bí quyết trường thọ: đi bộ nhẹ nhàng sau bữa ăn rất tốt cho tiêu hoá và sức khoẻ.",
+   "t": "Chủ đề 16–17"
+  },
+  {
+   "id": "og0",
+   "a": "仍然",
+   "opts": [
+    "仍然",
+    "并且",
+    "不得不",
+    "大约"
+   ],
+   "sent": "已经是春天了，但天气____很冷。",
+   "full": "已经是春天了，但天气仍然很冷。",
+   "pin": "Yǐjīng shì chūntiān le, dàn tiānqì réngrán hěn lěng.",
+   "vi": "Đã sang xuân rồi, nhưng thời tiết vẫn rất lạnh.",
+   "name": "Phó từ 仍然 — vẫn, vẫn còn",
+   "expl": "Diễn tả trạng thái/tình huống vẫn tiếp tục, không thay đổi như trước.",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "id": "og1",
+   "a": "并且",
+   "opts": [
+    "并且",
+    "仍然",
+    "不得不",
+    "大约"
+   ],
+   "sent": "他聪明、能干____善良。",
+   "full": "他聪明、能干并且善良。",
+   "pin": "Tā cōngmíng, nénggàn bìngqiě shànliáng.",
+   "vi": "Anh ấy thông minh, giỏi giang và còn lương thiện.",
+   "name": "Liên từ 并且 — và, hơn nữa, đồng thời",
+   "expl": "Nối hai tính chất / hành động cùng tồn tại, mang nghĩa bổ sung, tăng tiến.",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "id": "og2",
+   "a": "不得不",
+   "opts": [
+    "不得不",
+    "仍然",
+    "并且",
+    "大约"
+   ],
+   "sent": "今天停电停水，做不成饭了，我____到外边去吃。",
+   "full": "今天停电停水，做不成饭了，我不得不到外边去吃。",
+   "pin": "Jīntiān tíngdiàn tíngshuǐ, zuò bu chéng fàn le, wǒ bùdébù dào wàibian qù chī.",
+   "vi": "Hôm nay mất điện mất nước, không thể nấu cơm, tôi đành phải ra ngoài ăn.",
+   "name": "Cụm từ 不得不 — không thể không, đành phải",
+   "expl": "Diễn tả việc buộc phải làm do hoàn cảnh, dù không muốn (= bắt buộc, đành phải).",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "id": "og3",
+   "a": "大约",
+   "opts": [
+    "大约",
+    "仍然",
+    "并且",
+    "不得不"
+   ],
+   "sent": "从这儿开车到学校，____要花三到四个小时。",
+   "full": "从这儿开车到学校，大约要花三到四个小时。",
+   "pin": "Cóng zhèr kāichē dào xuéxiào, dàyuē yào huā sān dào sì gè xiǎoshí.",
+   "vi": "Lái xe từ đây đến trường, mất khoảng 3–4 tiếng.",
+   "name": "Phó từ 大约 — khoảng, độ chừng",
+   "expl": "Đặt trước số lượng / thời gian để chỉ con số ước lượng, không chính xác.",
+   "t": "Giao thông & Du lịch"
+  },
+  {
+   "id": "fq0",
+   "a": "情况",
+   "opts": [
+    "回忆",
+    "情况",
+    "距离"
+   ],
+   "sent": "由于天气的___，我们不能出去了。",
+   "full": "由于天气的情况，我们不能出去了。",
+   "pin": "",
+   "vi": "",
+   "name": "Từ vựng: 情况",
+   "expl": "情况 (qíngkuàng): Tình hình, hoàn cảnh. \"Tình hình thời tiết\" -> 天气的情况.",
+   "t": "Bài 3"
+  },
+  {
+   "id": "fq1",
+   "a": "打扰",
+   "opts": [
+    "打扰",
+    "开玩笑",
+    "交流"
+   ],
+   "sent": "对不起，___您一下，请问地铁站在哪儿？",
+   "full": "对不起，打扰您一下，请问地铁站在哪儿？",
+   "pin": "",
+   "vi": "",
+   "name": "Từ vựng: 打扰",
+   "expl": "打扰 (dǎrǎo): Làm phiền, quấy rầy. Câu cửa miệng lịch sự: 抱歉打扰您 (Xin lỗi đã làm phiền ngài).",
+   "t": "Bài 3"
+  },
+  {
+   "id": "fq2",
+   "a": "互相",
+   "opts": [
+    "真正",
+    "互相",
+    "当时"
+   ],
+   "sent": "好朋友之间应该___帮助。",
+   "full": "好朋友之间应该互相帮助。",
+   "pin": "",
+   "vi": "",
+   "name": "Từ vựng: 互相",
+   "expl": "互相 (hùxiāng): Lẫn nhau. Làm phó từ, bắt buộc phải đứng TRƯỚC động từ: 互相帮助 (giúp đỡ lẫn nhau).",
+   "t": "Bài 3"
+  },
+  {
+   "id": "fq3",
+   "a": "回忆",
+   "opts": [
+    "回忆",
+    "情况",
+    "周围"
+   ],
+   "sent": "那是一段让人难忘的美好___。",
+   "full": "那是一段让人难忘的美好回忆。",
+   "pin": "",
+   "vi": "",
+   "name": "Từ vựng: 回忆",
+   "expl": "回忆 (huíyì): Hồi ức, kỷ niệm. (Danh từ hoặc động từ).",
+   "t": "Bài 3"
+  },
+  {
+   "id": "fq4",
+   "a": "距离",
+   "opts": [
+    "距离",
+    "聚会",
+    "友谊"
+   ],
+   "sent": "我的家离公司的___不太远。",
+   "full": "我的家离公司的距离不太远。",
+   "pin": "",
+   "vi": "",
+   "name": "Từ vựng: 距离",
+   "expl": "距离 (jùlí): Cự ly, khoảng cách. \"Khoảng cách từ nhà đến công ty\".",
+   "t": "Bài 3"
+  },
+  {
+   "id": "fq5",
+   "a": "拉",
+   "opts": [
+    "交",
+    "拉",
+    "俩"
+   ],
+   "sent": "他用力___开门，急忙走了出去。",
+   "full": "他用力拉开门，急忙走了出去。",
+   "pin": "",
+   "vi": "",
+   "name": "Từ vựng: 拉",
+   "expl": "拉 (lā): Lôi, kéo (Dùng sức của tay). Trái nghĩa với 推 (tuī) - đẩy.",
+   "t": "Bài 3"
+  },
+  {
+   "id": "fq6",
+   "a": "开玩笑",
+   "opts": [
+    "打扰",
+    "误会",
+    "开玩笑"
+   ],
+   "sent": "别生气了，我只是跟你___的。",
+   "full": "别生气了，我只是跟你开玩笑的。",
+   "pin": "",
+   "vi": "",
+   "name": "Từ vựng: 开玩笑",
+   "expl": "开玩笑 (kāi wánxiào): Nói đùa, đùa cợt. Đây là động từ ly hợp.",
+   "t": "Bài 3"
+  },
+  {
+   "id": "fq7",
+   "a": "当时",
+   "opts": [
+    "当时",
+    "互相",
+    "真正"
+   ],
+   "sent": "我去找他的时候，他___不在家。",
+   "full": "我去找他的时候，他当时不在家。",
+   "pin": "",
+   "vi": "",
+   "name": "Từ vựng: 当时",
+   "expl": "当时 (dāngshí): Lúc đó, khi ấy (chỉ một thời điểm trong quá khứ).",
+   "t": "Bài 3"
+  },
+  {
+   "id": "fq8",
+   "a": "无聊",
+   "opts": [
+    "丰富",
+    "无聊",
+    "讨厌"
+   ],
+   "sent": "周末一直待在家里，我觉得很___。",
+   "full": "周末一直待在家里，我觉得很无聊。",
+   "pin": "",
+   "vi": "",
+   "name": "Từ vựng: 无聊",
+   "expl": "无聊 (wúliáo): Vô vị, nhàm chán, chán nản.",
+   "t": "Bài 3"
+  },
+  {
+   "id": "fq9",
+   "a": "友谊",
+   "opts": [
+    "友谊",
+    "情况",
+    "误会"
+   ],
+   "sent": "祝我们的___地久天长。",
+   "full": "祝我们的友谊地久天长。",
+   "pin": "",
+   "vi": "",
+   "name": "Từ vựng: 友谊",
+   "expl": "友谊 (yǒuyì): Tình bạn, tình hữu nghị. (地久天长: trường tồn mãi mãi).",
+   "t": "Bài 3"
+  }
+ ],
+ "sentences": [
+  {
+   "id": "s:r1",
+   "cn": "房东说，各种费用一共一千块。",
+   "pin": "Fángdōng shuō, gè zhǒng fèiyòng yígòng yìqiān kuài.",
+   "vi": "Chủ nhà nói, các loại chi phí tổng cộng một nghìn tệ.",
+   "d": [
+    "Chủ nhà nói tiền thuê nhà mỗi tháng tăng một nghìn tệ.",
+    "Chủ nhà quên mật khẩu nên mất một nghìn tệ.",
+    "Chủ nhà nói chi phí sửa chữa là một trăm tệ."
+   ],
+   "t": "Chủ đề 21–23"
+  },
+  {
+   "id": "s:r2",
+   "cn": "请把窗户擦干净，客厅太脏了。",
+   "pin": "Qǐng bǎ chuānghu cā gānjìng, kètīng tài zāng le.",
+   "vi": "Hãy lau cửa sổ cho sạch, phòng khách bẩn quá.",
+   "d": [
+    "Hãy mở cửa sổ ra, phòng khách nóng quá.",
+    "Hãy sửa lại cửa sổ, phòng khách tối quá.",
+    "Hãy đóng cửa sổ lại, bên ngoài ồn quá."
+   ],
+   "t": "Chủ đề 21–23"
+  },
+  {
+   "id": "s:r3",
+   "cn": "随着互联网的发展，人们专门在网站上讨论各种问题。",
+   "pin": "Suízhe hùliánwǎng de fāzhǎn, rénmen zhuānmén zài wǎngzhàn shang tǎolùn gè zhǒng wèntí.",
+   "vi": "Cùng với sự phát triển của Internet, mọi người chuyên thảo luận đủ loại vấn đề trên các trang web.",
+   "d": [
+    "Vì Internet phát triển nên mọi người không còn thảo luận trực tiếp nữa.",
+    "Internet phát triển làm cho các trang web ngày càng đắt hơn.",
+    "Mọi người phản đối việc thảo luận các vấn đề trên mạng."
+   ],
+   "t": "Chủ đề 21–23"
+  },
+  {
+   "id": "s:r4",
+   "cn": "虽然他失败了很多次，他却没有放弃，坚持研究。",
+   "pin": "Suīrán tā shībài le hěn duō cì, tā què méiyǒu fàngqì, jiānchí yánjiū.",
+   "vi": "Tuy thất bại nhiều lần nhưng anh ấy không từ bỏ, kiên trì nghiên cứu.",
+   "d": [
+    "Vì thất bại nhiều lần nên anh ấy đã từ bỏ nghiên cứu.",
+    "Anh ấy chưa từng thất bại vì luôn kiên trì nghiên cứu.",
+    "Tuy nghiên cứu rất giỏi nhưng anh ấy vẫn muốn từ bỏ."
+   ],
+   "t": "Chủ đề 21–23"
+  },
+  {
+   "id": "s:r5",
+   "cn": "我把钥匙忘在出租车上了，真受不了！",
+   "pin": "Wǒ bǎ yàoshi wàng zài chūzūchē shang le, zhēn shòubuliǎo!",
+   "vi": "Tôi để quên chìa khóa trên taxi rồi, thật không chịu nổi!",
+   "d": [
+    "Tôi làm rơi điện thoại trên taxi, thật không chịu nổi!",
+    "Tài xế taxi quên trả chìa khóa cho tôi.",
+    "Tôi quên địa chỉ nhà nên taxi không đến được."
+   ],
+   "t": "Chủ đề 21–23"
+  },
+  {
+   "id": "s:r6",
+   "cn": "我家对面有一家餐厅，有点儿吵，但是很便宜。",
+   "pin": "Wǒ jiā duìmiàn yǒu yì jiā cāntīng, yǒudiǎnr chǎo, dànshì hěn piányi.",
+   "vi": "Đối diện nhà tôi có một nhà hàng, hơi ồn nhưng rất rẻ.",
+   "d": [
+    "Cạnh nhà tôi có một nhà hàng vừa yên tĩnh vừa rẻ.",
+    "Đối diện nhà tôi có một nhà hàng rất đắt nhưng yên tĩnh.",
+    "Nhà hàng đối diện nhà tôi vừa ồn vừa đắt."
+   ],
+   "t": "Chủ đề 21–23"
+  },
+  {
+   "id": "s:r7",
+   "cn": "他住在郊区，每个月至少存两千块钱。",
+   "pin": "Tā zhù zài jiāoqū, měi ge yuè zhìshǎo cún liǎng qiān kuài qián.",
+   "vi": "Anh ấy sống ở ngoại thành, mỗi tháng tiết kiệm ít nhất hai nghìn tệ.",
+   "d": [
+    "Anh ấy sống ở trung tâm, mỗi tháng tiêu hết hai nghìn tệ.",
+    "Anh ấy thuê nhà ở ngoại thành hết hai nghìn tệ mỗi tháng.",
+    "Anh ấy sống ở ngoại thành nên nhiều nhất chỉ để dành được hai nghìn tệ."
+   ],
+   "t": "Chủ đề 21–23"
+  },
+  {
+   "id": "s:r8",
+   "cn": "教授让我们总结这个世纪科学技术的发展过程。",
+   "pin": "Jiàoshòu ràng wǒmen zǒngjié zhège shìjì kēxué jìshù de fāzhǎn guòchéng.",
+   "vi": "Giáo sư bảo chúng tôi tổng kết quá trình phát triển khoa học kỹ thuật của thế kỷ này.",
+   "d": [
+    "Giáo sư đã tổng kết lịch sử khoa học của thế kỷ trước cho chúng tôi.",
+    "Chúng tôi mời giáo sư thảo luận về công nghệ mới nhất.",
+    "Giáo sư phản đối việc nghiên cứu quá trình phát triển kỹ thuật."
+   ],
+   "t": "Chủ đề 21–23"
+  }
+ ],
+ "passages": [
+  {
+   "id": "fp0",
+   "t": "Bài 1",
+   "title": "小明的周末",
+   "text": "小明今天很忙。上午他去银行取钱，然后去理发。下午，他的朋友邀请他参加生日晚会。他带了一本很厚的书作为礼物。晚会上有许多朋友，大家一起干杯，非常开心。小明好像玩得很高兴。",
+   "py": "Xiǎo Míng jīntiān hěn máng. Shàngwǔ tā qù yínháng qǔ qián, ránhòu qù lǐfà. Xiàwǔ, tā de péngyǒu yāoqǐng tā cānjiā shēngrì wǎnhuì. Tā dài le yì běn hěn hòu de shū zuòwéi lǐwù. Wǎnhuì shàng yǒu xǔduō péngyǒu, dàjiā yìqǐ gānbēi, fēicháng kāixīn. Xiǎo Míng hǎoxiàng wánr de hěn gāoxìng.",
+   "vi": "Hôm nay Tiểu Minh rất bận. Buổi sáng cậu ấy đi ngân hàng rút tiền, sau đó đi cắt tóc. Buổi chiều, bạn của cậu ấy mời cậu tham gia tiệc sinh nhật. Cậu mang theo một cuốn sách rất dày làm quà. Trong bữa tiệc có rất nhiều bạn bè, mọi người cùng nhau cạn ly, rất vui vẻ. Tiểu Minh dường như đã chơi rất vui.",
+   "questions": [
+    {
+     "q": "小明上午做了什么？",
+     "opts": [
+      "取钱和理发",
+      "买书",
+      "看电影",
+      "睡觉"
+     ],
+     "correct": 0,
+     "expl": "Văn bản nói rõ buổi sáng (上午) Tiểu Minh đi ngân hàng 取钱 (rút tiền) và sau đó đi 理发 (cắt tóc)."
+    },
+    {
+     "q": "朋友邀请小明做什么？",
+     "opts": [
+      "去旅游",
+      "参加生日晚会",
+      "去银行",
+      "去理发"
+     ],
+     "correct": 1,
+     "expl": "「邀请他参加生日晚会」 = mời anh ấy tham gia tiệc sinh nhật."
+    },
+    {
+     "q": "小明带什么礼物？",
+     "opts": [
+      "一朵花",
+      "一本很厚的书",
+      "一瓶酒",
+      "一条毛巾"
+     ],
+     "correct": 1,
+     "expl": "「带了一本很厚的书作为礼物」 = mang một cuốn sách rất dày làm quà. 厚 = dày."
+    },
+    {
+     "q": "晚会上人多吗？",
+     "opts": [
+      "只有一个人",
+      "两三个人",
+      "许多朋友",
+      "没有人"
+     ],
+     "correct": 2,
+     "expl": "「许多朋友」 xǔduō = rất nhiều. Đây chính là từ số 19 bạn đang học."
+    }
+   ]
+  },
+  {
+   "id": "fp1",
+   "t": "Bài 1",
+   "title": "动物园的老虎",
+   "text": "昨天我们班举办了一次活动，老师带儿童们去动物园。我们看到了许多动物。老虎最有意思，它的毛又黄又黑。一只小老虎好像在睡觉，另一只在走来走去。回家的时候，我发现我的帽子丢了，可能是在看老虎的时候掉的。",
+   "py": "Zuótiān wǒmen bān jǔbàn le yí cì huódòng, lǎoshī dài értóng men qù dòngwùyuán. Wǒmen kàn dào le xǔduō dòngwù. Lǎohǔ zuì yǒu yìsi, tā de máo yòu huáng yòu hēi. Yì zhī xiǎo lǎohǔ hǎoxiàng zài shuìjiào, lìng yì zhī zài zǒu lái zǒu qù. Huí jiā de shíhou, wǒ fāxiàn wǒ de màozi diū le, kěnéng shì zài kàn lǎohǔ de shíhou diào de.",
+   "vi": "Hôm qua lớp chúng tôi tổ chức một hoạt động, cô giáo dẫn các em thiếu nhi đi sở thú. Chúng tôi đã thấy rất nhiều con vật. Hổ là thú vị nhất, lông của nó vừa vàng vừa đen. Một con hổ con dường như đang ngủ, con kia thì đi qua đi lại. Khi về nhà, tôi phát hiện mũ của mình bị mất rồi, có thể là đã đánh rơi lúc xem hổ.",
+   "questions": [
+    {
+     "q": "谁举办了活动？",
+     "opts": [
+      "学生",
+      "爸爸妈妈",
+      "我们班 / 老师",
+      "动物园"
+     ],
+     "correct": 2,
+     "expl": "「我们班举办了一次活动」 - 举办 jǔbàn = tổ chức."
+    },
+    {
+     "q": "老虎的毛是什么颜色？",
+     "opts": [
+      "白色",
+      "又黄又黑",
+      "红色",
+      "蓝色"
+     ],
+     "correct": 1,
+     "expl": "「毛又黄又黑」 = lông vừa vàng vừa đen. 毛 máo = lông."
+    },
+    {
+     "q": "小老虎在做什么？",
+     "opts": [
+      "吃东西",
+      "好像在睡觉",
+      "跑步",
+      "喝水"
+     ],
+     "correct": 1,
+     "expl": "「好像在睡觉」 - 好像 hǎoxiàng = dường như."
+    },
+    {
+     "q": "「我」丢了什么？",
+     "opts": [
+      "书",
+      "钱",
+      "帽子",
+      "钥匙"
+     ],
+     "correct": 2,
+     "expl": "「我的帽子丢了」. 丢 diū = mất. 掉 diào = rơi (động tác gây ra việc mất)."
+    }
+   ]
+  },
+  {
+   "id": "fp2",
+   "t": "Bài 4–5",
+   "title": "我的父亲",
+   "text": "我的父亲是一名律师。他工作很忙，但是对我很有礼貌，也很骄傲地告诉别人我的事。小时候，他常常抱我，教育我做人要接受别人的意见。他的脾气很好，从来不让我失望。我希望将来也能像他一样让家人开心。",
+   "py": "",
+   "vi": "Cha tôi là một luật sư. Ông làm việc rất bận, nhưng rất lễ phép với tôi, và cũng rất tự hào kể cho người khác nghe về tôi. Khi còn nhỏ, ông thường ôm tôi, dạy tôi làm người phải biết tiếp thu ý kiến của người khác. Tính tình ông rất tốt, chưa bao giờ làm tôi thất vọng. Tôi hy vọng tương lai cũng có thể giống ông, làm cho gia đình vui vẻ.",
+   "questions": [
+    {
+     "q": "父亲的职业是什么？",
+     "opts": [
+      "医生",
+      "老师",
+      "律师",
+      "司机"
+     ],
+     "correct": 2,
+     "expl": ""
+    },
+    {
+     "q": "根据短文，父亲教育“我”要怎么做？",
+     "opts": [
+      "要骄傲",
+      "要接受别人的意见",
+      "要有钱",
+      "要工作忙"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "父亲的脾气怎么样？",
+     "opts": [
+      "不好",
+      "很好",
+      "很奇怪",
+      "很可怜"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp3",
+   "t": "Bài 4–5",
+   "title": "网上购物",
+   "text": "现在网上购物很流行，普遍的顾客都喜欢看广告找打折的东西。价格便宜，还能寄到家里，非常方便。但是要考虑安全问题，有些东西是假的，标准也不一定好。付款的时候要看清楚，不要浪费零钱。",
+   "py": "",
+   "vi": "Bây giờ mua sắm online rất thịnh hành, đa số khách hàng đều thích xem quảng cáo tìm đồ giảm giá. Giá rẻ, lại có thể gửi đến tận nhà, rất tiện lợi. Nhưng phải cân nhắc vấn đề an toàn, có một số đồ là giả, tiêu chuẩn cũng không chắc tốt. Khi thanh toán phải xem kỹ, đừng lãng phí tiền lẻ.",
+   "questions": [
+    {
+     "q": "顾客为什么喜欢看广告？",
+     "opts": [
+      "因为好看",
+      "为了找打折的东西",
+      "因为没事做",
+      "为了学习"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "网上购物有什么问题？",
+     "opts": [
+      "太贵",
+      "不方便",
+      "有假的东西，要考虑安全",
+      "不能寄到家"
+     ],
+     "correct": 2,
+     "expl": ""
+    },
+    {
+     "q": "付款的时候应该怎么样？",
+     "opts": [
+      "快一点",
+      "看清楚，不要浪费零钱",
+      "不用看",
+      "找别人帮忙"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp4",
+   "t": "Bài 4–5",
+   "title": "妈妈的电话",
+   "text": "昨天晚上有人敲门，我很吃惊，原来是亲戚来看我。他们告诉我，我的母亲生病了。我听了非常失望，觉得自己很可怜，不能在她身边。母亲的年龄大了，我应该多回家看她。我肯定下个月就回去，给她寄一条新毛巾。",
+   "py": "",
+   "vi": "Tối qua có người gõ cửa, tôi rất giật mình, hóa ra là họ hàng đến thăm. Họ nói với tôi rằng mẹ tôi bị bệnh. Tôi nghe xong rất thất vọng, cảm thấy mình thật đáng thương, không thể ở bên cạnh bà. Mẹ tôi tuổi đã lớn, tôi nên về nhà thăm bà nhiều hơn. Tôi chắc chắn tháng sau sẽ về, gửi cho bà một chiếc khăn mới.",
+   "questions": [
+    {
+     "q": "“我”为什么吃惊？",
+     "opts": [
+      "母亲来了",
+      "有亲戚来敲门",
+      "下雨了",
+      "丢了钱"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "母亲怎么了？",
+     "opts": [
+      "很开心",
+      "生病了",
+      "搬家了",
+      "找工作"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "“我”决定下个月做什么？",
+     "opts": [
+      "买家具",
+      "回家看母亲，寄毛巾",
+      "去旅游",
+      "换工作"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp5",
+   "t": "Bài 4–5",
+   "title": "新家具",
+   "text": "上个周末我去商店购物，想买一些家具。顾客很多，因为店里在打折。一个沙发的价格本来很贵，现在便宜了一半。我考虑了很久，肯定这个标准不错，就决定买。付款的时候，我没带够零钱，店员说可以用手机。我很开心，回家路上还抱着小礼物。",
+   "py": "",
+   "vi": "Cuối tuần trước tôi đi cửa hàng mua sắm, muốn mua một ít đồ nội thất. Khách hàng rất đông, vì cửa hàng đang giảm giá. Giá một chiếc ghế sofa vốn rất đắt, bây giờ rẻ đi một nửa. Tôi cân nhắc rất lâu, chắc chắn tiêu chuẩn này không tệ, nên quyết định mua. Khi thanh toán, tôi không mang đủ tiền lẻ, nhân viên nói có thể dùng điện thoại. Tôi rất vui, trên đường về còn ôm món quà nhỏ.",
+   "questions": [
+    {
+     "q": "“我”去商店做什么？",
+     "opts": [
+      "看朋友",
+      "买家具",
+      "找工作",
+      "寄东西"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "为什么顾客很多？",
+     "opts": [
+      "店里在打折",
+      "天气好",
+      "新开业",
+      "有广告"
+     ],
+     "correct": 0,
+     "expl": ""
+    },
+    {
+     "q": "付款时遇到了什么问题？",
+     "opts": [
+      "东西是假的",
+      "没带够零钱",
+      "店员不在",
+      "价格太贵"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp6",
+   "t": "Bài 4–5",
+   "title": "教育孩子",
+   "text": "现在很多父亲和母亲都很骄傲自己的孩子。但是教育孩子不容易，孩子的脾气有时候让人失望。我觉得普遍的问题是父母太忙，没有时间。孩子需要接受好的礼貌教育，将来才能成为有用的人。不要浪费将来的时间，多抱抱他们，让他们开心。",
+   "py": "",
+   "vi": "Bây giờ rất nhiều cha mẹ đều rất tự hào về con của mình. Nhưng dạy dỗ con không dễ, tính nết của trẻ đôi khi làm người ta thất vọng. Tôi nghĩ vấn đề phổ biến là cha mẹ quá bận, không có thời gian. Trẻ con cần được tiếp nhận sự giáo dục lễ phép tốt, tương lai mới có thể trở thành người có ích. Đừng lãng phí thời gian của tương lai, hãy ôm chúng nhiều hơn, làm cho chúng vui vẻ.",
+   "questions": [
+    {
+     "q": "作者认为普遍的问题是什么？",
+     "opts": [
+      "孩子太多",
+      "父母太忙，没有时间",
+      "学校不好",
+      "钱不够"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "孩子需要接受什么？",
+     "opts": [
+      "很多钱",
+      "好的礼貌教育",
+      "新家具",
+      "广告"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "作者建议父母怎么做？",
+     "opts": [
+      "多工作",
+      "多抱孩子，让他们开心",
+      "少说话",
+      "买东西"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp7",
+   "t": "Bài 6",
+   "title": "去北京旅行",
+   "text": "下个月我和家人要去北京旅行。我打算参观长城，听说那里的景色非常美。我们早上六点出发，坐火车去。导游是一个非常友好的中国人，他会说一点儿英文。北京的气候很好，现在暖和，天上有很多白色的云。晚上我还想去逛街，吃一些有名的小吃，比如烤鸭。回来以前，我们还要去大使馆附近的小公园看一看。",
+   "py": "",
+   "vi": "Tháng sau tôi và gia đình sẽ đi du lịch Bắc Kinh. Tôi định tham quan Vạn Lý Trường Thành, nghe nói phong cảnh ở đó rất đẹp. Chúng tôi xuất phát lúc 6 giờ sáng, đi tàu hỏa. Hướng dẫn viên là một người Trung Quốc rất thân thiện, ông ấy biết nói một chút tiếng Anh. Khí hậu Bắc Kinh rất tốt, bây giờ ấm áp, trên trời có rất nhiều mây trắng. Buổi tối tôi còn muốn đi dạo phố, ăn vài món ăn vặt nổi tiếng, ví dụ như vịt quay. Trước khi về, chúng tôi còn đi xem công viên nhỏ gần Đại sứ quán.",
+   "questions": [
+    {
+     "q": "“我”要去哪里旅行？",
+     "opts": [
+      "上海",
+      "北京",
+      "西安",
+      "南京"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "导游是什么样的人？",
+     "opts": [
+      "很忙",
+      "很友好，会一点英文",
+      "很可怜",
+      "很奇怪"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "晚上“我”想做什么？",
+     "opts": [
+      "去长城",
+      "逛街吃小吃",
+      "看电影",
+      "睡觉"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp8",
+   "t": "Bài 6",
+   "title": "寒假计划",
+   "text": "寒假快到了，我和家人打算一起旅行。我们想去南方，因为南方的气候比北方暖和得多。爸爸说要去看长江的景色，他还想坐船。妈妈想参观一些古老的博物馆，下午还要去大使馆附近的小街逛一逛，买几件衣服。弟弟最喜欢吃，所以他列了一张小吃的名单。我们已经准备好出发的东西了，每个人都很开心。",
+   "py": "",
+   "vi": "Kỳ nghỉ đông sắp đến, tôi và gia đình dự định cùng nhau đi du lịch. Chúng tôi muốn đi miền Nam vì khí hậu miền Nam ấm hơn miền Bắc rất nhiều. Bố nói muốn đi xem cảnh sông Trường Giang, ông còn muốn đi tàu. Mẹ muốn tham quan vài bảo tàng cổ, chiều còn muốn đi dạo ở con phố nhỏ gần Đại sứ quán, mua vài món đồ. Em trai thích ăn nhất nên nó đã liệt kê một danh sách món ăn vặt. Chúng tôi đã chuẩn bị xong đồ để xuất phát, ai cũng rất vui.",
+   "questions": [
+    {
+     "q": "为什么去南方？",
+     "opts": [
+      "东西便宜",
+      "气候比北方暖和",
+      "人少",
+      "有亲戚"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "爸爸想做什么？",
+     "opts": [
+      "逛街",
+      "看长江景色，坐船",
+      "买衣服",
+      "吃小吃"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "弟弟最喜欢什么？",
+     "opts": [
+      "看景色",
+      "吃，列了小吃名单",
+      "买东西",
+      "学习"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp9",
+   "t": "Bài 6",
+   "title": "夏天的活动",
+   "text": "学校每年放暑假的时候都举行很多活动。今年我们要去长城旅行三天，老师说山上比较凉快，不会太热。景色也很美，可以看到很远的山和白云。我们会跟着导游一步一步走，他对学生非常友好，会告诉我们很多有意思的故事。中午大家可以一起逛小村子，吃当地的小吃。这次活动让我对中国的历史更感兴趣了。",
+   "py": "",
+   "vi": "Mỗi năm khi trường nghỉ hè đều tổ chức rất nhiều hoạt động. Năm nay chúng tôi sẽ đi du lịch Vạn Lý Trường Thành ba ngày, thầy nói trên núi khá mát, không quá nóng. Phong cảnh cũng rất đẹp, có thể nhìn thấy núi xa xa và mây trắng. Chúng tôi sẽ đi theo hướng dẫn viên từng bước, ông ấy rất thân thiện với học sinh, sẽ kể nhiều câu chuyện thú vị. Trưa cả nhóm có thể cùng đi dạo trong làng nhỏ, ăn món ăn vặt địa phương. Hoạt động lần này khiến tôi quan tâm hơn đến lịch sử Trung Quốc.",
+   "questions": [
+    {
+     "q": "学校放暑假时做什么？",
+     "opts": [
+      "上课",
+      "举行很多活动",
+      "考试",
+      "休息"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "山上的天气怎么样？",
+     "opts": [
+      "很热",
+      "比较凉快",
+      "下雨",
+      "很冷"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "导游会做什么？",
+     "opts": [
+      "卖东西",
+      "讲有意思的故事",
+      "睡觉",
+      "回家"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp10",
+   "t": "Bài 6",
+   "title": "在大使馆办签证",
+   "text": "我下个星期要去中国旅行，今天先去大使馆办签证。大使馆的工作人员很友好，她笑着问我去哪里。我说想参观长城，看长江，还想去苏州逛园林。她说现在去那边气候很暖和，景色也很美，是出发的好时候。她还告诉我，办签证大概要一个星期，到时候可以来取。我准备好就出发，希望这次旅行会很顺利。",
+   "py": "",
+   "vi": "Tuần sau tôi sẽ đi du lịch Trung Quốc, hôm nay đi Đại sứ quán làm visa trước. Nhân viên ở Đại sứ quán rất thân thiện, cô ấy mỉm cười hỏi tôi đi đâu. Tôi nói muốn tham quan Vạn Lý Trường Thành, ngắm Trường Giang, còn muốn đi dạo viên lâm Tô Châu. Cô ấy nói bây giờ bên đó khí hậu rất ấm áp, phong cảnh cũng rất đẹp, là thời điểm tốt để xuất phát. Cô còn nói làm visa khoảng một tuần, đến lúc đó có thể đến lấy. Tôi chuẩn bị xong là xuất phát, hy vọng chuyến đi này sẽ thuận lợi.",
+   "questions": [
+    {
+     "q": "“我”去大使馆做什么？",
+     "opts": [
+      "找工作",
+      "办签证",
+      "参观",
+      "逛街"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "苏州可以做什么？",
+     "opts": [
+      "看长城",
+      "逛园林",
+      "吃小吃",
+      "看长江"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "签证要多久？",
+     "opts": [
+      "一天",
+      "大概一个星期",
+      "一个月",
+      "立刻"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp11",
+   "t": "Bài 6",
+   "title": "美丽的长江",
+   "text": "长江是中国最长的河，也是世界上最有名的河之一。每年很多人来这里旅行。这里的景色非常美：水边有山，山上有白云，还能听到鸟叫。秋天气候凉快，特别舒服，是最好的旅游时间。我们的导游说长江两边有很多有名的小吃，可以一边逛一边吃，又便宜又好吃。下午我们还要参观一座古老的桥，听说那座桥已经有一百多年的历史了。",
+   "py": "",
+   "vi": "Trường Giang là con sông dài nhất Trung Quốc, cũng là một trong những con sông nổi tiếng nhất thế giới. Mỗi năm rất nhiều người đến đây du lịch. Phong cảnh nơi đây vô cùng đẹp: bên sông có núi, trên núi có mây trắng, còn nghe được tiếng chim hót. Mùa thu khí hậu mát mẻ, đặc biệt dễ chịu, là thời điểm du lịch tốt nhất. Hướng dẫn viên nói hai bên Trường Giang có rất nhiều món ăn vặt nổi tiếng, có thể vừa đi dạo vừa ăn, vừa rẻ vừa ngon. Buổi chiều chúng tôi còn tham quan một cây cầu cổ, nghe nói cầu đó đã có hơn 100 năm lịch sử.",
+   "questions": [
+    {
+     "q": "长江是什么？",
+     "opts": [
+      "一座山",
+      "中国最长的河",
+      "一座桥",
+      "一个城市"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "什么时间最适合旅游？",
+     "opts": [
+      "夏天",
+      "秋天，气候凉快",
+      "冬天",
+      "春天"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "下午要去哪里？",
+     "opts": [
+      "大使馆",
+      "古老的桥",
+      "学校",
+      "公园"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp12",
+   "t": "Bài 6",
+   "title": "我喜欢逛街",
+   "text": "我最喜欢的活动是和朋友一起逛街。每个周末我们都会出门，先去吃小吃，然后慢慢逛各种各样的商店。今天天气很好，不冷也不热，很凉快，天上的云像棉花一样白。我们的朋友都很友好，互相帮忙挑选东西。下次放暑假，我们打算出发去南方旅行，听说那里的景色比这里更美，气候也更暖和。我们已经开始计划路线了。",
+   "py": "",
+   "vi": "Hoạt động tôi thích nhất là cùng bạn đi dạo phố. Mỗi cuối tuần chúng tôi đều ra ngoài, đi ăn món ăn vặt trước, rồi từ từ dạo qua đủ loại cửa hàng. Hôm nay thời tiết rất tốt, không lạnh không nóng, rất mát mẻ, mây trên trời trắng như bông gòn. Bạn của chúng tôi đều rất thân thiện, giúp nhau chọn đồ. Lần nghỉ hè sau, chúng tôi định xuất phát đi miền Nam du lịch, nghe nói phong cảnh bên đó đẹp hơn nơi này, khí hậu cũng ấm áp hơn. Chúng tôi đã bắt đầu lên kế hoạch đường đi.",
+   "questions": [
+    {
+     "q": "“我”最喜欢什么活动？",
+     "opts": [
+      "看电影",
+      "和朋友逛街",
+      "运动",
+      "学习"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "今天天气怎么样？",
+     "opts": [
+      "很热",
+      "凉快，云像棉花",
+      "下雨",
+      "很冷"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "暑假打算去哪里？",
+     "opts": [
+      "北方",
+      "南方旅行",
+      "学校",
+      "家里"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp13",
+   "t": "Bài 6",
+   "title": "学校的运动会",
+   "text": "上个星期，我们学校举行了一个大活动——运动会。那天气候非常好，暖和的太阳，蓝天上飞着几片白云，风也不大。同学们都很友好，一起加油，互相帮助。我参加了跑步比赛，虽然没拿第一，但是觉得很开心。运动会结束以后，老师带我们去附近的小街逛一逛，还买了很多小吃，大家边走边吃。我觉得这是今年最开心的一天，下次再举行我也想参加。",
+   "py": "",
+   "vi": "Tuần trước, trường chúng tôi tổ chức một hoạt động lớn — đại hội thể thao. Hôm đó khí hậu vô cùng tốt, mặt trời ấm áp, vài đám mây trắng bay trên trời xanh, gió cũng không lớn. Các bạn học rất thân thiện, cùng cổ vũ, giúp đỡ lẫn nhau. Tôi tham gia thi chạy, tuy không được nhất nhưng vẫn rất vui. Sau khi đại hội kết thúc, thầy cô dẫn chúng tôi ra phố nhỏ gần đó dạo một vòng, còn mua rất nhiều món ăn vặt, mọi người vừa đi vừa ăn. Tôi cảm thấy đây là ngày vui nhất trong năm nay, lần sau tổ chức tôi cũng muốn tham gia.",
+   "questions": [
+    {
+     "q": "学校举行了什么活动？",
+     "opts": [
+      "考试",
+      "运动会",
+      "旅行",
+      "音乐会"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "“我”参加了什么比赛？",
+     "opts": [
+      "游泳",
+      "跑步",
+      "篮球",
+      "唱歌"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "结束后老师做了什么？",
+     "opts": [
+      "回家",
+      "带学生逛街买小吃",
+      "考试",
+      "睡觉"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp14",
+   "t": "Bài 6",
+   "title": "中国的四季",
+   "text": "中国的气候很特别，每个季节都不一样。春天暖和，到处是花，是开始新活动的好时间。夏天非常热，学生放暑假，喜欢去海边旅行，吃冰凉的水果。秋天凉快，天高云白，是出发旅行的最好时间，很多人去爬山看景色。冬天有寒假，北方下雪很冷，南方还暖和，可以参观不同的城市。每个季节都可以发现不一样的美。",
+   "py": "",
+   "vi": "Khí hậu Trung Quốc rất đặc biệt, mỗi mùa đều khác nhau. Mùa xuân ấm áp, khắp nơi là hoa, là thời điểm tốt để bắt đầu hoạt động mới. Mùa hè rất nóng, học sinh nghỉ hè, thích đi du lịch ven biển, ăn trái cây mát. Mùa thu mát mẻ, trời cao mây trắng, là thời điểm tốt nhất để xuất phát du lịch, nhiều người đi leo núi ngắm cảnh. Mùa đông có nghỉ đông, miền Bắc tuyết rơi rất lạnh, miền Nam vẫn ấm áp, có thể tham quan các thành phố khác nhau. Mỗi mùa đều có thể tìm thấy vẻ đẹp khác nhau.",
+   "questions": [
+    {
+     "q": "夏天学生喜欢做什么？",
+     "opts": [
+      "上课",
+      "去海边旅行，吃水果",
+      "睡觉",
+      "考试"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "秋天为什么适合旅行？",
+     "opts": [
+      "很热",
+      "凉快，天高云白",
+      "下雨",
+      "很冷"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "冬天北方和南方有什么不同？",
+     "opts": [
+      "都很热",
+      "北方下雪冷，南方暖和",
+      "都下雪",
+      "都凉快"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp15",
+   "t": "Bài 6",
+   "title": "我的导游朋友",
+   "text": "我有一个朋友是导游，他叫小王，工作了五年了。他每天带不同的人去参观长城、故宫这些有名的地方。他说做导游最重要的是友好，要让客人开心。他懂很多历史，也知道哪里有最好的小吃。他常常带客人逛小街，吃当地的东西。每年放暑假和寒假是他最忙的时候，因为很多家庭都想去旅行。他说看到客人喜欢这里的景色，他就觉得很开心。",
+   "py": "",
+   "vi": "Tôi có một người bạn là hướng dẫn viên, anh ấy tên là Tiểu Vương, đã làm việc 5 năm. Anh ấy mỗi ngày dẫn các đoàn khác nhau đi tham quan những nơi nổi tiếng như Vạn Lý Trường Thành, Cố Cung. Anh nói làm hướng dẫn viên quan trọng nhất là thân thiện, phải làm khách vui. Anh hiểu nhiều về lịch sử, cũng biết chỗ nào có món ăn vặt ngon nhất. Anh thường dẫn khách dạo phố nhỏ, ăn đồ địa phương. Mỗi năm nghỉ hè và nghỉ đông là lúc anh bận nhất, vì nhiều gia đình muốn đi du lịch. Anh nói nhìn thấy khách thích phong cảnh nơi đây là anh thấy rất vui.",
+   "questions": [
+    {
+     "q": "小王做什么工作？",
+     "opts": [
+      "老师",
+      "导游",
+      "律师",
+      "医生"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "他认为做导游最重要的是什么？",
+     "opts": [
+      "有钱",
+      "友好，让客人开心",
+      "懂英文",
+      "年轻"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "什么时候他最忙？",
+     "opts": [
+      "上班",
+      "暑假和寒假",
+      "周末",
+      "晚上"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp16",
+   "t": "Bài 6",
+   "title": "第一次坐飞机",
+   "text": "去年寒假我第一次坐飞机去中国旅行，心里又紧张又开心。我们早上五点出发，机场里人很多。飞机上的工作人员很友好，给我介绍中国的气候和景色。下飞机以后，导游已经在等我们。第一天我们参观了长城，从上面看下去，山下都是白白的云。晚上我们去逛夜市，吃了很多小吃，又便宜又好吃。我永远不会忘记那一次旅行。",
+   "py": "",
+   "vi": "Nghỉ đông năm ngoái tôi lần đầu đi máy bay sang Trung Quốc du lịch, trong lòng vừa hồi hộp vừa vui. Chúng tôi xuất phát lúc 5 giờ sáng, sân bay rất đông người. Nhân viên trên máy bay rất thân thiện, giới thiệu cho tôi về khí hậu và phong cảnh Trung Quốc. Xuống máy bay xong, hướng dẫn viên đã đợi sẵn. Ngày đầu tiên chúng tôi tham quan Vạn Lý Trường Thành, từ trên nhìn xuống, dưới chân núi đều là mây trắng. Buổi tối chúng tôi đi dạo chợ đêm, ăn rất nhiều món ăn vặt, vừa rẻ vừa ngon. Tôi sẽ không bao giờ quên chuyến du lịch đó.",
+   "questions": [
+    {
+     "q": "“我”坐飞机时心情怎么样？",
+     "opts": [
+      "很累",
+      "又紧张又开心",
+      "很无聊",
+      "很失望"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "从长城上看到了什么？",
+     "opts": [
+      "大海",
+      "山下白白的云",
+      "城市",
+      "公园"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "晚上去哪里？",
+     "opts": [
+      "大使馆",
+      "夜市逛和吃小吃",
+      "公园",
+      "学校"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp17",
+   "t": "Bài 6",
+   "title": "春节的活动",
+   "text": "春节是中国最大的节日，正好在寒假。每个城市都会举行很多活动：放烟花、看舞狮、吃团圆饭。这个时候很多人不出发旅行，因为要回家和家人在一起。但是也有人选择去南方，那里气候暖和，可以逛花市、买花。大使馆和很多商店都会放假。我最喜欢的活动是和家人一起做饭、吃小吃，看天上的云变成红色，听外面的鞭炮声。",
+   "py": "",
+   "vi": "Tết là ngày lễ lớn nhất Trung Quốc, đúng vào kỳ nghỉ đông. Mỗi thành phố đều tổ chức rất nhiều hoạt động: bắn pháo hoa, xem múa lân, ăn bữa cơm đoàn viên. Lúc này nhiều người không xuất phát đi du lịch, vì muốn về nhà ở bên gia đình. Nhưng cũng có người chọn đi miền Nam, ở đó khí hậu ấm áp, có thể đi dạo chợ hoa, mua hoa. Đại sứ quán và nhiều cửa hàng đều nghỉ. Hoạt động tôi thích nhất là cùng gia đình nấu ăn, ăn món ăn vặt, ngắm mây trên trời chuyển màu đỏ, nghe tiếng pháo bên ngoài.",
+   "questions": [
+    {
+     "q": "春节是什么时候？",
+     "opts": [
+      "暑假",
+      "寒假",
+      "秋天",
+      "春天末"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "为什么有人不出发旅行？",
+     "opts": [
+      "太贵",
+      "要回家和家人在一起",
+      "天气不好",
+      "没钱"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "“我”最喜欢什么活动？",
+     "opts": [
+      "放烟花",
+      "和家人做饭、吃小吃",
+      "去南方",
+      "看舞狮"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp18",
+   "t": "Bài 6",
+   "title": "山上的小村子",
+   "text": "去年秋天我和朋友去山上的一个小村子旅行。从城市出发要四个小时。村子很小，只有一百多个人，但是大家都很友好。山上的气候很凉快，早上有雾，下午太阳出来云就慢慢散开了。我们的导游是村里的老人，他带我们参观了一座古老的庙，给我们讲了很多故事。晚饭我们吃了很多当地的小吃，特别是一种用山里的菜做的汤，非常好喝。下次放暑假我还想再去。",
+   "py": "",
+   "vi": "Mùa thu năm ngoái tôi và bạn đi du lịch một ngôi làng nhỏ trên núi. Từ thành phố xuất phát mất bốn tiếng. Làng rất nhỏ, chỉ có hơn 100 người, nhưng ai cũng rất thân thiện. Khí hậu trên núi rất mát mẻ, buổi sáng có sương, chiều mặt trời lên thì mây từ từ tan. Hướng dẫn viên của chúng tôi là một cụ già trong làng, ông dẫn chúng tôi tham quan một ngôi miếu cổ, kể nhiều câu chuyện. Bữa tối chúng tôi ăn rất nhiều món ăn vặt địa phương, đặc biệt là một loại canh nấu từ rau núi, cực kỳ ngon. Lần nghỉ hè sau tôi vẫn muốn đi nữa.",
+   "questions": [
+    {
+     "q": "村子有多少人？",
+     "opts": [
+      "十几个",
+      "一百多个",
+      "一千多个",
+      "几万个"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "导游是谁？",
+     "opts": [
+      "年轻女孩",
+      "村里的老人",
+      "学生",
+      "城里来的"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "晚饭最特别的是什么？",
+     "opts": [
+      "鱼",
+      "山里菜做的汤",
+      "面条",
+      "饺子"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp19",
+   "t": "Bài 6",
+   "title": "海边的暑假",
+   "text": "今年放暑假我和家人去了海边旅行。我们从北方出发，坐了一夜的火车。海边的气候比家里凉快多了，早上风吹过来很凉快，舒服极了。我们每天都去海边逛，看天上的白云和海里的小船。那里的人都很友好，老板给我们介绍很多有名的小吃：海鲜、冰水果，都很好吃。下午我们参加了一个活动——学游泳，老师非常耐心。这次旅行让我学到了很多新东西。",
+   "py": "",
+   "vi": "Nghỉ hè năm nay tôi và gia đình đã đi du lịch biển. Chúng tôi xuất phát từ miền Bắc, đi tàu hỏa một đêm. Khí hậu ven biển mát hơn ở nhà rất nhiều, buổi sáng gió thổi tới rất mát mẻ, dễ chịu vô cùng. Mỗi ngày chúng tôi đều ra biển dạo, ngắm mây trắng trên trời và những con thuyền nhỏ trên biển. Người ở đó đều rất thân thiện, ông chủ giới thiệu cho chúng tôi nhiều món ăn vặt nổi tiếng: hải sản, trái cây ướp lạnh, đều rất ngon. Buổi chiều chúng tôi tham gia một hoạt động — học bơi, giáo viên rất kiên nhẫn. Chuyến du lịch này khiến tôi học được nhiều điều mới.",
+   "questions": [
+    {
+     "q": "他们怎么去海边？",
+     "opts": [
+      "飞机",
+      "火车，一夜",
+      "汽车",
+      "走路"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "海边的气候怎么样？",
+     "opts": [
+      "很热",
+      "比家里凉快，舒服",
+      "很冷",
+      "下雨"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "他们参加了什么活动？",
+     "opts": [
+      "跑步",
+      "学游泳",
+      "唱歌",
+      "做饭"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp20",
+   "t": "Bài 6",
+   "title": "城里的小吃街",
+   "text": "我们城市最有名的地方不是公园，也不是博物馆，而是小吃街。这条街很长，两边都是小店，你可以一边逛一边吃，从早到晚都有人。导游常常带外国客人来这里，因为这里能尝到很多种中国味道。冬天的时候，店里很暖和，外面下雪也没关系；夏天店里有空调，比外面凉快得多。每年举行的美食节是最热闹的活动，那时候云多人也多。来我们城市旅行，一定不能错过这条街。",
+   "py": "",
+   "vi": "Nơi nổi tiếng nhất thành phố chúng tôi không phải công viên, cũng không phải bảo tàng, mà là phố ăn vặt. Con phố này rất dài, hai bên đều là cửa hàng nhỏ, bạn có thể vừa đi dạo vừa ăn, từ sáng đến tối đều có người. Hướng dẫn viên thường dẫn khách nước ngoài đến đây vì có thể thử nhiều hương vị Trung Quốc. Mùa đông trong cửa hàng rất ấm, ngoài trời tuyết rơi cũng không sao; mùa hè trong cửa hàng có máy lạnh, mát hơn bên ngoài nhiều. Lễ hội ẩm thực tổ chức mỗi năm là hoạt động náo nhiệt nhất, lúc đó mây nhiều người cũng đông. Đến thành phố chúng tôi du lịch, nhất định không được bỏ qua con phố này.",
+   "questions": [
+    {
+     "q": "城市最有名的地方是什么？",
+     "opts": [
+      "公园",
+      "小吃街",
+      "博物馆",
+      "大使馆"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "夏天店里为什么舒服？",
+     "opts": [
+      "开窗",
+      "有空调，比外面凉快",
+      "人少",
+      "有花"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "每年最热闹的活动是什么？",
+     "opts": [
+      "运动会",
+      "美食节",
+      "音乐会",
+      "电影节"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp21",
+   "t": "Bài 6",
+   "title": "云上的飞机",
+   "text": "我最喜欢坐飞机的时候，从窗户看外面的云。云有时候像棉花，有时候像小山，特别美。第一次坐飞机是去年寒假，跟妈妈一起去南方旅行。那时候气候还不太暖和，但是飞机上的人都很友好。从飞机上看下去，长江像一条银色的线，长城也能看到一点。下了飞机，导游带我们去参观有名的景色，晚上去逛夜市吃小吃。这次活动让我对旅行更感兴趣了，希望以后放暑假还能出发。",
+   "py": "",
+   "vi": "Khi đi máy bay tôi thích nhất là nhìn mây ngoài cửa sổ. Mây lúc thì như bông gòn, lúc thì như núi nhỏ, đẹp vô cùng. Lần đầu đi máy bay là kỳ nghỉ đông năm ngoái, đi cùng mẹ du lịch miền Nam. Lúc đó khí hậu vẫn chưa ấm lắm nhưng người trên máy bay đều rất thân thiện. Nhìn từ máy bay xuống, Trường Giang như một sợi chỉ bạc, Trường Thành cũng nhìn thấy một chút. Xuống máy bay, hướng dẫn viên dẫn chúng tôi đi tham quan các phong cảnh nổi tiếng, buổi tối đi dạo chợ đêm ăn món ăn vặt. Hoạt động lần này khiến tôi quan tâm hơn đến du lịch, hy vọng nghỉ hè sau còn được xuất phát.",
+   "questions": [
+    {
+     "q": "从飞机上看，长江像什么？",
+     "opts": [
+      "大海",
+      "一条银色的线",
+      "一座山",
+      "白云"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "第一次坐飞机是什么时候？",
+     "opts": [
+      "上个月",
+      "去年寒假",
+      "去年暑假",
+      "上周"
+     ],
+     "correct": 1,
+     "expl": ""
+    },
+    {
+     "q": "晚上做了什么？",
+     "opts": [
+      "睡觉",
+      "逛夜市吃小吃",
+      "看电影",
+      "学习"
+     ],
+     "correct": 1,
+     "expl": ""
+    }
+   ]
+  },
+  {
+   "id": "fp22",
+   "t": "Bài 10–11",
+   "title": "Thói quen mua sắm của người Trung Quốc",
+   "text": "中国人买东西的时候，很注意东西的质量和价格。以前很多人喜欢用现金，不过现在用手机付钱的人越来越多。在商店里，售货员一般会很热情地给客人提供帮助。另外，中国每个地方的人喜欢的味道也不一样，拿四川人来说，他们尤其喜欢吃辣的。",
+   "py": "Zhōngguó rén mǎi dōngxi de shíhou, hěn zhùyì dōngxi de zhìliàng hé jiàgé. Yǐqián hěn duō rén xǐhuan yòng xiànjīn, búguò xiànzài yòng shǒujī fù qián de rén yuèláiyuè duō. Zài shāngdiàn lǐ, shòuhuòyuán yìbān huì hěn rèqíng de gěi kèrén tígōng bāngzhù. Lìngwài, Zhōngguó měi ge dìfang de rén xǐhuan de wèidao yě bù yíyàng, ná Sìchuān rén láishuō, tāmen yóuqí xǐhuan chī là de.",
+   "vi": "Khi người Trung Quốc mua đồ, họ rất chú ý đến chất lượng và giá cả. Trước đây nhiều người thích dùng tiền mặt, nhưng nay người trả tiền bằng điện thoại ngày càng nhiều. Trong cửa hàng, nhân viên bán hàng thường nhiệt tình cung cấp sự giúp đỡ cho khách. Ngoài ra, người mỗi vùng lại thích vị khác nhau, lấy người Tứ Xuyên làm ví dụ, họ đặc biệt thích ăn cay.",
+   "questions": [
+    {
+     "q": "中国人买东西时最注意什么？",
+     "opts": [
+      "颜色和样子",
+      "质量和价格",
+      "数量和入口",
+      "味道和现金"
+     ],
+     "correct": 1,
+     "expl": "Câu 1 nêu rõ: 很注意东西的质量和价格 (rất chú ý chất lượng và giá cả)."
+    },
+    {
+     "q": "现在越来越多的人用什么付钱？",
+     "opts": [
+      "现金",
+      "手机",
+      "银行卡",
+      "支票"
+     ],
+     "correct": 1,
+     "expl": "现在用手机付钱的人越来越多 — người trả bằng điện thoại (手机) ngày càng nhiều."
+    },
+    {
+     "q": "\"拿四川人来说\"在文中的作用是什么？",
+     "opts": [
+      "提出问题",
+      "举一个例子",
+      "表示转折",
+      "总结全文"
+     ],
+     "correct": 1,
+     "expl": "Cấu trúc 拿……来说 dùng để NÊU MỘT VÍ DỤ minh họa (người Tứ Xuyên thích ăn cay)."
+    }
+   ]
+  },
+  {
+   "id": "fp23",
+   "t": "Bài 10–11",
+   "title": "Chuyến đi của Lan Anh",
+   "text": "兰英是我的朋友，她戴着一副眼镜，看起来很文静。上个月底，她一放假就去了一趟海南。她一到海边，就被美丽的海洋吸引了。她说海南的水果味道特别好，尤其是芒果。这次旅行让她真正明白了\"百闻不如一见\"的意思。",
+   "py": "Lán Yīng shì wǒ de péngyou, tā dàizhe yí fù yǎnjìng, kàn qǐlái hěn wénjìng. Shàng ge yuèdǐ, tā yí fàngjià jiù qù le yí tàng Hǎinán. Tā yí dào hǎibiān, jiù bèi měilì de hǎiyáng xīyǐn le. Tā shuō Hǎinán de shuǐguǒ wèidao tèbié hǎo, yóuqí shì mángguǒ. Zhè cì lǚxíng ràng tā zhēnzhèng míngbai le \"bǎi wén bù rú yí jiàn\" de yìsi.",
+   "vi": "Lan Anh là bạn tôi, cô ấy đeo một chiếc kính, trông rất điềm đạm. Cuối tháng trước, cô vừa nghỉ là đi Hải Nam một chuyến. Cô vừa ra tới bờ biển đã bị đại dương xinh đẹp thu hút. Cô nói trái cây Hải Nam vị đặc biệt ngon, nhất là xoài. Chuyến đi này khiến cô thật sự hiểu nghĩa của \"trăm nghe không bằng một thấy\".",
+   "questions": [
+    {
+     "q": "兰英长什么样子？",
+     "opts": [
+      "戴着帽子",
+      "戴着眼镜",
+      "很高很瘦",
+      "留着长发"
+     ],
+     "correct": 1,
+     "expl": "她戴着一副眼镜 — Lan Anh ĐEO KÍNH (戴 + 眼镜)."
+    },
+    {
+     "q": "兰英是什么时候去海南的？",
+     "opts": [
+      "这个月初",
+      "上个月底",
+      "下个星期",
+      "今天早上"
+     ],
+     "correct": 1,
+     "expl": "上个月底 = cuối tháng trước (底 = cuối tháng/năm)."
+    },
+    {
+     "q": "她一到海边就发生了什么？",
+     "opts": [
+      "给妈妈打电话",
+      "被海洋吸引了",
+      "买了很多饼干",
+      "向朋友道歉"
+     ],
+     "correct": 1,
+     "expl": "Cấu trúc 一……就……: 一到海边，就被海洋吸引了 (vừa tới biển đã bị thu hút)."
+    },
+    {
+     "q": "\"百闻不如一见\"在这里说明什么？",
+     "opts": [
+      "听别人说就够了",
+      "亲眼看到更真实",
+      "旅行很花钱",
+      "海南没有水果"
+     ],
+     "correct": 1,
+     "expl": "Thành ngữ nghĩa: tự mình tận mắt thấy (一见) đáng tin hơn nghe kể trăm lần (百闻)."
+    }
+   ]
+  },
+  {
+   "id": "fp24",
+   "t": "Bài 10–11",
+   "title": "Một lời xin lỗi",
+   "text": "小明是个粗心的人。昨天他和朋友约好了见面的时间和地点，可是他记错了，迟到了一个小时。朋友在入口等了很久，稍微有点儿生气。小明一见到朋友就马上道歉，还顺便请朋友吃了饭。朋友说：\"没关系，下次细心一点儿就行了。\"",
+   "py": "Xiǎomíng shì ge cūxīn de rén. Zuótiān tā hé péngyou yuē hǎo le jiànmiàn de shíjiān hé dìdiǎn, kěshì tā jì cuò le, chídào le yí ge xiǎoshí. Péngyou zài rùkǒu děng le hěn jiǔ, shāowēi yǒudiǎnr shēngqì. Xiǎomíng yí jiàndào péngyou jiù mǎshàng dàoqiàn, hái shùnbiàn qǐng péngyou chī le fàn. Péngyou shuō: \"Méi guānxi, xià cì xìxīn yìdiǎnr jiù xíng le.\"",
+   "vi": "Tiểu Minh là người cẩu thả. Hôm qua cậu hẹn bạn thời gian và địa điểm gặp mặt, nhưng nhớ nhầm nên đến muộn một tiếng. Người bạn đợi rất lâu ở lối vào, hơi giận một chút. Tiểu Minh vừa gặp bạn liền lập tức xin lỗi, còn tiện thể mời bạn ăn cơm. Người bạn nói: \"Không sao, lần sau cẩn thận hơn một chút là được.\"",
+   "questions": [
+    {
+     "q": "小明迟到的原因是什么？",
+     "opts": [
+      "睡过头了",
+      "记错了时间和地点",
+      "天气不好",
+      "找不到入口"
+     ],
+     "correct": 1,
+     "expl": "小明粗心，记错了见面的时间和地点 — nhớ nhầm thời gian & địa điểm (do 粗心 cẩu thả)."
+    },
+    {
+     "q": "朋友在哪里等小明？",
+     "opts": [
+      "在出口",
+      "在入口",
+      "在沙发上",
+      "在海边"
+     ],
+     "correct": 1,
+     "expl": "朋友在入口等了很久 — đợi ở 入口 (lối vào)."
+    },
+    {
+     "q": "小明见到朋友后先做了什么？",
+     "opts": [
+      "请客吃饭",
+      "马上道歉",
+      "讲笑话",
+      "送礼物"
+     ],
+     "correct": 1,
+     "expl": "一见到朋友就马上道歉 (vừa gặp đã lập tức xin lỗi) — XIN LỖI trước, rồi mới mời ăn."
+    },
+    {
+     "q": "朋友希望小明以后怎么样？",
+     "opts": [
+      "更粗心",
+      "细心一点儿",
+      "别来了",
+      "多请客"
+     ],
+     "correct": 1,
+     "expl": "下次细心一点儿就行了 — mong Tiểu Minh CẨN THẬN hơn (细心, trái với 粗心)."
+    }
+   ]
+  },
+  {
+   "id": "fp25",
+   "t": "Chủ đề 16–17",
+   "title": "Bữa cơm chủ nhật",
+   "text": "礼拜天我和妈妈一起在家做饭。妈妈拿着刀切菜，我拿着勺子尝汤。汤有点儿咸，妈妈说她放了太多盐，所以又加了一些水。我又尝了尝，觉得很香。除此以外，妈妈还做了酸辣汤和一个不苦的菜。总的来说，今天的饭很好吃。",
+   "py": "Lǐbàitiān wǒ hé māma yìqǐ zài jiā zuò fàn. Māma názhe dāo qiē cài, wǒ názhe sháozi cháng tāng. Tāng yǒu diǎnr xián, māma shuō tā fàng le tài duō yán, suǒyǐ yòu jiā le yìxiē shuǐ. Wǒ yòu cháng le cháng, juéde hěn xiāng. Chú cǐ yǐwài, māma hái zuò le suān là tāng hé yí ge bù kǔ de cài. Zǒng de lái shuō, jīntiān de fàn hěn hǎochī.",
+   "vi": "Chủ nhật tôi cùng mẹ nấu ăn ở nhà. Mẹ cầm dao cắt rau, tôi cầm thìa nếm canh. Canh hơi mặn, mẹ nói đã cho quá nhiều muối nên thêm chút nước. Tôi nếm lại, thấy rất thơm. Ngoài ra mẹ còn nấu canh chua cay và một món không đắng. Tóm lại, bữa ăn hôm nay rất ngon.",
+   "questions": [
+    {
+     "q": "Tại sao mẹ phải thêm nước vào canh?",
+     "opts": [
+      "Vì canh quá ít",
+      "Vì canh quá cay",
+      "Vì canh quá mặn (quá nhiều muối)",
+      "Vì canh quá chua"
+     ],
+     "correct": 2,
+     "expl": "Văn bản nêu rõ 汤有点儿咸，妈妈说她放了太多盐 — canh hơi mặn vì mẹ cho quá nhiều 盐 (muối), nên phải thêm nước cho bớt mặn."
+    },
+    {
+     "q": "Người mẹ đã nấu mấy món được nhắc đến?",
+     "opts": [
+      "1 món",
+      "2 món",
+      "3 món",
+      "Không nhắc đến số lượng cụ thể"
+     ],
+     "correct": 2,
+     "expl": "Có 3 món: 汤 (canh thường), 酸辣汤 (canh chua cay) và 一个不苦的菜 (một món không đắng)."
+    },
+    {
+     "q": "Cụm từ 总的来说 ở cuối bài đóng vai trò gì?",
+     "opts": [
+      "Đưa ra ý kiến trái ngược",
+      "Tổng kết, đánh giá chung",
+      "Chuyển sang chủ đề mới",
+      "Đặt câu hỏi cho người đọc"
+     ],
+     "correct": 1,
+     "expl": "总的来说 = \"tóm lại, nhìn chung\" — dùng để khái quát lại nhận xét: bữa ăn hôm nay rất ngon."
+    }
+   ]
+  },
+  {
+   "id": "fp26",
+   "t": "Chủ đề 16–17",
+   "title": "Cái cây nhỏ",
+   "text": "我家有很多植物。每天早上，我看着叶子，看着看着就觉得心里很安静。有一天风很大，一棵植物倒了，叶子也掉了全部。我说：\"呀！怎么办？\" 妈妈笑着说：\"没关系，过几天就会长出新的叶子。\" 真的，过了一个礼拜，新叶子长出来了。",
+   "py": "Wǒ jiā yǒu hěn duō zhíwù. Měi tiān zǎoshang, wǒ kànzhe yèzi, kànzhe kànzhe jiù juéde xīn lǐ hěn ānjìng. Yǒu yì tiān fēng hěn dà, yì kē zhíwù dǎo le, yèzi yě diào le quánbù. Wǒ shuō: \"Ya! Zěnme bàn?\" Māma xiàozhe shuō: \"Méi guānxi, guò jǐ tiān jiù huì zhǎng chū xīn de yèzi.\" Zhēnde, guò le yí ge lǐbài, xīn yèzi zhǎng chūlái le.",
+   "vi": "Nhà tôi có rất nhiều cây. Mỗi sáng tôi ngắm lá cây, ngắm ngắm thấy lòng rất bình yên. Một hôm gió to, một cây bị đổ, lá rụng toàn bộ. Tôi kêu: \"Ô! Phải làm sao đây?\" Mẹ cười: \"Không sao, vài hôm nữa sẽ mọc lá mới.\" Quả thật, một tuần sau lá mới đã mọc ra.",
+   "questions": [
+    {
+     "q": "Vì sao cây bị đổ?",
+     "opts": [
+      "Vì có người làm đổ",
+      "Vì gió quá to",
+      "Vì cây quá nặng",
+      "Vì đất quá khô"
+     ],
+     "correct": 1,
+     "expl": "Câu 有一天风很大，一棵植物倒了 — vì 风很大 (gió rất to) nên cây 倒 (đổ)."
+    },
+    {
+     "q": "Cấu trúc 看着看着 diễn tả điều gì?",
+     "opts": [
+      "Hành động lặp lại nhiều lần trong quá khứ",
+      "Mệnh lệnh nhẹ nhàng",
+      "Hành động đang tiếp diễn thì xảy ra việc khác",
+      "Hành động đã hoàn thành xong"
+     ],
+     "correct": 2,
+     "expl": "V着V着 = đang làm gì đó liên tục thì bất ngờ xảy ra việc khác. Ở đây: ngắm lá liên tục thì bất giác thấy lòng bình yên."
+    },
+    {
+     "q": "Người mẹ phản ứng thế nào trước việc cây đổ?",
+     "opts": [
+      "Tức giận",
+      "Lo lắng và đi mua cây mới",
+      "Bình thản, cười nói sẽ mọc lại",
+      "Không quan tâm"
+     ],
+     "correct": 2,
+     "expl": "妈妈笑着说：\"没关系...\" — mẹ cười nói \"không sao, vài hôm sẽ mọc lá mới\"."
+    }
+   ]
+  },
+  {
+   "id": "fp27",
+   "t": "Chủ đề 16–17",
+   "title": "Đi khám bệnh",
+   "text": "昨天晚上我肚子很难受，咳嗽得也很厉害。今天早上我一醒就去医院。大夫看了看，给我打针，又给我说明应该怎么吃药。护士说我的病不严重，但是估计要休息几天。大夫还说：「饭后百步走，活到九十九」，每天要走路减肥。我觉得他既专业又亲切。",
+   "py": "Zuótiān wǎnshang wǒ dùzi hěn nánshòu, késou de yě hěn lìhai. Jīntiān zǎoshang wǒ yì xǐng jiù qù yīyuàn. Dàifu kàn le kàn, gěi wǒ dǎzhēn, yòu gěi wǒ shuōmíng yīnggāi zěnme chī yào. Hùshi shuō wǒ de bìng bù yánzhòng, dànshì gūjì yào xiūxi jǐ tiān. Dàifu hái shuō: \"Fàn hòu bǎi bù zǒu, huó dào jiǔshíjiǔ\", měi tiān yào zǒulù jiǎnféi. Wǒ juéde tā jì zhuānyè yòu qīnqiè.",
+   "vi": "Tối qua bụng tôi rất khó chịu, ho cũng rất dữ dội. Sáng nay vừa tỉnh dậy là tôi đi bệnh viện. Bác sĩ xem xét, tiêm cho tôi, lại giải thích cách uống thuốc. Y tá nói bệnh của tôi không nghiêm trọng nhưng đoán chừng phải nghỉ vài hôm. Bác sĩ còn nói: \"Cơm xong đi trăm bước, sống đến 99 tuổi\", mỗi ngày phải đi bộ giảm cân. Tôi thấy ông ấy vừa chuyên nghiệp vừa thân thiện.",
+   "questions": [
+    {
+     "q": "Buổi tối hôm trước, người kể bị làm sao?",
+     "opts": [
+      "Đau đầu và sốt",
+      "Bụng khó chịu và ho dữ dội",
+      "Mất ngủ và mệt mỏi",
+      "Đau chân và buồn nôn"
+     ],
+     "correct": 1,
+     "expl": "Câu mở đầu nói rõ: 肚子很难受，咳嗽得也很厉害 — bụng rất khó chịu và ho cũng rất lợi hại (nặng)."
+    },
+    {
+     "q": "Tại bệnh viện, người kể được làm gì?",
+     "opts": [
+      "Chỉ được kê thuốc",
+      "Được tiêm và được giải thích cách uống thuốc",
+      "Được phẫu thuật",
+      "Được truyền nước"
+     ],
+     "correct": 1,
+     "expl": "大夫…给我打针，又给我说明应该怎么吃药 — bác sĩ tiêm (打针) và giải thích (说明) cách uống thuốc."
+    },
+    {
+     "q": "Cấu trúc 既专业又亲切 ở cuối bài có nghĩa gì?",
+     "opts": [
+      "Hoặc chuyên nghiệp hoặc thân thiện",
+      "Vừa chuyên nghiệp vừa thân thiện",
+      "Chuyên nghiệp nhưng không thân thiện",
+      "Càng chuyên nghiệp càng thân thiện"
+     ],
+     "correct": 1,
+     "expl": "既…又… = \"vừa… vừa…\" — cùng tồn tại 2 tính chất ở cùng một chủ thể."
+    },
+    {
+     "q": "Bệnh của người kể được mô tả như thế nào?",
+     "opts": [
+      "Rất nghiêm trọng, phải nhập viện",
+      "Không nghiêm trọng, ước tính nghỉ vài hôm",
+      "Không nói rõ",
+      "Không cần uống thuốc"
+     ],
+     "correct": 1,
+     "expl": "护士说我的病不严重，但是估计要休息几天 — y tá nói bệnh không nghiêm trọng, nhưng 估计 (ước tính) phải nghỉ vài ngày."
+    }
+   ]
+  },
+  {
+   "id": "fp28",
+   "t": "Chủ đề 16–17",
+   "title": "Nỗi phiền não giảm cân",
+   "text": "我最近很烦恼。我想减肥，但是每次饿的时候就受不了。我朋友指着我的肚子说：「你看，已经这么大了！」我觉得很难受。其中最辛苦的是不能吃辣的菜。朋友给我说明了一个办法：饭后走一走，每天三十分钟。她说，三十分钟只有一千八百秒，不算多。我决定试一试。",
+   "py": "Wǒ zuìjìn hěn fánnǎo. Wǒ xiǎng jiǎnféi, dànshì měi cì è de shíhou jiù shòu bu liǎo. Wǒ péngyou zhǐzhe wǒ de dùzi shuō: \"Nǐ kàn, yǐjīng zhème dà le!\" Wǒ juéde hěn nánshòu. Qízhōng zuì xīnkǔ de shì bù néng chī là de cài. Péngyou gěi wǒ shuōmíng le yí ge bànfǎ: fàn hòu zǒu yi zǒu, měi tiān sānshí fēnzhōng. Tā shuō, sānshí fēnzhōng zhǐyǒu yìqiān bā bǎi miǎo, bú suàn duō.",
+   "vi": "Gần đây tôi rất phiền não. Tôi muốn giảm cân nhưng mỗi lần đói lại không chịu nổi. Bạn tôi chỉ vào bụng tôi nói: \"Cậu nhìn xem, to thế này rồi!\" Tôi thấy rất khó chịu. Trong đó vất vả nhất là không được ăn món cay. Bạn giải thích cho tôi một cách: ăn xong đi bộ, mỗi ngày 30 phút. Cô ấy nói 30 phút chỉ có 1800 giây, không nhiều.",
+   "questions": [
+    {
+     "q": "Vì sao nhân vật cảm thấy 烦恼?",
+     "opts": [
+      "Vì bị bệnh",
+      "Vì muốn giảm cân nhưng đói thì không chịu được",
+      "Vì bị bạn mắng",
+      "Vì không ăn được cay"
+     ],
+     "correct": 1,
+     "expl": "我想减肥，但是每次饿的时候就受不了 — phiền não vì muốn giảm cân nhưng mỗi khi đói lại không chịu nổi."
+    },
+    {
+     "q": "Từ 其中 trong câu \"其中最辛苦的是不能吃辣的菜\" chỉ điều gì?",
+     "opts": [
+      "Trong số những món ăn",
+      "Trong số những khó khăn của việc giảm cân",
+      "Trong số bạn bè",
+      "Trong số 30 phút đi bộ"
+     ],
+     "correct": 1,
+     "expl": "其中 = \"trong đó\" — đề cập tới những khó khăn khi giảm cân đã nói ở các câu trước, mà khó khăn nhất là không được ăn cay."
+    },
+    {
+     "q": "30 phút bằng bao nhiêu giây theo cô bạn nói?",
+     "opts": [
+      "180 giây",
+      "1800 giây",
+      "3000 giây",
+      "30 giây"
+     ],
+     "correct": 1,
+     "expl": "三十分钟只有一千八百秒 — 30 phút × 60 giây = 1800 秒 (miǎo / giây)."
+    }
+   ]
+  },
+  {
+   "id": "hp0",
+   "t": "HSK4 nâng cao",
+   "title": "陪朋友逛街",
+   "text": "今天我陪朋友小李去逛街。实际上我不太喜欢逛街,但是小李一定要我去。\n我们去了一家很大的商店,里面的商品非常多。小李买东西的时候很注重质量,她总是看了很久才决定。\n我对她说:\"你这样太慢了,恐怕商店要关门了!\"她笑着说:\"好东西要慢慢选啊。\"最后她买了一件漂亮的衣服,然后我们一起去付款。",
+   "py": "",
+   "vi": "Hôm nay tôi đi cùng bạn Tiểu Lý đi dạo phố. Thực ra tôi không thích đi dạo phố lắm, nhưng Tiểu Lý nhất định bắt tôi đi. Chúng tôi đến một cửa hàng rất lớn, hàng hóa bên trong rất nhiều. Tiểu Lý khi mua đồ rất chú trọng chất lượng, cô ấy luôn xem rất lâu mới quyết định. Tôi nói với cô ấy: \"Cậu chậm thế này, e rằng cửa hàng sắp đóng cửa rồi!\" Cô ấy cười nói: \"Đồ tốt thì phải chọn từ từ chứ.\" Cuối cùng cô ấy mua được một chiếc váy đẹp, rồi chúng tôi cùng đi thanh toán.",
+   "questions": [
+    {
+     "q": "\"我\"对逛街的态度是什么?",
+     "opts": [
+      "非常喜欢",
+      "不太喜欢",
+      "从来不去",
+      "只有周末去"
+     ],
+     "correct": 1,
+     "expl": "Câu \"[实际上]我不太喜欢[逛街]\" = \"Thực ra tôi không thích đi dạo phố lắm\". Từ 实际上 (shíjì shàng) dùng để nói thật lòng, trái với điều người ta nghĩ."
+    },
+    {
+     "q": "小李买东西的时候注重什么?",
+     "opts": [
+      "价格",
+      "颜色",
+      "质量",
+      "品牌"
+     ],
+     "correct": 2,
+     "expl": "\"小李买东西的时候很[注重][质量]\" — 注重 (zhùzhòng) = chú trọng, 质量 (zhìliàng) = chất lượng. Đây là 2 từ thường đi với nhau khi nói về tiêu dùng."
+    },
+    {
+     "q": "\"恐怕商店要关门了\"中\"恐怕\"的意思是?",
+     "opts": [
+      "希望",
+      "担心可能会",
+      "一定会",
+      "不会"
+     ],
+     "correct": 1,
+     "expl": "恐怕 (kǒngpà) = e rằng, sợ là. Dùng để diễn tả lo lắng về điều có thể xảy ra (thường là xấu). VD: 恐怕下雨 = e là sẽ mưa."
+    }
+   ]
+  },
+  {
+   "id": "hp1",
+   "t": "HSK4 nâng cao",
+   "title": "一次美丽的旅行",
+   "text": "上个月我去云南旅游。那里的景色非常美丽,让我难忘。我们的导游姓王,他给我们讲了很多有趣的故事。\n顺便说一下,云南的地方小吃真的很特别。我尝试了很多种,每一种的味道都不一样。品尝当地的美食,是旅行最快乐的事情之一。\n回来的时候,我发现自己的心情变好了很多。旅行真的能让人放松。",
+   "py": "",
+   "vi": "Tháng trước tôi đi du lịch Vân Nam. Phong cảnh ở đó rất đẹp, khiến tôi khó quên. Hướng dẫn viên của chúng tôi họ Vương, anh ấy kể cho chúng tôi nghe rất nhiều câu chuyện thú vị. Tiện thể nói một chút, món ăn vặt địa phương Vân Nam thật sự rất đặc biệt. Tôi đã thử rất nhiều loại, mỗi loại đều có hương vị khác nhau. Nếm thử đặc sản địa phương là một trong những việc vui nhất khi du lịch. Khi trở về, tôi phát hiện tâm trạng của mình đã tốt hơn rất nhiều. Du lịch thật sự khiến người ta thư giãn.",
+   "questions": [
+    {
+     "q": "作者认为云南最让人难忘的是什么?",
+     "opts": [
+      "天气",
+      "景色",
+      "人",
+      "宾馆"
+     ],
+     "correct": 1,
+     "expl": "\"那里的[景色]非常[美丽],让我难忘\" — 景色 (jǐngsè) = phong cảnh. Đi du lịch thường dùng các tính từ như 美丽 (měilì - xinh đẹp), 漂亮, 壮观."
+    },
+    {
+     "q": "\"顺便说一下\"的意思是?",
+     "opts": [
+      "很重要的事",
+      "附带提一下",
+      "最后说",
+      "故意说"
+     ],
+     "correct": 1,
+     "expl": "顺便 (shùnbiàn) = tiện thể, nhân tiện. \"顺便说一下\" là cụm thông dụng = \"tiện thể nói thêm\". Khác với 顺利 (thuận lợi) — đừng nhầm!"
+    },
+    {
+     "q": "旅行回来后,作者的心情怎么样?",
+     "opts": [
+      "很累",
+      "没有变化",
+      "变好了",
+      "不好"
+     ],
+     "correct": 2,
+     "expl": "\"我[发现]自己的[心情][变]好了很多\" — 变 (biàn) = thay đổi. Cấu trúc 变 + tính từ rất hay dùng: 变好 (tốt hơn), 变冷 (lạnh hơn), 变大 (to ra)."
+    }
+   ]
+  },
+  {
+   "id": "hp2",
+   "t": "HSK4 nâng cao",
+   "title": "学中文的方法",
+   "text": "我学中文已经两年了。我有一个建议要给大家:学语言最重要的是积累。\n我每天都看中文杂志或者小说,一天看几页也好。我最喜欢的作家是莫言,他的写作方式非常特别,我从他的书里学到了很多新词。\n实际上,每个人都有自己的方法。你应该发现最适合自己的方式。慢慢学,慢慢积累,你一定会成功的。",
+   "py": "",
+   "vi": "Tôi đã học tiếng Trung được 2 năm. Tôi có một lời khuyên dành cho mọi người: học ngôn ngữ quan trọng nhất là tích lũy. Mỗi ngày tôi đều đọc tạp chí hoặc tiểu thuyết tiếng Trung, một ngày đọc vài trang cũng được. Nhà văn tôi thích nhất là Mạc Ngôn, phong cách viết của ông rất đặc biệt, tôi học được rất nhiều từ mới từ sách của ông. Thực ra, mỗi người đều có phương pháp riêng. Bạn nên tìm ra cách phù hợp nhất với mình. Học từ từ, tích lũy từ từ, bạn nhất định sẽ thành công.",
+   "questions": [
+    {
+     "q": "作者认为学语言最重要的是什么?",
+     "opts": [
+      "天赋",
+      "老师",
+      "积累",
+      "考试"
+     ],
+     "correct": 2,
+     "expl": "积累 (jīlěi) = tích lũy. Đây là từ rất quan trọng trong văn cảnh học tập. VD: 积累词汇 = tích lũy từ vựng, 积累经验 = tích lũy kinh nghiệm."
+    },
+    {
+     "q": "作者从莫言的书里学到了什么?",
+     "opts": [
+      "做菜的方法",
+      "很多新词",
+      "画画",
+      "历史"
+     ],
+     "correct": 1,
+     "expl": "\"我从他的书里学到了很多新词\" — Bài nói tác giả thích 写作方式 (xiězuò fāngshì - phong cách viết) của Mạc Ngôn. Đây là từ ghép: 写作 (viết lách) + 方式 (phương thức)."
+    }
+   ]
+  },
+  {
+   "id": "hp3",
+   "t": "HSK4 nâng cao",
+   "title": "我的应聘经历",
+   "text": "上周我看到一个招聘消息,一家大公司在招新员工。这是一个很好的机会,我决定申请。\n我先写了一封详细的申请信,然后用传真发了过去。三天后,他们打电话让我去应聘这个职位。\n面试的时候我非常紧张。经理跟我谈了很久,主要是想了解我的情况。我诚实地回答了所有问题。\n结果非常顺利,我成功了!我已经接受了这份工作。",
+   "py": "",
+   "vi": "Tuần trước tôi thấy một tin tuyển dụng, một công ty lớn đang tuyển nhân viên mới. Đây là một cơ hội rất tốt, tôi quyết định nộp đơn. Đầu tiên tôi viết một lá đơn xin việc chi tiết, sau đó gửi fax qua. Ba ngày sau, họ gọi điện bảo tôi đến ứng tuyển vị trí này. Lúc phỏng vấn tôi rất hồi hộp. Giám đốc nói chuyện với tôi rất lâu, chủ yếu là muốn tìm hiểu tình hình của tôi. Tôi đã thành thật trả lời tất cả câu hỏi. Kết quả rất thuận lợi, tôi đã thành công! Tôi đã nhận lời công việc này.",
+   "questions": [
+    {
+     "q": "作者通过什么方式发出了申请信?",
+     "opts": [
+      "电子邮件",
+      "传真",
+      "邮寄",
+      "亲自送"
+     ],
+     "correct": 1,
+     "expl": "传真 (chuánzhēn) = fax. Lưu ý phân biệt với 真的 (thật sự). Trong văn phòng cũ, fax là cách phổ biến để gửi tài liệu chính thức."
+    },
+    {
+     "q": "面试时,经理主要想做什么?",
+     "opts": [
+      "考验他",
+      "了解他的情况",
+      "让他工作",
+      "介绍公司"
+     ],
+     "correct": 1,
+     "expl": "\"主要是想[了解]我的[情况]\" — 了解 (liǎojiě) = tìm hiểu, 情况 (qíngkuàng) = tình hình. Đây là cặp từ rất phổ biến trong giao tiếp công việc."
+    },
+    {
+     "q": "\"我已经接受了这份工作\"中\"接受\"的意思是?",
+     "opts": [
+      "拒绝",
+      "同意做",
+      "考虑",
+      "想要"
+     ],
+     "correct": 1,
+     "expl": "接受 (jiēshòu) = chấp nhận, tiếp nhận. Khác với 接 (đón). Cấu trúc: 接受 + 工作/邀请/建议/礼物 (chấp nhận công việc/lời mời/lời khuyên/quà)."
+    }
+   ]
+  },
+  {
+   "id": "hp4",
+   "t": "HSK4 nâng cao",
+   "title": "年底的奖金",
+   "text": "年底到了,我们公司的任务完成得很顺利。经理告诉我们,今年要给大家发奖金了!\n我们公司一直很好,提供了很多福利。比如周末加班有加班费,每年还有奖金。\n经理说:\"今年大家都挺努力的,特别是几位按时完成工作的员工。\"听到这个消息,大家都非常高兴。\n实际上,钱不是最重要的,但是被认可的心情最棒!",
+   "py": "",
+   "vi": "Cuối năm đến rồi, nhiệm vụ của công ty chúng tôi hoàn thành rất thuận lợi. Giám đốc nói với chúng tôi rằng năm nay sẽ phát tiền thưởng cho mọi người! Công ty chúng tôi vẫn luôn rất tốt, cung cấp nhiều phúc lợi. Ví dụ cuối tuần tăng ca có phí tăng ca, mỗi năm còn có tiền thưởng. Giám đốc nói: \"Năm nay mọi người đều khá nỗ lực, đặc biệt là vài nhân viên hoàn thành công việc đúng giờ.\" Nghe tin này, mọi người đều rất vui. Thực ra, tiền không phải là quan trọng nhất, nhưng cảm giác được công nhận là tuyệt nhất!",
+   "questions": [
+    {
+     "q": "公司为什么要发奖金?",
+     "opts": [
+      "今年是节日",
+      "任务完成得很顺利",
+      "员工太少",
+      "老板心情好"
+     ],
+     "correct": 1,
+     "expl": "\"[任务]完成得很[顺利]\" — 任务 (rènwu) = nhiệm vụ, 顺利 (shùnlì) = thuận lợi. Lưu ý phân biệt: 顺利 (thuận lợi) ≠ 顺便 (tiện thể)."
+    },
+    {
+     "q": "公司提供什么样的福利?",
+     "opts": [
+      "只有奖金",
+      "加班费和奖金",
+      "免费午餐",
+      "汽车"
+     ],
+     "correct": 1,
+     "expl": "\"周末加班有[加班费],每年还有奖金\" — 提供 (tígōng) = cung cấp; 加班费 (jiābān fèi) = phí tăng ca; 奖金 (jiǎngjīn) = tiền thưởng. Lưu ý: 发奖金 = phát thưởng (動词 + 名词)."
+    }
+   ]
+  },
+  {
+   "id": "hp5",
+   "t": "HSK4 nâng cao",
+   "title": "周末的安排",
+   "text": "周末怎么过才有意思?我建议大家多做运动。\n我喜欢打乒乓球和羽毛球,有时候也跟朋友们打排球。运动让人有精神,也能放松心情。\n实际上,运动不一定要很激烈。晚饭后散步半个小时,也是很好的运动。\n我每个周末都会安排一些时间运动。下雨天不能出去,我只好在家里休息,但是我会找朋友聊聊天,这样心情也会变好。",
+   "py": "",
+   "vi": "Cuối tuần làm gì cho thú vị? Tôi khuyên mọi người nên vận động nhiều. Tôi thích chơi bóng bàn và cầu lông, đôi khi cũng chơi bóng chuyền với bạn bè. Vận động khiến người ta có tinh thần, cũng có thể thư giãn tâm trạng. Thực ra, vận động không nhất thiết phải dữ dội. Sau bữa tối đi dạo nửa tiếng cũng là vận động tốt. Mỗi cuối tuần tôi đều sắp xếp thời gian để vận động. Ngày mưa không ra ngoài được, tôi đành phải nghỉ ở nhà, nhưng tôi sẽ tìm bạn bè tán gẫu, như vậy tâm trạng cũng sẽ tốt lên.",
+   "questions": [
+    {
+     "q": "作者认为运动有什么好处?",
+     "opts": [
+      "可以赚钱",
+      "让人有精神,放松心情",
+      "可以学习",
+      "可以减肥"
+     ],
+     "correct": 1,
+     "expl": "\"运动让人[有精神],也能[放松]心情\" — 有精神 (yǒu jīngshén) = có tinh thần; 放松 (fàngsōng) = thư giãn. Hai từ này hay đi đôi khi nói về lợi ích của thể thao."
+    },
+    {
+     "q": "下雨天作者会做什么?",
+     "opts": [
+      "出去打球",
+      "在家睡觉",
+      "找朋友聊聊天",
+      "看电视"
+     ],
+     "correct": 2,
+     "expl": "\"我[只好]在家里休息...找朋友[聊聊]天\" — 只好 (zhǐhǎo) = đành phải (khi không có lựa chọn khác); 聊聊 = trò chuyện, tán gẫu (động từ lặp lại làm dịu giọng)."
+    },
+    {
+     "q": "\"只好\"在文中表示什么?",
+     "opts": [
+      "很高兴地",
+      "没有别的办法",
+      "故意地",
+      "希望地"
+     ],
+     "correct": 1,
+     "expl": "只好 (zhǐhǎo) = đành phải, chỉ còn cách. Diễn tả sự bất đắc dĩ khi không có lựa chọn nào khác. VD: 下雨了,我只好打车 = trời mưa, tôi đành phải gọi taxi."
+    }
+   ]
+  }
+ ],
+ "orders": [
+  {
+   "id": "o0",
+   "tokens": [
+    "我",
+    "一",
+    "紧张",
+    "就",
+    "脸红"
+   ],
+   "py": "Wǒ yì jǐnzhāng jiù liǎnhóng.",
+   "vi": "Cứ hồi hộp là tôi đỏ mặt.",
+   "tip": "Cấu trúc 一……就……",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "o1",
+   "tokens": [
+    "你",
+    "应该",
+    "向他",
+    "道歉"
+   ],
+   "py": "Nǐ yīnggāi xiàng tā dàoqiàn.",
+   "vi": "Bạn nên xin lỗi cậu ấy.",
+   "tip": "向 + người + 道歉",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "o2",
+   "tokens": [
+    "这个",
+    "产品",
+    "质量",
+    "很",
+    "好"
+   ],
+   "py": "Zhège chǎnpǐn zhìliàng hěn hǎo.",
+   "vi": "Sản phẩm này chất lượng rất tốt.",
+   "tip": "Chủ ngữ + 质量 + 很 + tính từ",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "o3",
+   "tokens": [
+    "酒店",
+    "提供",
+    "免费",
+    "早餐"
+   ],
+   "py": "Jiǔdiàn tígōng miǎnfèi zǎocān.",
+   "vi": "Khách sạn cung cấp bữa sáng miễn phí.",
+   "tip": "提供 + tân ngữ",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "o4",
+   "tokens": [
+    "北京",
+    "是",
+    "中国",
+    "的",
+    "首都"
+   ],
+   "py": "Běijīng shì Zhōngguó de shǒudū.",
+   "vi": "Bắc Kinh là thủ đô của Trung Quốc.",
+   "tip": "A 是 B 的 + danh từ",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "o5",
+   "tokens": [
+    "你",
+    "出去",
+    "顺便",
+    "买",
+    "点儿",
+    "菜"
+   ],
+   "py": "Nǐ chūqù shùnbiàn mǎi diǎnr cài.",
+   "vi": "Bạn ra ngoài tiện thể mua ít rau.",
+   "tip": "顺便 đứng trước động từ thứ hai",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "o6",
+   "tokens": [
+    "这",
+    "本",
+    "书",
+    "吸引",
+    "了",
+    "我"
+   ],
+   "py": "Zhè běn shū xīyǐn le wǒ.",
+   "vi": "Cuốn sách này thu hút tôi.",
+   "tip": "吸引 + 了 + tân ngữ",
+   "t": "Bài 10–11"
+  },
+  {
+   "id": "o7",
+   "tokens": [
+    "请",
+    "在",
+    "三天",
+    "内",
+    "完成"
+   ],
+   "py": "Qǐng zài sān tiān nèi wánchéng.",
+   "vi": "Hãy hoàn thành trong vòng ba ngày.",
+   "tip": "在 + thời gian + 内",
+   "t": "Bài 10–11"
+  }
+ ]
+}

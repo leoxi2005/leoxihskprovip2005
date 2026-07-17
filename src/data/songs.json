@@ -1,0 +1,92 @@
+[
+ {
+  "id": "sg1",
+  "title": "Bài ca dọn nhà 🧹",
+  "lines": [
+   {
+    "cn": "我把窗户擦干净",
+    "blank": "擦",
+    "pin": "Wǒ bǎ chuānghu cā gānjìng",
+    "vi": "Tôi lau cửa sổ sạch bong"
+   },
+   {
+    "cn": "客厅对面是餐厅",
+    "blank": "对面",
+    "pin": "Kètīng duìmiàn shì cāntīng",
+    "vi": "Đối diện phòng khách là phòng ăn"
+   },
+   {
+    "cn": "房东来了要修理",
+    "blank": "修理",
+    "pin": "Fángdōng lái le yào xiūlǐ",
+    "vi": "Chủ nhà đến rồi, phải sửa chữa"
+   },
+   {
+    "cn": "钥匙别忘带在身",
+    "blank": "钥匙",
+    "pin": "Yàoshi bié wàng dài zài shēn",
+    "vi": "Chìa khóa đừng quên mang bên người"
+   }
+  ]
+ },
+ {
+  "id": "sg2",
+  "title": "Bài ca kiên trì 💪",
+  "lines": [
+   {
+    "cn": "失败不要放弃",
+    "blank": "放弃",
+    "pin": "Shībài bú yào fàngqì",
+    "vi": "Thất bại đừng từ bỏ"
+   },
+   {
+    "cn": "流汗也要坚持",
+    "blank": "坚持",
+    "pin": "Liú hàn yě yào jiānchí",
+    "vi": "Đổ mồ hôi vẫn phải kiên trì"
+   },
+   {
+    "cn": "过程虽然不容易",
+    "blank": "过程",
+    "pin": "Guòchéng suīrán bù róngyì",
+    "vi": "Quá trình tuy không dễ dàng"
+   },
+   {
+    "cn": "勇敢的人会赢",
+    "blank": "勇敢",
+    "pin": "Yǒnggǎn de rén huì yíng",
+    "vi": "Người dũng cảm sẽ thắng"
+   }
+  ]
+ },
+ {
+  "id": "sg3",
+  "title": "Bài ca lên mạng 💻",
+  "lines": [
+   {
+    "cn": "互联网真方便",
+    "blank": "互联网",
+    "pin": "Hùliánwǎng zhēn fāngbiàn",
+    "vi": "Internet thật tiện lợi"
+   },
+   {
+    "cn": "网站上聊科学",
+    "blank": "网站",
+    "pin": "Wǎngzhàn shang liáo kēxué",
+    "vi": "Lên trang web bàn chuyện khoa học"
+   },
+   {
+    "cn": "密码千万别忘记",
+    "blank": "密码",
+    "pin": "Mìmǎ qiānwàn bié wàngjì",
+    "vi": "Mật khẩu nhất định đừng quên"
+   },
+   {
+    "cn": "短信发给好朋友",
+    "blank": "短信",
+    "pin": "Duǎnxìn fā gěi hǎo péngyou",
+    "vi": "Tin nhắn gửi cho bạn thân"
+   }
+  ]
+ }
+]

@@ -1,0 +1,202 @@
+{
+ "id": "my1",
+ "title": "绝弦的美 — Vẻ đẹp của tri kỷ",
+ "yt": "ad-0wi7TTd0",
+ "vocab": [
+  {
+   "h": "落叶",
+   "p": "luòyè",
+   "m": "lá rụng"
+  },
+  {
+   "h": "归根",
+   "p": "guīgēn",
+   "m": "về cội"
+  },
+  {
+   "h": "寄托",
+   "p": "jìtuō",
+   "m": "gửi gắm"
+  },
+  {
+   "h": "流浪",
+   "p": "liúlàng",
+   "m": "lưu lạc, phiêu bạt"
+  },
+  {
+   "h": "红豆",
+   "p": "hóngdòu",
+   "m": "đậu đỏ (tượng trưng tương tư)"
+  },
+  {
+   "h": "赠",
+   "p": "zèng",
+   "m": "tặng"
+  },
+  {
+   "h": "不如",
+   "p": "bùrú",
+   "m": "không bằng"
+  },
+  {
+   "h": "落款",
+   "p": "luòkuǎn",
+   "m": "ký tên (cuối thư/tranh)"
+  },
+  {
+   "h": "名字",
+   "p": "míngzi",
+   "m": "tên"
+  },
+  {
+   "h": "工整",
+   "p": "gōngzhěng",
+   "m": "ngay ngắn, tinh tế"
+  },
+  {
+   "h": "好看",
+   "p": "hǎokàn",
+   "m": "đẹp, ưa nhìn"
+  },
+  {
+   "h": "比作",
+   "p": "bǐzuò",
+   "m": "ví như, ví với"
+  },
+  {
+   "h": "高山流水",
+   "p": "gāoshān liúshuǐ",
+   "m": "tri âm tri kỷ (điển cố)"
+  },
+  {
+   "h": "佳人",
+   "p": "jiārén",
+   "m": "giai nhân"
+  },
+  {
+   "h": "伴舞",
+   "p": "bànwǔ",
+   "m": "múa cùng"
+  },
+  {
+   "h": "美",
+   "p": "měi",
+   "m": "đẹp, vẻ đẹp"
+  },
+  {
+   "h": "写",
+   "p": "xiě",
+   "m": "viết"
+  },
+  {
+   "h": "众生",
+   "p": "zhòngshēng",
+   "m": "chúng sinh"
+  },
+  {
+   "h": "魂",
+   "p": "hún",
+   "m": "linh hồn"
+  },
+  {
+   "h": "无心",
+   "p": "wúxīn",
+   "m": "vô tâm, không có lòng"
+  },
+  {
+   "h": "星星",
+   "p": "xīngxīng",
+   "m": "ngôi sao"
+  },
+  {
+   "h": "一起",
+   "p": "yìqǐ",
+   "m": "cùng nhau"
+  },
+  {
+   "h": "矢志不渝",
+   "p": "shǐzhì bùyú",
+   "m": "thề quyết không thay đổi"
+  }
+ ],
+ "lines": [
+  {
+   "cn": "落叶无归根单丝不成线",
+   "blank": "落叶",
+   "pin": "luòyè wú guīgēn dān sī bùchéng xiàn",
+   "vi": "Lá rụng không về cội, một sợi không kết thành dây"
+  },
+  {
+   "cn": "无所寄托亦无心流浪",
+   "blank": "流浪",
+   "pin": "wú suǒ jìtuō yì wúxīn liúlàng",
+   "vi": "Không nơi gửi gắm, cũng chẳng còn lòng lưu lạc"
+  },
+  {
+   "cn": "你把红豆赠我不如写我一首歌",
+   "blank": "不如",
+   "pin": "nǐ bǎ hóngdòu zèng wǒ bùrú xiě wǒ yì shǒu gē",
+   "vi": "Anh tặng ta đậu đỏ không bằng viết cho ta một bài hát"
+  },
+  {
+   "cn": "落款你的名字工整又好看",
+   "blank": "名字",
+   "pin": "luòkuǎn nǐ de míngzi gōngzhěng yòu hǎokàn",
+   "vi": "Chữ ký tên anh vừa tinh tế lại còn đẹp"
+  },
+  {
+   "cn": "若把你比作歌",
+   "blank": "比作",
+   "pin": "ruò bǎ nǐ bǐzuò gē",
+   "vi": "Nếu ví anh với bài ca"
+  },
+  {
+   "cn": "你便是那高山流水",
+   "blank": "高山流水",
+   "pin": "nǐ biàn shì nà gāoshān liúshuǐ",
+   "vi": "Anh chính là khúc tri âm tri kỷ ấy"
+  },
+  {
+   "cn": "佳人伴舞天地伴舞",
+   "blank": "佳人",
+   "pin": "jiārén bànwǔ tiāndì bànwǔ",
+   "vi": "Giai nhân cùng múa, trời đất cùng múa"
+  },
+  {
+   "cn": "绝弦的美",
+   "blank": "美",
+   "pin": "jué xián de měi",
+   "vi": "Vẻ đẹp của tri kỷ"
+  },
+  {
+   "cn": "歌写的我缠绵悱恻",
+   "blank": "写",
+   "pin": "gē xiě de wǒ chánmián fěicè",
+   "vi": "Bài ca ta viết âu sầu triền miên"
+  },
+  {
+   "cn": "恒顺众生迁走我魂",
+   "blank": "众生",
+   "pin": "héng shùn zhòngshēng qiān zǒu wǒ hún",
+   "vi": "Mãi thuận theo chúng sinh, mang linh hồn ta đi"
+  },
+  {
+   "cn": "有嘴无心亦有才无命",
+   "blank": "无心",
+   "pin": "yǒu zuǐ wúxīn yì yǒu cái wú mìng",
+   "vi": "Có miệng mà vô tâm, có tài mà không có mệnh"
+  },
+  {
+   "cn": "不一起看星星星星它亮有什么用",
+   "blank": "星星",
+   "pin": "bù yìqǐ kàn xīngxīng xīngxīng tā liàng yǒu shénme yòng",
+   "vi": "Không cùng ngắm sao thì sao sáng có ích gì"
+  },
+  {
+   "cn": "你我矢志不渝举案又齐眉",
+   "blank": "矢志不渝",
+   "pin": "nǐ wǒ shǐzhì bùyú jǔ àn yòu qí méi",
+   "vi": "Hai ta thề không đổi thay, tương kính như tân"
+  }
+ ]
+}
