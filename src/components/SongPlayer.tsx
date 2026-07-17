@@ -7,9 +7,16 @@ interface YTPlayer {
   playVideo: () => void;
   pauseVideo: () => void;
   getCurrentTime: () => number;
+  /** -1 unstarted · 0 ended · 1 playing · 2 paused · 3 buffering · 5 cued */
+  getPlayerState: () => number;
+  loadVideoById: (opts: { videoId: string; startSeconds?: number }) => void;
   setPlaybackRate: (rate: number) => void;
   destroy: () => void;
 }
+
+const UNSTARTED = -1;
+const PLAYING = 1;
+const CUED = 5;
 
 declare global {
   interface Window {
@@ -70,6 +77,9 @@ export function SongPlayer({
   /** A line asked for before the player finished booting — played on ready. */
   const queued = useRef<[number, number, number] | null>(null);
   const stopAt = useRef<number | null>(null);
+  /** The line we asked for, until playback actually lands inside it. */
+  const want = useRef<{ from: number; to: number; since: number } | null>(null);
+  const lastSeek = useRef(0);
   const poll = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
   const endCb = useRef(onLineEnd);
   endCb.current = onLineEnd;
@@ -83,10 +93,21 @@ export function SongPlayer({
       return;
     }
     try {
-      p.setPlaybackRate(rate);
       stopAt.current = to;
-      p.seekTo(from, true);
-      p.playVideo();
+      want.current = { from, to, since: Date.now() };
+      p.setPlaybackRate(rate);
+
+      const state = p.getPlayerState();
+      if (state === UNSTARTED || state === CUED) {
+        // Nothing is loaded yet, and a seek issued now is silently ignored — playback
+        // would start from zero, which for this song is 18 seconds of intro that
+        // sounds like the app is broken. loadVideoById is the API's own way to start
+        // at a given second.
+        p.loadVideoById({ videoId, startSeconds: from });
+      } else {
+        p.seekTo(from, true);
+        p.playVideo();
+      }
     } catch {
       /* ignore */
     }
@@ -116,9 +137,27 @@ export function SongPlayer({
     // that a line stops on its last syllable rather than bleeding into the next.
     poll.current = setInterval(() => {
       const p = player.current;
-      if (!p || stopAt.current === null || !p.getCurrentTime) return;
-      if (p.getCurrentTime() >= stopAt.current) {
+      if (!p?.getCurrentTime) return;
+      const t = p.getCurrentTime();
+
+      // A seek issued while the video is still loading is silently dropped, and the
+      // song then plays from the top — 18 seconds of intro that sound like the app is
+      // broken. Seeking only once playback is actually running is what makes it stick.
+      const w = want.current;
+      if (w) {
+        if (t >= w.from - 0.5 && t <= w.to + 0.5) {
+          want.current = null;
+        } else if (Date.now() - w.since > 10000) {
+          want.current = null; // give up rather than fight the player forever
+        } else if (p.getPlayerState() === PLAYING && Date.now() - lastSeek.current > 500) {
+          lastSeek.current = Date.now();
+          p.seekTo(w.from, true);
+        }
+      }
+
+      if (stopAt.current !== null && t >= stopAt.current) {
         stopAt.current = null;
+        want.current = null;
         p.pauseVideo();
         endCb.current?.();
       }
@@ -143,6 +182,7 @@ export function SongPlayer({
       stop: () => {
         stopAt.current = null;
         queued.current = null;
+        want.current = null;
         try {
           player.current?.pauseVideo();
         } catch {
