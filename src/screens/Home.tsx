@@ -2,6 +2,7 @@ import { DECK, IMAGES } from '../data';
 import type { GameId } from '../engine/types';
 import { useEngine, useGameState } from '../engine/useEngine';
 import { Bar } from '../components/Bar';
+import { SoundCheck } from '../components/SoundCheck';
 import { C, F, shadow } from '../theme';
 
 interface GameCard {
@@ -465,6 +466,7 @@ export function Home() {
         <p style={{ margin: '5px 0 0', fontSize: 12, color: '#b3a488' }}>
           Giọng đọc tiếng Trung chuẩn (zh-CN) — dùng Chrome/Edge để có giọng hay nhất 🔊
         </p>
+        <SoundCheck />
       </div>
     </div>
   );
