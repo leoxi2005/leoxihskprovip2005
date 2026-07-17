@@ -9,7 +9,6 @@ export class Audio {
   private voice: SpeechSynthesisVoice | null = null;
   /** Only the newest utterance is allowed to speak; older ones are dropped. */
   private seq = 0;
-  private timer: ReturnType<typeof setTimeout> | undefined;
   private watchdog: ReturnType<typeof setTimeout> | undefined;
   private ctx: AudioContext | null = null;
   private onVisible: (() => void) | undefined;
@@ -35,7 +34,6 @@ export class Audio {
 
   /** Detaches listeners — pair with `GameEngine.dispose`. */
   destroy(): void {
-    clearTimeout(this.timer);
     clearTimeout(this.watchdog);
     if (this.onVisible) document.removeEventListener('visibilitychange', this.onVisible);
   }
@@ -66,14 +64,15 @@ export class Audio {
     this.seq += 1;
     const seq = this.seq;
     try {
-      clearTimeout(this.timer);
       clearTimeout(this.watchdog);
-      speechSynthesis.cancel();
-      // A short delay lets the cancel settle; Chrome drops utterances queued too soon after.
-      this.timer = setTimeout(() => {
-        if (seq !== this.seq) return;
-        this.utter(text, seq, true);
-      }, 200);
+      speechSynthesis.resume();
+      // A cancel() issued right before speak() is what makes Chrome drop utterances,
+      // so only cancel when there is actually something to stop.
+      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+      // Speak inside the click or keypress that led here. Safari rejects speech that
+      // isn't part of a user gesture, and says nothing about it — anything deferred
+      // through a setTimeout is silently dropped, which is silence with no error.
+      this.utter(text, seq, true);
     } catch {
       /* ignore */
     }
@@ -128,7 +127,6 @@ export class Audio {
   /** Silence everything pending, e.g. on quit. */
   hush(): void {
     this.seq += 1;
-    clearTimeout(this.timer);
     clearTimeout(this.watchdog);
     try {
       // cancel() on a paused queue leaves it paused, and the next speak() would be
@@ -149,6 +147,9 @@ export class Audio {
         return null;
       }
     }
+    // Safari hands back a context that is born "suspended" and stays that way until
+    // resumed inside a user gesture — every sound is silently dropped until then.
+    if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
     return this.ctx;
   }
 

@@ -131,14 +131,31 @@ describe('speaking through Chrome misbehaving', () => {
     expect(synth.spoken).toEqual([]);
   });
 
-  it('only ever speaks the newest word when answers come fast', () => {
+  /**
+   * Safari only allows speech that happens inside the click or keypress that asked
+   * for it — anything reached through a setTimeout is dropped without an error. The
+   * app spoke through a 200ms debounce, so Safari was silent from the very first word
+   * while Chrome sounded fine, which is why this went unnoticed for so long.
+   */
+  it('speaks inside the gesture, not on a timer', () => {
+    audio.speak('你好');
+    // No timers advanced: it must already have been handed to the synth.
+    expect(synth.spoken).toEqual(['你好']);
+  });
+
+  it('cuts the previous word off and speaks the newest', () => {
     audio.speak('一');
-    vi.advanceTimersByTime(50);
     audio.speak('二');
-    vi.advanceTimersByTime(50);
-    audio.speak('三');
-    vi.advanceTimersByTime(500);
-    expect(synth.spoken).toEqual(['三']);
+    expect(synth.cancelCalls).toBeGreaterThan(0);
+    expect(synth.spoken.at(-1)).toBe('二');
+  });
+
+  it('does not cancel when nothing is speaking', () => {
+    // A cancel() right before speak() is exactly what makes Chrome drop utterances.
+    expect(synth.speaking).toBe(false);
+    audio.speak('一');
+    expect(synth.cancelCalls).toBe(0);
+    expect(synth.spoken).toEqual(['一']);
   });
 
   it('leaves the queue usable after a hush', () => {
