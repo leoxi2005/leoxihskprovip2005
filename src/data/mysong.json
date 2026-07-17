@@ -124,79 +124,106 @@
    "cn": "落叶无归根单丝不成线",
    "blank": "落叶",
    "pin": "luòyè wú guīgēn dān sī bùchéng xiàn",
-   "vi": "Lá rụng không về cội, một sợi không kết thành dây"
+   "vi": "Lá rụng không về cội, một sợi không kết thành dây",
+   "t": 18.49,
+   "end": 27.39
   },
   {
    "cn": "无所寄托亦无心流浪",
    "blank": "流浪",
    "pin": "wú suǒ jìtuō yì wúxīn liúlàng",
-   "vi": "Không nơi gửi gắm, cũng chẳng còn lòng lưu lạc"
+   "vi": "Không nơi gửi gắm, cũng chẳng còn lòng lưu lạc",
+   "t": 27.39,
+   "end": 36.49
   },
   {
    "cn": "你把红豆赠我不如写我一首歌",
    "blank": "不如",
    "pin": "nǐ bǎ hóngdòu zèng wǒ bùrú xiě wǒ yì shǒu gē",
-   "vi": "Anh tặng ta đậu đỏ không bằng viết cho ta một bài hát"
+   "vi": "Anh tặng ta đậu đỏ không bằng viết cho ta một bài hát",
+   "t": 36.49,
+   "end": 44.22
   },
   {
    "cn": "落款你的名字工整又好看",
    "blank": "名字",
    "pin": "luòkuǎn nǐ de míngzi gōngzhěng yòu hǎokàn",
-   "vi": "Chữ ký tên anh vừa tinh tế lại còn đẹp"
+   "vi": "Chữ ký tên anh vừa tinh tế lại còn đẹp",
+   "t": 44.22,
+   "end": 52.03
   },
   {
    "cn": "若把你比作歌",
    "blank": "比作",
    "pin": "ruò bǎ nǐ bǐzuò gē",
-   "vi": "Nếu ví anh với bài ca"
+   "vi": "Nếu ví anh với bài ca",
+   "t": 52.03,
+   "end": 57.28
   },
   {
    "cn": "你便是那高山流水",
    "blank": "高山流水",
    "pin": "nǐ biàn shì nà gāoshān liúshuǐ",
-   "vi": "Anh chính là khúc tri âm tri kỷ ấy"
+   "vi": "Anh chính là khúc tri âm tri kỷ ấy",
+   "t": 57.28,
+   "end": 61.75
   },
   {
    "cn": "佳人伴舞天地伴舞",
    "blank": "佳人",
    "pin": "jiārén bànwǔ tiāndì bànwǔ",
-   "vi": "Giai nhân cùng múa, trời đất cùng múa"
+   "vi": "Giai nhân cùng múa, trời đất cùng múa",
+   "t": 61.75,
+   "end": 66.64
   },
   {
    "cn": "绝弦的美",
    "blank": "美",
    "pin": "jué xián de měi",
-   "vi": "Vẻ đẹp của tri kỷ"
+   "vi": "Vẻ đẹp của tri kỷ",
+   "t": 66.64,
+   "end": 69.8
   },
   {
    "cn": "歌写的我缠绵悱恻",
    "blank": "写",
    "pin": "gē xiě de wǒ chánmián fěicè",
-   "vi": "Bài ca ta viết âu sầu triền miên"
+   "vi": "Bài ca ta viết âu sầu triền miên",
+   "t": 74.99,
+   "end": 79.72
   },
   {
    "cn": "恒顺众生迁走我魂",
    "blank": "众生",
    "pin": "héng shùn zhòngshēng qiān zǒu wǒ hún",
-   "vi": "Mãi thuận theo chúng sinh, mang linh hồn ta đi"
+   "vi": "Mãi thuận theo chúng sinh, mang linh hồn ta đi",
+   "t": 79.72,
+   "end": 84.68
   },
   {
    "cn": "有嘴无心亦有才无命",
    "blank": "无心",
    "pin": "yǒu zuǐ wúxīn yì yǒu cái wú mìng",
-   "vi": "Có miệng mà vô tâm, có tài mà không có mệnh"
+   "vi": "Có miệng mà vô tâm, có tài mà không có mệnh",
+   "t": 116.12,
+   "end": 124.91
   },
   {
    "cn": "不一起看星星星星它亮有什么用",
    "blank": "星星",
    "pin": "bù yìqǐ kàn xīngxīng xīngxīng tā liàng yǒu shénme yòng",
-   "vi": "Không cùng ngắm sao thì sao sáng có ích gì"
+   "vi": "Không cùng ngắm sao thì sao sáng có ích gì",
+   "t": 124.91,
+   "end": 133.02
   },
   {
    "cn": "你我矢志不渝举案又齐眉",
    "blank": "矢志不渝",
    "pin": "nǐ wǒ shǐzhì bùyú jǔ àn yòu qí méi",
-   "vi": "Hai ta thề không đổi thay, tương kính như tân"
+   "vi": "Hai ta thề không đổi thay, tương kính như tân",
+   "t": 133.02,
+   "end": 141.09
   }
- ]
+ ],
+ "duration": 189
 }

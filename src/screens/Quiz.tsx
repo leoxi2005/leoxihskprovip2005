@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { Bar } from '../components/Bar';
+import { SongPlayer, type SongPlayerHandle } from '../components/SongPlayer';
 import { isChoiceQ, isTileQ, isTypeQ } from '../engine/types';
 import { useEngine, useGameState } from '../engine/useEngine';
 import { C, CHIP_COLORS, CHIP_LABELS, F, shadow } from '../theme';
@@ -25,6 +27,18 @@ const iconBtn = {
 export function Quiz() {
   const engine = useEngine();
   const st = useGameState();
+  const playerRef = useRef<SongPlayerHandle | null>(null);
+
+  // The engine drives playback (seek to this line, stop at its end) but must not
+  // know about YouTube, so it gets plain functions to call.
+  useEffect(() => {
+    engine.attachPlayer(
+      (from, to, rate) => playerRef.current?.playLine(from, to, rate),
+      () => playerRef.current?.stop(),
+    );
+    return () => engine.detachPlayer();
+  }, [engine]);
+
   const q = engine.cur();
   if (!q) return null;
 
@@ -145,28 +159,8 @@ export function Quiz() {
       </div>
 
       {q.kind === 'song' && q.yt && 'yt' in q.song && (
-        <div
-          style={{
-            width: '100%',
-            maxWidth: 640,
-            marginTop: 14,
-            border: `3px solid ${C.ink}`,
-            borderRadius: 18,
-            overflow: 'hidden',
-            boxShadow: shadow(5),
-            background: '#000',
-          }}
-        >
-          {/* Keyed by song, not question, so the video keeps playing across lines. */}
-          <iframe
-            key={q.song.id}
-            src={`https://www.youtube.com/embed/${q.song.yt}`}
-            title="Bài hát"
-            style={{ display: 'block', width: '100%', aspectRatio: '16/9', border: 0 }}
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          />
-        </div>
+        // Mounted per song, not per question, so seeking between lines is seamless.
+        <SongPlayer key={q.song.id} videoId={q.song.yt} ref={playerRef} />
       )}
 
       {q.boss && (
@@ -262,14 +256,27 @@ export function Quiz() {
         )}
 
         {pv.speaker !== 'none' && (
-          <button
-            onClick={engine.playPrompt}
-            title="Nghe lại"
-            aria-label="Nghe lại"
-            style={pv.speaker === 'big' ? BIG_SPEAKER : SMALL_SPEAKER}
-          >
-            🔊
-          </button>
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'center', alignItems: 'center' }}>
+            <button
+              onClick={engine.playPrompt}
+              title="Nghe lại"
+              aria-label="Nghe lại"
+              style={pv.speaker === 'big' ? BIG_SPEAKER : SMALL_SPEAKER}
+            >
+              🔊
+            </button>
+            {/* Slowing the line down is how every song-teaching channel drills a phrase. */}
+            {engine.isSungLine() && (
+              <button
+                onClick={engine.playSlow}
+                title="Nghe chậm lại"
+                aria-label="Nghe chậm lại"
+                style={{ ...SMALL_SPEAKER, width: 'auto', padding: '0 14px', fontSize: 14, fontWeight: 800 }}
+              >
+                🐢 Chậm
+              </button>
+            )}
+          </div>
         )}
 
         <div style={pv.mainStyle}>{pv.main}</div>

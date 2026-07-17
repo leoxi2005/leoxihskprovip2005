@@ -94,6 +94,12 @@ export class GameEngine {
   private flashT: ReturnType<typeof setTimeout> | undefined;
   /** Set by the quiz screen so `type`/`dict` questions can focus the input. */
   focusInput: (() => void) | undefined;
+  /** Set by the song player: sings one lyric line and stops. */
+  playLine: ((from: number, to: number, rate?: number) => void) | undefined;
+  /** Set by the song player: stops playback entirely. */
+  stopSong: (() => void) | undefined;
+  /** A line asked for before the screen attached its player. */
+  private pendingLine: [number, number, number] | null = null;
   /** Set by the confetti layer. */
   burst: (n: number) => void = () => {};
 
@@ -141,6 +147,13 @@ export class GameEngine {
     this.setState({});
   }
 
+  /** Everything that makes noise or ticks: speech, the song, and the timers. */
+  private hushAll(): void {
+    this.audio.hush();
+    this.stopSong?.();
+    this.clearTimers();
+  }
+
   private clearTimers(): void {
     clearInterval(this.tfInt);
     clearTimeout(this.tfNext);
@@ -152,8 +165,7 @@ export class GameEngine {
   cur = (): Question | undefined => this.state.session[this.state.qi];
 
   goHome = (): void => {
-    this.audio.hush();
-    this.clearTimers();
+    this.hushAll();
     this.setState({ mode: 'home', bookWord: null });
   };
 
@@ -166,8 +178,7 @@ export class GameEngine {
   };
 
   quit = (): void => {
-    this.audio.hush();
-    this.clearTimers();
+    this.hushAll();
     this.setState({ mode: 'home' });
   };
 
@@ -249,8 +260,12 @@ export class GameEngine {
     if (q.kind === 'song') {
       // The real song is sung by its video — TTS must never talk over it. Chants have
       // no audio of their own, so those get read with a pause at the blank.
-      if (q.yt) this.audio.hush();
-      else this.audio.speak(q.line.cn.split(q.line.blank).join('……'));
+      if (q.yt) {
+        this.audio.hush();
+        this.singLine(q);
+      } else {
+        this.audio.speak(q.line.cn.split(q.line.blank).join('……'));
+      }
       return;
     }
     if (q.kind === 'a2h' || q.kind === 'dict' || q.kind === 'tf') {
@@ -362,7 +377,7 @@ export class GameEngine {
     s.dayXp += this.state.sessionXp;
     s.xp = (s.xp || 0) + this.state.sessionXp;
     save(KEYS.stats, s);
-    this.audio.hush();
+    this.hushAll();
     this.setState({ mode: 'result' });
     setTimeout(() => this.burst(120), 200);
   }
@@ -420,10 +435,61 @@ export class GameEngine {
     if (!this.state.checked) this.setState({ typedText });
   };
 
+  /**
+   * Attaches the song player. The first question of a song session is shown before
+   * the screen has mounted, so whatever it asked for is flushed here — otherwise the
+   * song opens on silence and only starts working from the second line.
+   */
+  attachPlayer(
+    playLine: (from: number, to: number, rate?: number) => void,
+    stopSong: () => void,
+  ): void {
+    this.playLine = playLine;
+    this.stopSong = stopSong;
+    const pending = this.pendingLine;
+    this.pendingLine = null;
+    if (pending) playLine(...pending);
+  }
+
+  detachPlayer(): void {
+    this.playLine = undefined;
+    this.stopSong = undefined;
+    this.pendingLine = null;
+  }
+
+  /**
+   * Sings the line this question is about, then stops. Safe to call before either the
+   * screen or the YouTube player is ready — the request is held until it can run.
+   */
+  private singLine(q: Question, rate = 1): void {
+    if (q.kind !== 'song' || !q.yt || q.line.t === undefined || q.line.end === undefined) return;
+    if (!this.playLine) {
+      this.pendingLine = [q.line.t, q.line.end, rate];
+      return;
+    }
+    this.playLine(q.line.t, q.line.end, rate);
+  }
+
+  /** The 🔊 button: hear the prompt again. */
   playPrompt = (): void => {
     const q = this.cur();
-    if (q) this.audio.speak(ttsFor(q));
+    if (!q) return;
+    // For the real song, "listen again" means the singer, not a robot reading over her.
+    if (q.kind === 'song' && q.yt) this.singLine(q);
+    else this.audio.speak(ttsFor(q));
   };
+
+  /** Replay the sung line slowly — the trick every song-teaching channel leans on. */
+  playSlow = (): void => {
+    const q = this.cur();
+    if (q) this.singLine(q, 0.75);
+  };
+
+  /** True when the current question is a line of the real song. */
+  isSungLine(): boolean {
+    const q = this.cur();
+    return q?.kind === 'song' && !!q.yt && q.line.t !== undefined;
+  }
 
   /** Whether the current answer is complete enough to check. */
   canCheck(): boolean {

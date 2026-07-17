@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { CONFUSABLES, DECK, EXTRA_TOPIC, IMAGES, OLD_IDS } from '../data';
+import { CONFUSABLES, DECK, EXTRA_TOPIC, IMAGES, MYSONG, OLD_IDS } from '../data';
 import { ttsFor } from './questions';
 import { buildSession, endlessBatch, matchTopic, pickDue, pools, topicsOf } from './session';
 import { migrateSrs, nextEntry, type SrsMap } from './storage';
@@ -204,6 +204,41 @@ describe('confusables (经过 / 通过)', () => {
     // Boss and lightning both need at least 8 words in the pool.
     expect(pools(only).vocab.length).toBeGreaterThanOrEqual(8);
     expect(buildSession('boss', only, {}, DEFAULT_SETTINGS)).toHaveLength(8);
+  });
+});
+
+describe('the real song is aligned to its recording', () => {
+  it('gives every line a slice of the song to sing', () => {
+    MYSONG.lines.forEach((l, i) => {
+      expect(l.t, `line ${i + 1} has no start`).toBeGreaterThan(0);
+      expect(l.end, `line ${i + 1} has no end`).toBeGreaterThan(l.t!);
+      // A sung line runs a few seconds; anything longer means a bad alignment.
+      expect(l.end! - l.t!, `line ${i + 1} is ${l.end! - l.t!}s long`).toBeLessThanOrEqual(12);
+      expect(l.end, `line ${i + 1} runs past the song`).toBeLessThanOrEqual(MYSONG.duration);
+    });
+  });
+
+  it('keeps the lines in the order they are sung', () => {
+    const starts = MYSONG.lines.map((l) => l.t!);
+    expect(starts).toEqual([...starts].sort((a, b) => a - b));
+  });
+
+  it('asks about a line the player can actually hear', () => {
+    // The whole point: every question maps to a real slice of audio.
+    build('mysong').forEach((q) => {
+      expect(q.kind).toBe('song');
+      if (q.kind !== 'song') return;
+      expect(q.yt).toBe(true);
+      expect(q.line.t).toBeDefined();
+      expect(q.line.end).toBeDefined();
+    });
+  });
+
+  it('hides exactly the word being asked for', () => {
+    MYSONG.lines.forEach((l) => {
+      expect(l.cn, l.cn).toContain(l.blank);
+      expect(l.cn.split(l.blank).join(' ____ ')).not.toContain(l.blank);
+    });
   });
 });
 

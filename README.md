@@ -13,14 +13,14 @@ Tác giả: **leoxi**
 - **331 từ vựng** · 43 điểm ngữ pháp · 35 bài đọc · 8 câu sắp xếp · 8 cặp từ dễ nhầm
 - 59 ảnh minh hoạ AI + mẹo nhớ tiếng Việt cho từng từ
 - Hoạt hình viết từng nét (bộ thủ tô đỏ) cho mọi chữ Hán
-- 3 bài chant tự soạn + 1 bài hát thật có video
+- 3 bài chant tự soạn + 1 bài hát thật, lời đã gióng với bản thu theo từng giây
 
 ## Chạy trên máy
 
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm test         # 48 test cho engine + nội dung
+npm test         # 67 test cho engine + nội dung
 npm run build
 ```
 
@@ -38,11 +38,28 @@ npm run build
 | 🧠 | Nhớ Nhanh | `6` | Chữ hiện 1.8s rồi biến mất |
 | 📚 | Ngữ pháp & Đọc | `7` | Cloze · câu · đoạn văn |
 | 🎵 | Học qua nhạc | `8` | Điền từ vào lời chant |
-| 🎤 | 绝弦的美 | `9` | Bài hát thật + video YouTube |
+| 🎤 | 若把你 | `9` | Bài hát thật — video hát đúng câu đang hỏi rồi tự dừng |
 | ⚔️ | **Cặp Dễ Nhầm** | `0` | 经过 hay 通过? Chọn 1 trong 2, có lời giải thích tại sao |
 
 Trong lúc chơi: `1–9` chọn đáp án · `Enter` kiểm tra & chuyển câu · `Backspace` xoá ·
 `Esc` thoát ô tìm kiếm.
+
+## Chế độ bài hát thật hoạt động thế nào
+
+Lời bài hát được gióng với bản thu bằng sheet LRC lấy từ [lrclib](https://lrclib.net/),
+nên mỗi câu biết chính xác nó được hát ở giây nào. Nhờ đó:
+
+- Video **tua tới đúng câu đang hỏi**, hát hết câu thì **tự dừng** — cách
+  [LyricsTraining](https://lyricstraining.com/) dừng video ở mỗi chỗ trống.
+- 🔊 phát lại **giọng ca sĩ** đúng đoạn đó, không phải giọng máy đọc đè lên nhạc.
+- 🐢 phát lại ở 0.75× — "slow repetition", thứ mọi kênh dạy tiếng Trung qua nhạc đều dùng.
+
+Trước đây video chạy tự do trong khi câu hỏi đứng yên, nên người học bị hỏi câu 3 trong khi
+tai đang nghe câu 8 — "nghe rồi điền" là một lời hứa không thể thực hiện được.
+
+Lưu ý thẳng thắn: **0/23 từ trong bài này thuộc HSK 3–4** (落款, 高山流水, 矢志不渝… là từ cổ
+phong). Đây là chế độ để thưởng thức và luyện tai, không phải để luyện thi. Phần nhạc giúp thi
+là 🎵 *Học qua nhạc* — các bài chant dùng đúng từ trong deck.
 
 ## Vì sao có Sinh Tồn và Cặp Dễ Nhầm
 
@@ -71,7 +88,7 @@ src/
     storage.ts     localStorage, hộp SRS, migrate dữ liệu v1
     audio.ts       TTS tiếng Trung + hiệu ứng âm thanh WebAudio
   screens/       Home · Quiz · Result · Notebook
-  components/    Bar · Confetti · StrokeAnimation
+  components/    Bar · Confetti · StrokeAnimation · SongPlayer
   theme.ts       design token
 ```
 

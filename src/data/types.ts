@@ -82,6 +82,10 @@ export interface SongLine {
   blank: string;
   pin: string;
   vi: string;
+  /** Seconds into the recording where this line is sung. Real songs only. */
+  t?: number;
+  /** Seconds where the next line starts — the point to stop playback at. */
+  end?: number;
 }
 
 export interface Song {
@@ -90,8 +94,14 @@ export interface Song {
   lines: SongLine[];
 }
 
-/** A real song: same as `Song` plus a YouTube id and its own vocab list. */
+/**
+ * A real song: a `Song` plus a YouTube id and its own vocab. Its lines carry
+ * timestamps (aligned from an LRC sheet), which is what lets the player sing the
+ * exact line a question is asking about instead of whatever is playing.
+ */
 export interface MySong extends Song {
   yt: string;
+  /** Length of the recording in seconds. */
+  duration: number;
   vocab: Pick<Vocab, 'h' | 'p' | 'm'>[];
 }

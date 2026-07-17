@@ -58,11 +58,75 @@ describe('the real song never gets talked over', () => {
     expect(spoken).toEqual([]);
   });
 
-  it('still reads the line when the 🔊 button is pressed', () => {
+  it('replays the singer, not a robot, when 🔊 is pressed', () => {
     const { engine, spoken } = engineWithSpy();
+    const sung: Array<[number, number, number | undefined]> = [];
+    engine.playLine = (from, to, rate) => sung.push([from, to, rate]);
+
     start(engine, 'mysong');
+    sung.length = 0;
     engine.playPrompt();
-    expect(spoken).toHaveLength(1);
+
+    expect(spoken).toEqual([]);
+    // Seeks to this line's own slice of the recording, at normal speed.
+    const q = engine.cur();
+    expect(q?.kind).toBe('song');
+    if (q?.kind !== 'song') return;
+    expect(sung).toEqual([[q.line.t, q.line.end, 1]]);
+  });
+
+  it('sings the line the question is about as soon as it appears', () => {
+    const { engine } = engineWithSpy();
+    const sung: number[] = [];
+    engine.playLine = (from) => sung.push(from);
+    start(engine, 'mysong');
+    const q = engine.cur();
+    expect(q?.kind).toBe('song');
+    if (q?.kind !== 'song') return;
+    expect(sung).toEqual([q.line.t]);
+  });
+
+  it('sings the first line even though the screen mounts after it is asked', () => {
+    // The session starts inside a keypress, before React has rendered the player.
+    // Without holding that request the song opens silent and only works from line 2.
+    const { engine } = engineWithSpy();
+    const sung: number[] = [];
+    start(engine, 'mysong');
+    expect(sung).toEqual([]);
+
+    engine.attachPlayer((from) => sung.push(from), () => {});
+    const q = engine.cur();
+    expect(q?.kind).toBe('song');
+    if (q?.kind !== 'song') return;
+    expect(sung).toEqual([q.line.t]);
+  });
+
+  it('forgets a held line once the player goes away', () => {
+    const { engine } = engineWithSpy();
+    start(engine, 'mysong');
+    engine.detachPlayer();
+    const sung: number[] = [];
+    engine.attachPlayer((from) => sung.push(from), () => {});
+    expect(sung).toEqual([]);
+  });
+
+  it('replays slowly at 0.75x for the 🐢 button', () => {
+    const { engine } = engineWithSpy();
+    const rates: Array<number | undefined> = [];
+    engine.playLine = (_f, _t, rate) => rates.push(rate);
+    start(engine, 'mysong');
+    rates.length = 0;
+    engine.playSlow();
+    expect(rates).toEqual([0.75]);
+  });
+
+  it('stops the song when you quit', () => {
+    const { engine } = engineWithSpy();
+    let stopped = 0;
+    engine.stopSong = () => stopped++;
+    start(engine, 'mysong');
+    engine.quit();
+    expect(stopped).toBeGreaterThan(0);
   });
 });
 

@@ -83,7 +83,9 @@ export function promptView(q: Question, st: GameState): PromptView {
         title: `🎵 ${q.song.title} — câu ${q.li + 1}/${q.song.lines.length}`,
         main: q.line.cn.split(q.line.blank).join(' ____ '),
         mainStyle: { ...serif, fontSize: 32, lineHeight: 1.7 },
-        sub: 'Nghe 🔊 rồi điền từ còn thiếu vào lời bài hát',
+        sub: q.yt
+          ? 'Ca sĩ vừa hát đúng câu này — 🔊 nghe lại, 🐢 nghe chậm'
+          : 'Nghe 🔊 rồi điền từ còn thiếu vào lời bài hát',
         speaker: 'small',
       };
     case 'tf':
