@@ -35,12 +35,6 @@ export const F = {
 /** Offset hard shadow, the signature of the style. */
 export const shadow = (n: number, color: string = C.ink) => `${n}px ${n}px 0 ${color}`;
 
-/** `#rrggbb` + alpha 0–1 → `rgba(...)`. */
-export const withAlpha = (hex: string, a: number) => {
-  const n = parseInt(hex.slice(1), 16);
-  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
-};
-
 export const CHIP_COLORS: Record<string, string> = {
   m2h: '#c94f38',
   h2m: '#3b7ea1',

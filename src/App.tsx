@@ -6,7 +6,7 @@ import { Home } from './screens/Home';
 import { Notebook } from './screens/Notebook';
 import { Quiz } from './screens/Quiz';
 import { Result } from './screens/Result';
-import { C, F, withAlpha } from './theme';
+import { C, F } from './theme';
 
 function Loading() {
   return (
@@ -62,13 +62,8 @@ export default function App() {
           minHeight: '100vh',
           fontFamily: `'Baloo 2','Noto Sans SC',sans-serif`,
           color: C.ink,
-          // Mosaic ảnh do người dùng cung cấp, lát thành ô nhỏ. Một lớp kem mờ phủ
-          // lên trên để thẻ và chữ vẫn nổi rõ trên nền ảnh rậm.
-          backgroundColor: C.bg,
-          backgroundImage: `linear-gradient(${withAlpha(C.bg, 0.55)}, ${withAlpha(C.bg, 0.55)}), url("${import.meta.env.BASE_URL}img/bg-mosaic.jpg")`,
-          backgroundSize: 'auto, 190px 190px',
-          backgroundRepeat: 'repeat, repeat',
-          backgroundAttachment: 'fixed, fixed',
+          backgroundImage: `radial-gradient(${C.dot} 1.5px,transparent 1.5px)`,
+          backgroundSize: '26px 26px',
         }}
       >
         <Screens />
