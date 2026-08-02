@@ -1,9 +1,12 @@
-import { DECK, IMAGES } from '../data';
+import { DECK, EXTRA2_TOPICS, IMAGES } from '../data';
 import type { GameId } from '../engine/types';
 import { useEngine, useGameState } from '../engine/useEngine';
 import { Bar } from '../components/Bar';
 import { SoundCheck } from '../components/SoundCheck';
 import { C, F, shadow } from '../theme';
+
+/** Size of the newest batch of words, shown on the ⭐ shortcut that isolates it. */
+const NEW_WORD_COUNT = DECK.vocab.filter((v) => (EXTRA2_TOPICS as readonly string[]).includes(v.t)).length;
 
 interface GameCard {
   icon: string;
@@ -228,6 +231,21 @@ export function Home() {
               Chọn chủ đề ôn tập
             </span>
             <span style={{ display: 'flex', gap: 8 }}>
+              <button
+                onClick={() => engine.selOnly(EXTRA2_TOPICS)}
+                title="Chỉ ôn 42 từ của Bài 13–16"
+                style={{
+                  border: `2px solid ${C.ink}`,
+                  background: C.soft,
+                  borderRadius: 99,
+                  padding: '3px 12px',
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                }}
+              >
+                ⭐ Từ mới ({NEW_WORD_COUNT})
+              </button>
               <button
                 onClick={engine.selAll}
                 style={{

@@ -210,6 +210,13 @@ export class GameEngine {
     this.saveTopics();
   };
 
+  /** Narrow to exactly `only` — the one-tap way to drill a single batch of words. */
+  selOnly = (only: readonly string[]): void => {
+    const wanted = new Set(only);
+    this.topics.forEach((t) => (this.sel[t] = wanted.has(t)));
+    this.saveTopics();
+  };
+
   toggleTopic = (t: string): void => {
     this.sel[t] = !this.sel[t];
     this.saveTopics();

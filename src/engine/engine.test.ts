@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { CONFUSABLES, DECK, EXTRA_TOPIC, EXTRA2_TOPICS, IMAGES, MYSONG, OLD_IDS, STORIES } from '../data';
 import { EXTRA2_GRAMMAR, EXTRA2_VOCAB } from '../data/extra2';
+import { GameEngine } from './GameEngine';
 import { ttsFor } from './questions';
 import { buildSession, endlessBatch, matchTopic, pickDue, pools, topicsOf } from './session';
 import { migrateSrs, nextEntry, type SrsMap } from './storage';
@@ -236,6 +237,16 @@ describe('the Bài 13–16 drop', () => {
       expect(g.sent, g.id).toContain('____');
       expect(g.sent.replace('____', g.a), g.id).toBe(g.full);
     });
+  });
+
+  it('has a one-tap shortcut that isolates exactly the new topics', () => {
+    const engine = new GameEngine();
+    engine.init();
+    engine.selOnly(EXTRA2_TOPICS);
+    expect(engine.topics.filter((t) => engine.sel[t])).toEqual([...EXTRA2_TOPICS]);
+    // The notebook and every game mode read the same pool, so both narrow together.
+    expect(engine.pools().vocab).toHaveLength(EXTRA2_VOCAB.length);
+    engine.dispose();
   });
 
   it('leaves each new topic playable on its own', () => {
