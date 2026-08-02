@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { CONFUSABLES, DECK, EXTRA_TOPIC, IMAGES, MYSONG, OLD_IDS } from '../data';
+import { CONFUSABLES, DECK, EXTRA_TOPIC, EXTRA2_TOPICS, IMAGES, MYSONG, OLD_IDS, STORIES } from '../data';
+import { EXTRA2_GRAMMAR, EXTRA2_VOCAB } from '../data/extra2';
 import { ttsFor } from './questions';
 import { buildSession, endlessBatch, matchTopic, pickDue, pools, topicsOf } from './session';
 import { migrateSrs, nextEntry, type SrsMap } from './storage';
@@ -204,6 +205,47 @@ describe('confusables (经过 / 通过)', () => {
     // Boss and lightning both need at least 8 words in the pool.
     expect(pools(only).vocab.length).toBeGreaterThanOrEqual(8);
     expect(buildSession('boss', only, {}, DEFAULT_SETTINGS)).toHaveLength(8);
+  });
+});
+
+describe('the Bài 13–16 drop', () => {
+  it('adds every word exactly once', () => {
+    // The SRS id is `w:<hanzi>`, so two entries for one word would share a box.
+    const seen = DECK.vocab.map((v) => v.h);
+    expect(new Set(seen).size).toBe(seen.length);
+    EXTRA2_VOCAB.forEach((v) => {
+      expect(DECK.vocab.filter((x) => x.h === v.h), v.h).toHaveLength(1);
+    });
+  });
+
+  it('gives every word a reading, a meaning and an example', () => {
+    EXTRA2_VOCAB.forEach((v) => {
+      expect(v.p, v.h).toBeTruthy();
+      expect(v.m, v.h).toBeTruthy();
+      expect(v.ex, v.h).toContain(v.h);
+      expect(v.exVi, v.h).toBeTruthy();
+      // Function words are unlearnable from a bare gloss — every word gets a hint.
+      expect(STORIES[v.h], v.h).toBeTruthy();
+    });
+  });
+
+  it('keeps every cloze self-consistent, with the answer among the options', () => {
+    EXTRA2_GRAMMAR.forEach((g) => {
+      expect(g.opts, g.id).toContain(g.a);
+      expect(new Set(g.opts).size, g.id).toBe(g.opts.length);
+      expect(g.sent, g.id).toContain('____');
+      expect(g.sent.replace('____', g.a), g.id).toBe(g.full);
+    });
+  });
+
+  it('leaves each new topic playable on its own', () => {
+    EXTRA2_TOPICS.forEach((t) => {
+      const only = { [t]: true };
+      // Boss and lightning both need at least 8 words in the pool.
+      expect(pools(only).vocab.length, t).toBeGreaterThanOrEqual(8);
+      expect(pools(only).grammar.length, t).toBeGreaterThan(0);
+      expect(buildSession('boss', only, {}, DEFAULT_SETTINGS), t).toHaveLength(8);
+    });
   });
 });
 

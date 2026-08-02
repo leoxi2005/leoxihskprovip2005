@@ -5,18 +5,20 @@ import songsJson from './songs.json';
 import mysongJson from './mysong.json';
 import oldIdsJson from './oldids.json';
 import { EXTRA_GRAMMAR, EXTRA_STORIES, EXTRA_VOCAB } from './extra';
+import { EXTRA2_GRAMMAR, EXTRA2_STORIES, EXTRA2_VOCAB } from './extra2';
 import type { Deck, MySong, Song } from './types';
 
 export * from './types';
 export { CONFUSABLES, EXTRA_TOPIC, type Confusable } from './extra';
+export { EXTRA2_TOPICS, TOPIC_ART, TOPIC_JOB, TOPIC_LANG, TOPIC_STUDY } from './extra2';
 
 const bundled = deckJson as Deck;
 
-/** The handoff bundle plus everything in `extra.ts`. */
+/** The handoff bundle plus everything in `extra.ts` and `extra2.ts`. */
 export const DECK: Deck = {
   ...bundled,
-  vocab: [...bundled.vocab, ...EXTRA_VOCAB],
-  grammar: [...bundled.grammar, ...EXTRA_GRAMMAR],
+  vocab: [...bundled.vocab, ...EXTRA_VOCAB, ...EXTRA2_VOCAB],
+  grammar: [...bundled.grammar, ...EXTRA_GRAMMAR, ...EXTRA2_GRAMMAR],
 };
 
 /**
@@ -34,7 +36,11 @@ export const IMAGES: Record<string, string> = Object.fromEntries(
 );
 
 /** Hanzi → Vietnamese mnemonic. */
-export const STORIES: Record<string, string> = { ...storiesJson, ...EXTRA_STORIES };
+export const STORIES: Record<string, string> = {
+  ...storiesJson,
+  ...EXTRA_STORIES,
+  ...EXTRA2_STORIES,
+};
 
 /** Built-in vocabulary chants. */
 export const SONGS = songsJson as Song[];

@@ -127,8 +127,11 @@ export class GameEngine {
     this.srs = migrateSrs(load<SrsMap>(KEYS.srs, {}));
     this.topics = topicsOf();
 
+    // Topics default to on; a saved choice wins where it has one. Spreading in
+    // that order is what makes topics added after a player's last visit show up
+    // — with a plain `saved ??` they would be missing keys, i.e. silently off.
     const saved = load<TopicSel | null>(KEYS.topics, null);
-    this.sel = saved ?? Object.fromEntries(this.topics.map((t) => [t, true]));
+    this.sel = { ...Object.fromEntries(this.topics.map((t) => [t, true])), ...saved };
 
     this.setState({ ready: true, muted: loadRaw(KEYS.muted) === '1' });
     this.audio.muted = this.state.muted;

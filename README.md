@@ -10,8 +10,8 @@ Tác giả: **leoxi**
 
 ## Nội dung
 
-- **331 từ vựng** · 43 điểm ngữ pháp · 35 bài đọc · 8 câu sắp xếp · 8 cặp từ dễ nhầm
-- 59 ảnh minh hoạ AI + mẹo nhớ tiếng Việt cho từng từ
+- **373 từ vựng** · 55 điểm ngữ pháp · 35 bài đọc · 8 câu sắp xếp · 8 cặp từ dễ nhầm
+- 59 ảnh minh hoạ AI + 111 mẹo nhớ Hán Việt
 - Hoạt hình viết từng nét (bộ thủ tô đỏ) cho mọi chữ Hán
 - 3 bài chant tự soạn + 1 bài hát thật, lời đã gióng với bản thu theo từng giây
 
@@ -20,7 +20,7 @@ Tác giả: **leoxi**
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm test         # 67 test cho engine + nội dung
+npm test         # 73 test cho engine + nội dung
 npm run build
 ```
 
@@ -76,11 +76,31 @@ và luôn kèm lý do vì sao cái kia sai.
 Điểm quan trọng: **chỉ đưa vào những câu mà một trong hai từ thật sự sai.** Những câu kiểu
 经过讨论 / 通过讨论 (cả hai đều đúng) bị loại — luyện những câu đó là dạy một quy tắc không có thật.
 
+## Bài 13–16 (đợt từ mới)
+
+42 từ HSK4 thêm sau, chia thành 4 chủ đề để mỗi chủ đề tự chơi được một mình (đấu trùm và
+tia chớp đều cần tối thiểu 8 từ trong pool):
+
+| Chủ đề | Từ | Nội dung |
+| --- | --- | --- |
+| `Bài 13 · Nghệ thuật & Giao lưu` | 12 | 该 值得 艺术 不仅 喜爱 与 国籍 无关 交流 感情 增进 水平 |
+| `Bài 14 · Ngôn ngữ & Công nghệ` | 10 | 句子 进行 即使 翻译 理解 随着 科技 笔记 借 表格 |
+| `Bài 15 · Học tập & Cố gắng` | 8 | 收拾 羡慕 填空 好棒 奖学金 任何 基础 知识 |
+| `Bài 16 · Ứng tuyển & Ấn tượng` | 12 | 印象 自信 满足 需求 技能 经验 首先 其次 本来 却 影响 留下 |
+
+Mỗi từ có ví dụ Trung–Việt và một mẹo nhớ Hán Việt. Thêm **12 câu cloze** cho nhóm hư từ
+(不仅, 与, 即使, 随着, 却, 首先…其次, 任何, 本来, 该, 进行, 值得, 无关) — những từ này gần như
+không có "nghĩa" để ghép thẻ, chỉ học được qua vị trí trong câu.
+
+Tám từ trong danh sách gốc đã có sẵn trong deck nên không thêm lại: 区别 · 紧张 · 勇敢 · 坚持 ·
+应聘 · 判断 · 顾客 (deck.json) và 取得 (extra.ts). Id SRS là `w:<chữ Hán>`, thêm bản thứ hai thì
+hai thẻ sẽ tranh nhau cùng một hộp.
+
 ## Kiến trúc
 
 ```
 src/
-  data/          nội dung (JSON) + extra.ts (bài 通过 & 经过)
+  data/          nội dung (JSON) + extra.ts (bài 通过 & 经过) + extra2.ts (Bài 13–16)
   engine/        toàn bộ luật chơi, không dính React
     GameEngine.ts  máy trạng thái + side effect (timer, giọng đọc, ghi SRS)
     session.ts     mỗi chế độ ra câu gì, theo thứ tự SRS
@@ -130,7 +150,7 @@ Không có màn hình cài đặt — chỉnh qua `engine.setSettings({...})` ho
 
 ## Còn tồn đọng
 
-- **10 trong 43 điểm ngữ pháp không vào được phiên nào.** Chúng gắn chủ đề `Bài 3`, mà chip chủ
+- **10 trong 55 điểm ngữ pháp không vào được phiên nào.** Chúng gắn chủ đề `Bài 3`, mà chip chủ
   đề chỉ sinh ra từ chủ đề của *từ vựng*, không từ nào thuộc `Bài 3`. Lỗi này có từ bản prototype
   gốc; đã ghim bằng test trong `engine.test.ts`. Sửa bằng cách gắn lại chủ đề cho 10 mục đó,
   hoặc sinh chip từ toàn bộ nội dung.
