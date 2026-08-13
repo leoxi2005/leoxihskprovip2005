@@ -15,7 +15,9 @@ export type Kind =
   | 'pass'
   | 'order'
   | 'song'
-  | 'conf';
+  | 'conf'
+  | 'tone'
+  | 'cloze';
 
 export type GameId =
   | 'mix'
@@ -29,7 +31,10 @@ export type GameId =
   | 'song'
   | 'mysong'
   | 'confuse'
-  | 'endless';
+  | 'endless'
+  | 'tone'
+  | 'cloze'
+  | 'leech';
 
 interface Base {
   kind: Kind;
@@ -82,6 +87,30 @@ export interface ConfQ extends Base {
   kind: 'conf';
   c: Confusable;
   opts: string[];
+  ans: number;
+}
+
+/**
+ * Pick the correctly-toned pinyin. Every option is the same syllable string — only
+ * the tone marks (or a deliberate zh/z, -n/-ng swap) differ.
+ */
+export interface ToneQ extends Base {
+  kind: 'tone';
+  word: Vocab;
+  opts: string[];
+  ans: number;
+  /** What the distractors were built from, for the feedback panel. */
+  trap: 'tone' | 'sound';
+}
+
+/** The word's own example sentence with the word blanked out. */
+export interface ClozeQ extends Base {
+  kind: 'cloze';
+  word: Vocab;
+  /** `q.sent` already has the blank cut into it. */
+  sent: string;
+  vi: string;
+  opts: Vocab[];
   ans: number;
 }
 
@@ -141,10 +170,12 @@ export type Question =
   | MatchQ
   | TfQ
   | SongQ
-  | ConfQ;
+  | ConfQ
+  | ToneQ
+  | ClozeQ;
 
 /** Questions whose answer is picked from an options grid. */
-export type AnyChoiceQ = ChoiceQ | GramQ | SentQ | PassQ | SongQ | ConfQ;
+export type AnyChoiceQ = ChoiceQ | GramQ | SentQ | PassQ | SongQ | ConfQ | ToneQ | ClozeQ;
 
 /** Questions built from tiles (`write` and `order`). */
 export type AnyTileQ = WriteQ | OrderQ;
@@ -155,7 +186,7 @@ export const isTypeQ = (q: Question): q is TypeQ => q.kind === 'type' || q.kind 
 /** The word a question is about, when it has one. */
 export const wordOf = (q: Question): Vocab | undefined => ('word' in q ? q.word : undefined);
 
-export type Mode = 'home' | 'quiz' | 'result' | 'book';
+export type Mode = 'home' | 'quiz' | 'result' | 'book' | 'exam' | 'stats';
 
 export interface GameState {
   ready: boolean;
@@ -215,7 +246,19 @@ export interface Settings {
   dailyGoal: number;
   /** 800–4000 */
   flashMs: number;
+  /**
+   * How many words may be met for the first time each day, 3–40.
+   *
+   * Without a cap every session front-loads unseen words, and a fortnight later the
+   * due pile is unclearable — the classic way an SRS deck dies.
+   */
+  newPerDay: number;
+  /** Target exam day, `YYYY-MM-DD`. Drives the countdown and the daily plan. */
+  examDate: string;
 }
+
+/** HSK 4 at Ho Chi Minh City University of Education, the last paper before HSK 3.0. */
+export const DEFAULT_EXAM_DATE = '2026-11-07';
 
 export const DEFAULT_SETTINGS: Settings = {
   autoPlayAudio: true,
@@ -223,12 +266,18 @@ export const DEFAULT_SETTINGS: Settings = {
   sessionSize: 18,
   dailyGoal: 150,
   flashMs: 1800,
+  newPerDay: 12,
+  examDate: DEFAULT_EXAM_DATE,
 };
 
 export interface SrsEntry {
-  /** 0–5 */
+  /** 0–`MAX_BOX` (7). */
   box: number;
   due: number;
+  /** Times this lane has been missed. At `LEECH_AT` the word counts as a leech. */
+  lapses?: number;
+  /** Times this lane has been graded, right or wrong. */
+  reps?: number;
 }
 
 export interface Stats {

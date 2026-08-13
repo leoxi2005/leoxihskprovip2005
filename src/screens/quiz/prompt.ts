@@ -119,6 +119,27 @@ export function promptView(q: Question, st: GameState): PromptView {
         mainStyle: { ...serif, fontSize: 24, lineHeight: 1.6 },
         speaker: 'small',
       };
+    case 'tone':
+      return {
+        title:
+          q.trap === 'sound'
+            ? 'Phát âm nào đúng? — coi chừng zh/z · sh/s · ch/c · -n/-ng'
+            : 'Từ này đọc đúng thanh điệu nào?',
+        main: q.word.h,
+        mainStyle: { ...serif, fontSize: 62, lineHeight: 1.2 },
+        sub: q.word.m,
+        // The listen button only appears after the check: hearing the word is how you
+        // confirm a tone, so offering it earlier would answer the question out loud.
+        speaker: st.checked ? 'small' : 'none',
+      };
+    case 'cloze':
+      return {
+        title: 'Chọn từ điền vào chỗ trống trong câu',
+        main: q.sent,
+        mainStyle: { ...serif, fontSize: 27, lineHeight: 1.75 },
+        sub: q.vi || undefined,
+        speaker: 'none',
+      };
     case 'order':
       return {
         title: 'Sắp xếp thành câu đúng',
@@ -164,5 +185,7 @@ export function hintFor(q: Question): string {
   if (q.kind === 'dict') return 'Nghe 🔊 rồi gõ lại chữ Hán · Enter kiểm tra';
   if (q.kind === 'type') return 'Gõ chữ Hán bằng bộ gõ tiếng Trung · Enter kiểm tra';
   if (q.kind === 'conf') return 'Phím 1 · 2 chọn từ · Enter kiểm tra';
+  if (q.kind === 'tone') return 'Nhớ lại thanh điệu trước — nghe 🔊 sau khi kiểm tra để đối chiếu';
+  if (q.kind === 'cloze') return 'Đọc cả câu rồi chọn từ hợp nghĩa · Enter kiểm tra';
   return `Phím 1–${'opts' in q ? q.opts.length : 0} chọn đáp án · Enter kiểm tra`;
 }

@@ -1,17 +1,27 @@
-import { DECK, type Vocab } from '../data';
+import { DECK, DEFAULT_OFF_TOPICS, type Vocab } from '../data';
 import { OOPS, PRAISE } from '../theme';
 import { Audio } from './audio';
+import { gameForKey } from './games';
+import { LOCKED_UNTIL_CLEAR, dayPlan, newPerDayFor, type DayPlan } from './plan';
 import { ttsFor } from './questions';
 import { buildSession, endlessBatch, nextFinale, pools, topicsOf, type TopicSel } from './session';
 import {
   DEFAULT_STATS,
   KEYS,
+  appendLog,
+  gradeId,
+  isLeech,
+  isSlow,
+  laneId,
   load,
+  loadLog,
   loadRaw,
   migrateSrs,
+  newBudget,
   nextEntry,
   save,
   saveRaw,
+  seedRecallLanes,
   type SrsMap,
 } from './storage';
 import {
@@ -20,6 +30,7 @@ import {
   isTileQ,
   type GameId,
   type GameState,
+  type Kind,
   type Question,
   type Settings,
   type Stats,
@@ -89,6 +100,8 @@ export class GameEngine {
   sel: TopicSel = {};
 
   private listeners = new Set<() => void>();
+  /** When the current question first appeared — the clock behind the slow/fast split. */
+  private shownAt = 0;
   private tfInt: ReturnType<typeof setInterval> | undefined;
   private tfNext: ReturnType<typeof setTimeout> | undefined;
   private flashT: ReturnType<typeof setTimeout> | undefined;
@@ -124,14 +137,17 @@ export class GameEngine {
     this.settings = { ...DEFAULT_SETTINGS, ...load(KEYS.settings, {}) };
     this.audio.rate = this.settings.voiceRate;
     this.stats = { ...DEFAULT_STATS, ...load(KEYS.stats, {}) };
-    this.srs = migrateSrs(load<SrsMap>(KEYS.srs, {}));
+    this.srs = seedRecallLanes(migrateSrs(load<SrsMap>(KEYS.srs, {})));
     this.topics = topicsOf();
 
     // Topics default to on; a saved choice wins where it has one. Spreading in
     // that order is what makes topics added after a player's last visit show up
     // — with a plain `saved ??` they would be missing keys, i.e. silently off.
+    // The exception is the HSK 1–2 base, which is bundled for completeness rather
+    // than for drilling and would otherwise eat the daily new-word budget.
+    const off = new Set(DEFAULT_OFF_TOPICS);
     const saved = load<TopicSel | null>(KEYS.topics, null);
-    this.sel = { ...Object.fromEntries(this.topics.map((t) => [t, true])), ...saved };
+    this.sel = { ...Object.fromEntries(this.topics.map((t) => [t, !off.has(t)])), ...saved };
 
     this.setState({ ready: true, muted: loadRaw(KEYS.muted) === '1' });
     this.audio.muted = this.state.muted;
@@ -173,6 +189,16 @@ export class GameEngine {
   };
 
   openBook = (): void => this.setState({ mode: 'book', bookWord: null });
+
+  openExam = (): void => {
+    this.hushAll();
+    this.setState({ mode: 'exam' });
+  };
+
+  openStats = (): void => {
+    this.hushAll();
+    this.setState({ mode: 'stats' });
+  };
   closeBookWord = (): void => this.setState({ bookWord: null });
 
   bookPick = (w: Vocab): void => {
@@ -228,8 +254,29 @@ export class GameEngine {
 
   startSession = (): void => this.startGame('mix');
 
+  /** Today's study plan, rebuilt from the log on every read so it is never stale. */
+  plan = (): DayPlan => {
+    const p = this.progress();
+    return dayPlan({
+      settings: this.settings,
+      log: loadLog(),
+      due: p.due,
+      unseen: p.newCount,
+      leeches: p.leeches,
+      newToday: p.newPerDay - p.newLeft,
+    });
+  };
+
+  /** Whether a mode is being held back until today's required work is done. */
+  isLocked = (g: GameId): boolean => LOCKED_UNTIL_CLEAR.includes(g) && !this.plan().clear;
+
   startGame = (g: GameId): void => {
-    const session = buildSession(g, this.sel, this.srs, this.settings);
+    // No lock check here on purpose: locking is a choice made where the user picks a
+    // mode (the home screen and the keyboard), not a property of starting a session.
+    // The plan tapers new words to nothing in the final week; the session builder has
+    // to see that number rather than the raw setting.
+    const perDay = newPerDayFor(this.plan().phase.id, this.settings.newPerDay);
+    const session = buildSession(g, this.sel, this.srs, { ...this.settings, newPerDay: perDay });
     if (!session.length) return;
     this.clearTimers();
     this.setState(
@@ -265,6 +312,7 @@ export class GameEngine {
   private onShow(): void {
     const q = this.cur();
     if (!q) return;
+    this.shownAt = Date.now();
     const auto = this.settings.autoPlayAudio;
 
     if (q.kind === 'song') {
@@ -394,9 +442,20 @@ export class GameEngine {
 
   // -- answering ------------------------------------------------------------
 
-  private grade(id: string, ok: boolean): void {
-    this.srs[id] = nextEntry(this.srs[id], ok);
+  /** How long the current question has been on screen. */
+  private elapsed = (): number => Math.max(0, Date.now() - this.shownAt);
+
+  /**
+   * Grades one answer against the lane its kind belongs to, and logs it.
+   *
+   * A correct-but-slow answer still promotes the box but buys a shorter interval —
+   * hesitating is the shape of knowledge that is about to be lost.
+   */
+  private grade(id: string, ok: boolean, kind: Kind, ms: number): void {
+    const key = gradeId(id, kind);
+    this.srs[key] = nextEntry(this.srs[key], ok, isSlow(kind, ms));
     save(KEYS.srs, this.srs);
+    appendLog([[Date.now(), key, kind, ok ? 1 : 0, ms]]);
   }
 
   /** Select an option, or place a tile for `write`/`order`. */
@@ -531,7 +590,8 @@ export class GameEngine {
       return;
     }
 
-    if (!q.re && q.id) this.grade(q.id, ok);
+    const ms = this.elapsed();
+    if (!q.re && q.id) this.grade(q.id, ok, q.kind, ms);
 
     const combo = ok ? st.combo + 1 : 0;
     let gain = ok ? (q.re ? 5 : 10) + Math.min(combo, 6) : 0;
@@ -627,6 +687,13 @@ export class GameEngine {
     const missed = st.missed.slice();
     if (!ok && !missed.some((m) => m.h === q.w.h)) missed.push(q.w);
 
+    // Two options on a six-second clock is a coin flip dressed as a question, so the
+    // lightning round never moves an SRS box. It is still logged: the stats screen
+    // wants to know which words go wrong under time pressure.
+    if (q.id && !timeout) {
+      appendLog([[Date.now(), gradeId(q.id, 'tf'), 'tf', ok ? 1 : 0, this.elapsed()]]);
+    }
+
     if (ok) {
       this.audio.right(combo);
       this.burst(30);
@@ -692,9 +759,11 @@ export class GameEngine {
     let okAll = true;
     let gain = 0;
     const missed = st.missed.slice();
+    // One board is one sitting, so every pair on it shares the board's elapsed time.
+    const ms = Math.round(this.elapsed() / Math.max(1, q.pairs.length));
     q.pairs.forEach((w) => {
       const ok = !st.mWrong[w.h];
-      this.grade('w:' + w.h, ok);
+      this.grade('w:' + w.h, ok, 'match', ms);
       if (ok) gain += 6;
       else {
         okAll = false;
@@ -745,7 +814,7 @@ export class GameEngine {
       return;
     }
 
-    if (mode === 'book') {
+    if (mode === 'book' || mode === 'stats') {
       if (e.key === 'Escape' || e.key === 'Backspace') {
         e.preventDefault();
         if (this.state.bookWord) this.closeBookWord();
@@ -753,6 +822,8 @@ export class GameEngine {
       }
       return;
     }
+    // The exam owns its own keyboard: a stray Escape must not end a timed paper.
+    if (mode === 'exam') return;
 
     if ((mode === 'home' || mode === 'result') && e.key === 'Enter') {
       // Without this, a button left focused by an earlier click also fires its own
@@ -763,13 +834,11 @@ export class GameEngine {
     }
 
     if (mode === 'home') {
-      // 1–9 follow the card order; the 10th card takes 0, and endless has its own key
-      // because it sits with the primary buttons rather than in the grid.
-      const games: GameId[] = ['boss', 'tf', 'write', 'listen', 'match', 'flash', 'read', 'song', 'mysong'];
-      const gi = parseInt(e.key, 10);
-      if (!isNaN(gi) && gi >= 1 && gi <= games.length) return this.startGame(games[gi - 1]);
-      if (e.key === '0') return this.startGame('confuse');
-      if (e.key === 's' || e.key === 'S') return this.startGame('endless');
+      // Shortcuts live on the cards themselves, so this can never disagree with the
+      // key printed on the button. Endless keeps its own — it sits above the grid.
+      const g = e.key.toLowerCase() === 's' ? 'endless' : gameForKey(e.key);
+      // A shortcut must not be a way around the day's plan — the grid greys these out.
+      if (g && !this.isLocked(g)) return this.startGame(g);
     }
 
     if (mode !== 'quiz') return;
@@ -809,20 +878,33 @@ export class GameEngine {
   progress() {
     const P = this.pools();
     const now = Date.now();
-    const ids = [
-      ...P.vocab.map((v) => 'w:' + v.h),
+    let due = 0;
+    let learned = 0;
+    let newCount = 0;
+    let leeches = 0;
+
+    // A word is only "learned" once both lanes are mature — being able to read 通过
+    // while still unable to write it is half a word, and the counter should say so.
+    P.vocab.forEach((v) => {
+      const rec = this.srs[laneId('w:' + v.h, 'recog')];
+      const rcl = this.srs[laneId('w:' + v.h, 'recall')];
+      if (!rec && !rcl) newCount++;
+      // One word never contributes more than one to the due count, however many of
+      // its lanes are ready — the number has to mean "words to review".
+      if ((rec && rec.due <= now) || (rcl && rcl.due <= now)) due++;
+      if ((rec?.box ?? 0) >= 3 && (rcl?.box ?? 0) >= 3) learned++;
+      if (isLeech(rec) || isLeech(rcl)) leeches++;
+    });
+
+    const others = [
       ...P.grammar.map((g) => g.id),
       ...P.sentences.map((s) => s.id),
       ...P.passages.map((p) => p.id),
       ...P.orders.map((o) => o.id),
     ];
-    let due = 0;
-    let learned = 0;
-    let seen = 0;
-    ids.forEach((id) => {
+    others.forEach((id) => {
       const e = this.srs[id];
-      if (!e) return;
-      seen++;
+      if (!e) return newCount++;
       if (e.due <= now) due++;
       if (e.box >= 3) learned++;
     });
@@ -839,7 +921,10 @@ export class GameEngine {
     return {
       due,
       learned,
-      newCount: ids.length - seen,
+      newCount,
+      leeches,
+      newLeft: newBudget(Math.max(3, Math.min(40, this.settings.newPerDay))),
+      newPerDay: Math.max(3, Math.min(40, this.settings.newPerDay)),
       streak: this.stats.streak || 0,
       xp,
       level,

@@ -51,6 +51,8 @@ export const CHIP_COLORS: Record<string, string> = {
   flash: '#e0653a',
   song: '#d6567b',
   conf: '#7a5cc4',
+  tone: '#1f7a6d',
+  cloze: '#a4571f',
 };
 
 export const CHIP_LABELS: Record<string, string> = {
@@ -69,6 +71,8 @@ export const CHIP_LABELS: Record<string, string> = {
   flash: 'NHỚ NHANH 🧠',
   song: 'HỌC QUA NHẠC 🎵',
   conf: 'CẶP DỄ NHẦM ⚔️',
+  tone: 'THANH ĐIỆU & PHÁT ÂM 🎚️',
+  cloze: 'ĐIỀN TỪ VÀO CÂU 🧩',
 };
 
 export const PRAISE = [

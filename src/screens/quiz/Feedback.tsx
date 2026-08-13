@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { IMAGES, STORIES } from '../../data';
+import { toneName, tonePattern, toneSpots } from '../../engine/pinyin';
 import { C, F } from '../../theme';
 import type { GameState, Question } from '../../engine/types';
 import { useEngine } from '../../engine/useEngine';
@@ -67,6 +68,33 @@ function feedbackView(q: Question): FeedbackView {
         pinyin: q.c.pin,
         meaning: q.c.vi,
         note: q.c.why,
+      };
+    case 'tone': {
+      const pattern = tonePattern(q.word.p);
+      const names = toneSpots(q.word.p)
+        .map((s) => toneName(s.tone))
+        .join(' + ');
+      return {
+        hanzi: q.word.h,
+        hanziStyle: BIG_HANZI,
+        pinyin: q.word.p,
+        meaning: (q.word.pos ? q.word.pos + ' · ' : '') + q.word.m,
+        note:
+          q.trap === 'sound'
+            ? `Bẫy phụ âm/vần — đọc kỹ: ${q.word.p}. Nghe 🔊 và lặp lại 3 lần.`
+            : `Mẫu thanh ${pattern}${names ? ' — ' + names : ''}`,
+        imgKey: q.word.h,
+      };
+    }
+    case 'cloze':
+      return {
+        hanzi: q.word.ex || q.word.h,
+        hanziStyle: SENT_HANZI,
+        pinyin: q.word.p,
+        meaning: q.vi || (q.word.pos ? q.word.pos + ' · ' : '') + q.word.m,
+        note: `${q.word.h} (${q.word.p}) — ${q.word.m}`,
+        story: STORIES[q.word.h],
+        imgKey: q.word.h,
       };
     case 'order':
       return {

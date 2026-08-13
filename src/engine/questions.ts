@@ -1,5 +1,21 @@
 import type { Confusable, Grammar, MySong, Order, Passage, Sentence, Song, Vocab } from '../data';
-import type { ChoiceQ, ConfQ, GramQ, Kind, MatchQ, OrderQ, PassQ, Question, SentQ, SongQ, TfQ } from './types';
+import { soundDistractors, toneDistractors } from './pinyin';
+import type { Lane } from './storage';
+import type {
+  ChoiceQ,
+  ClozeQ,
+  ConfQ,
+  GramQ,
+  Kind,
+  MatchQ,
+  OrderQ,
+  PassQ,
+  Question,
+  SentQ,
+  SongQ,
+  TfQ,
+  ToneQ,
+} from './types';
 
 export function shuffle<T>(a: readonly T[]): T[] {
   const out = a.slice();
@@ -32,17 +48,43 @@ export function makeChoice(
 }
 
 /**
- * Question kind is drawn from a pool weighted by SRS box: new words get
- * recognition-first kinds, mature words get recall-first ones (type/dictation).
+ * Kind pools per lane and box.
+ *
+ * The lane decides *which* skill is being tested — recognition kinds never grade the
+ * recall lane and vice versa — and the box decides how hard the question inside that
+ * lane gets. A fresh word is shown before it is asked for; a mature one is asked for
+ * from sound alone.
  */
-export function makeWordQ(w: Vocab, box: number, pool: Vocab[], deck: Vocab[], forceKind?: Kind): Question {
-  const others = (pool.length > 8 ? pool : deck).filter((x) => x.h !== w.h);
-  let kinds: Kind[];
-  if (box <= 0) kinds = ['m2h', 'h2m', 'a2h', 'write', 'type', 'type', 'flash'];
-  else if (box === 1) kinds = ['type', 'type', 'write', 'a2h', 'flash', 'type', 'dict'];
-  else kinds = ['type', 'type', 'dict', 'write', 'a2h', 'dict', 'flash'];
+const KINDS: Record<Lane, Kind[][]> = {
+  recog: [
+    ['m2h', 'h2m', 'h2m', 'flash'],
+    ['h2m', 'm2h', 'a2h', 'flash'],
+    ['a2h', 'h2m', 'a2h', 'm2h'],
+  ],
+  recall: [
+    ['write', 'write', 'type'],
+    ['type', 'write', 'type', 'dict'],
+    ['type', 'dict', 'dict', 'type'],
+  ],
+};
 
-  const kind = forceKind || pickOne(kinds);
+/**
+ * Question kind is drawn from the lane's pool, weighted by SRS box.
+ *
+ * `box` is the box of *that lane*, not of the word as a whole — a word you can read
+ * fluently but cannot write still gets beginner-level writing questions.
+ */
+export function makeWordQ(
+  w: Vocab,
+  box: number,
+  pool: Vocab[],
+  deck: Vocab[],
+  forceKind?: Kind,
+  lane: Lane = 'recog',
+): Question {
+  const others = (pool.length > 8 ? pool : deck).filter((x) => x.h !== w.h);
+  const tier = box <= 0 ? 0 : box === 1 ? 1 : 2;
+  const kind = forceKind || pickOne(KINDS[lane][tier]);
   const id = 'w:' + w.h;
 
   if (kind === 'type' || kind === 'dict') return { kind, id, word: w };
@@ -68,6 +110,53 @@ export function makeWordQ(w: Vocab, box: number, pool: Vocab[], deck: Vocab[], f
   }
 
   return makeChoice(w, others, kind as ChoiceQ['kind'], id);
+}
+
+/**
+ * Tone drill: four spellings of the same word, differing only in the tone marks — or,
+ * 40% of the time, in the retroflex/dental consonant or the `-n`/`-ng` final.
+ *
+ * Returns `null` for words with nothing to vary (all-neutral pinyin), which the
+ * caller filters out rather than papering over with a fake option.
+ */
+export function makeToneQ(w: Vocab): ToneQ | null {
+  const p = w.p;
+  const sound = soundDistractors(p, 3);
+  const tones = toneDistractors(p, 4);
+  const trap: ToneQ['trap'] = sound.length >= 2 && Math.random() < 0.4 ? 'sound' : 'tone';
+  const pref = trap === 'sound' ? [...sound, ...tones] : [...tones, ...sound];
+  const ds = [...new Set(pref)].filter((x) => x !== p).slice(0, 3);
+  if (ds.length < 3) return null;
+  const opts = shuffle([p, ...ds]);
+  return { kind: 'tone', id: 'w:' + w.h, word: w, opts, ans: opts.indexOf(p), trap };
+}
+
+/**
+ * The word's own example sentence with the word cut out.
+ *
+ * Distractors never appear elsewhere in the sentence — otherwise an option can be
+ * eliminated (or picked) by matching text rather than by knowing the word.
+ */
+export function makeClozeQ(w: Vocab, pool: Vocab[], deck: Vocab[]): ClozeQ | null {
+  const ex = w.ex;
+  if (!ex || !ex.includes(w.h)) return null;
+  const others = (pool.length > 8 ? pool : deck).filter((x) => x.h !== w.h && !ex.includes(x.h));
+  const pos0 = (w.pos || '').split('/')[0];
+  let ds = shuffle(others.filter((o) => (o.pos || '').split('/')[0] === pos0)).slice(0, 3);
+  if (ds.length < 3) {
+    ds = ds.concat(shuffle(others.filter((o) => !ds.includes(o))).slice(0, 3 - ds.length));
+  }
+  if (ds.length < 3) return null;
+  const opts = shuffle([w, ...ds]);
+  return {
+    kind: 'cloze',
+    id: 'w:' + w.h,
+    word: w,
+    sent: ex.split(w.h).join('（ ____ ）'),
+    vi: w.exVi || '',
+    opts,
+    ans: opts.indexOf(w),
+  };
 }
 
 export const makeGramQ = (g: Grammar): GramQ => {
@@ -174,6 +263,10 @@ export function ttsFor(q: Question): string {
       return q.o.tokens.join('');
     case 'pass':
       return q.p.text;
+    // Reading the sentence out loud before the check would say the missing word.
+    // The replay button is only offered once the answer is on screen.
+    case 'cloze':
+      return q.word.ex || q.word.h;
     default:
       return 'word' in q ? q.word.h : '';
   }

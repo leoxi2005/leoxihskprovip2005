@@ -1,10 +1,46 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { CONFUSABLES, DECK, EXTRA_TOPIC, EXTRA2_TOPICS, IMAGES, MYSONG, OLD_IDS, STORIES } from '../data';
+import {
+  CONFUSABLES,
+  DECK,
+  EXTRA_TOPIC,
+  EXTRA2_TOPICS,
+  EXTRA3_TOPICS,
+  IMAGES,
+  MYSONG,
+  NEW_TOPICS,
+  OLD_IDS,
+  STORIES,
+} from '../data';
 import { EXTRA2_GRAMMAR, EXTRA2_VOCAB } from '../data/extra2';
+import { EXTRA3_GRAMMAR, EXTRA3_VOCAB } from '../data/extra3';
 import { GameEngine } from './GameEngine';
+import { stripTones, tonePattern } from './pinyin';
 import { ttsFor } from './questions';
-import { buildSession, endlessBatch, matchTopic, pickDue, pools, topicsOf } from './session';
-import { migrateSrs, nextEntry, type SrsMap } from './storage';
+import {
+  buildSession,
+  clozeable,
+  endlessBatch,
+  leechesOf,
+  matchTopic,
+  pickDue,
+  pickWords,
+  pools,
+  topicsOf,
+} from './session';
+import {
+  LEECH_AT,
+  MAX_BOX,
+  gradeId,
+  isLeech,
+  laneId,
+  laneOf,
+  migrateSrs,
+  newBudget,
+  nextEntry,
+  seedRecallLanes,
+  spendNewBudget,
+  type SrsMap,
+} from './storage';
 import { DEFAULT_SETTINGS, isChoiceQ, isTileQ, type GameId, type Question } from './types';
 
 const ALL_TOPICS = Object.fromEntries(topicsOf().map((t) => [t, true]));
@@ -57,6 +93,8 @@ const MODES: GameId[] = [
   'mysong',
   'confuse',
   'endless',
+  'tone',
+  'cloze',
 ];
 
 describe.each(MODES)('%s session', (g) => {
@@ -98,8 +136,15 @@ describe('session shape', () => {
   it('matches the sizes the design pins down', () => {
     expect(build('boss')).toHaveLength(8);
     expect(build('tf')).toHaveLength(12);
-    expect(build('match')).toHaveLength(6);
     expect(build('mysong')).toHaveLength(13);
+  });
+
+  /**
+   * Match used to deal six boards off an untouched deck, which meant meeting 24 words
+   * for the first time in one sitting. The daily budget now bounds it instead.
+   */
+  it('bounds a match session by the day’s new-word budget', () => {
+    expect(build('match')).toHaveLength(Math.floor(DEFAULT_SETTINGS.newPerDay / 4));
   });
 
   it('flags every boss question', () => {
@@ -126,10 +171,31 @@ describe('spaced repetition', () => {
     let e = nextEntry(undefined, true);
     expect(e.box).toBe(1);
     for (let i = 0; i < 10; i++) e = nextEntry(e, true);
-    expect(e.box).toBe(5);
-    // Box 5 = 12 days out.
-    expect(e.due - Date.now()).toBeCloseTo(1036800e3, -4);
-    expect(nextEntry(e, false).box).toBe(0);
+    expect(e.box).toBe(MAX_BOX);
+    // Top box = 75 days out, jittered ±10% so a batch never returns as one lump.
+    const gap = e.due - Date.now();
+    expect(gap).toBeGreaterThan(6480e6 * 0.88);
+    expect(gap).toBeLessThan(6480e6 * 1.12);
+
+    const missed = nextEntry(e, false);
+    expect(missed.box).toBe(0);
+    expect(missed.lapses).toBe(1);
+  });
+
+  it('shortens the interval when a correct answer was slow', () => {
+    const fast = nextEntry({ box: 3, due: 0 }, true, false);
+    const slow = nextEntry({ box: 3, due: 0 }, true, true);
+    expect(slow.box).toBe(fast.box);
+    // 0.6× the gap, with both ends jittered — the ordering has to hold regardless.
+    expect(slow.due - Date.now()).toBeLessThan((fast.due - Date.now()) * 0.85);
+  });
+
+  it('counts a word as a leech only after enough misses', () => {
+    let e = nextEntry(undefined, false);
+    for (let i = 1; i < LEECH_AT; i++) e = nextEntry(e, false);
+    expect(e.lapses).toBe(LEECH_AT);
+    expect(isLeech(e)).toBe(true);
+    expect(isLeech({ box: 0, due: 0, lapses: LEECH_AT - 1 })).toBe(false);
   });
 
   it('serves due items first, then unseen, then not-yet-due', () => {
@@ -239,16 +305,6 @@ describe('the Bài 13–16 drop', () => {
     });
   });
 
-  it('has a one-tap shortcut that isolates exactly the new topics', () => {
-    const engine = new GameEngine();
-    engine.init();
-    engine.selOnly(EXTRA2_TOPICS);
-    expect(engine.topics.filter((t) => engine.sel[t])).toEqual([...EXTRA2_TOPICS]);
-    // The notebook and every game mode read the same pool, so both narrow together.
-    expect(engine.pools().vocab).toHaveLength(EXTRA2_VOCAB.length);
-    engine.dispose();
-  });
-
   it('leaves each new topic playable on its own', () => {
     EXTRA2_TOPICS.forEach((t) => {
       const only = { [t]: true };
@@ -257,6 +313,62 @@ describe('the Bài 13–16 drop', () => {
       expect(pools(only).grammar.length, t).toBeGreaterThan(0);
       expect(buildSession('boss', only, {}, DEFAULT_SETTINGS), t).toHaveLength(8);
     });
+  });
+});
+
+describe('the Bài 17–19 drop', () => {
+  it('adds every word exactly once', () => {
+    // The SRS id is `w:<hanzi>`, so two entries for one word would share a box.
+    const seen = DECK.vocab.map((v) => v.h);
+    expect(new Set(seen).size).toBe(seen.length);
+    EXTRA3_VOCAB.forEach((v) => {
+      expect(DECK.vocab.filter((x) => x.h === v.h), v.h).toHaveLength(1);
+    });
+  });
+
+  it('gives every word a reading, a meaning and an example', () => {
+    EXTRA3_VOCAB.forEach((v) => {
+      expect(v.p, v.h).toBeTruthy();
+      expect(v.m, v.h).toBeTruthy();
+      expect(v.ex, v.h).toContain(v.h);
+      expect(v.exVi, v.h).toBeTruthy();
+      // Function words are unlearnable from a bare gloss — every word gets a hint.
+      expect(STORIES[v.h], v.h).toBeTruthy();
+    });
+  });
+
+  it('keeps every cloze self-consistent, with the answer among the options', () => {
+    EXTRA3_GRAMMAR.forEach((g) => {
+      expect(g.opts, g.id).toContain(g.a);
+      expect(new Set(g.opts).size, g.id).toBe(g.opts.length);
+      expect(g.sent, g.id).toContain('____');
+      expect(g.sent.replace('____', g.a), g.id).toBe(g.full);
+      // A cloze id collision would silently drop one of the two items.
+      expect(DECK.grammar.filter((x) => x.id === g.id), g.id).toHaveLength(1);
+    });
+  });
+
+  it('leaves each new topic playable on its own', () => {
+    EXTRA3_TOPICS.forEach((t) => {
+      const only = { [t]: true };
+      // Boss and lightning both need at least 8 words in the pool.
+      expect(pools(only).vocab.length, t).toBeGreaterThanOrEqual(8);
+      expect(pools(only).grammar.length, t).toBeGreaterThan(0);
+      expect(buildSession('boss', only, {}, DEFAULT_SETTINGS), t).toHaveLength(8);
+    });
+  });
+});
+
+describe('the ⭐ shortcut', () => {
+  it('isolates exactly the topics added after the bundle', () => {
+    const engine = new GameEngine();
+    engine.init();
+    engine.selOnly(NEW_TOPICS);
+    // selOnly walks `engine.topics`, so the order here has to match deck order.
+    expect(engine.topics.filter((t) => engine.sel[t])).toEqual([...NEW_TOPICS]);
+    // The notebook and every game mode read the same pool, so both narrow together.
+    expect(engine.pools().vocab).toHaveLength(EXTRA2_VOCAB.length + EXTRA3_VOCAB.length);
+    engine.dispose();
   });
 });
 
@@ -326,5 +438,147 @@ describe('data bundle', () => {
       // Anchored on BASE_URL so the paths survive being served under a repo subpath.
       expect(src, src).toBe(import.meta.env.BASE_URL + src.replace(/^\//, ''));
     });
+  });
+});
+
+describe('recognition and recall lanes', () => {
+  it('routes each kind to its own lane, keeping the old id for recognition', () => {
+    // Everything written before lanes existed used the bare id — recognition has to
+    // keep it, or a year of progress lands in the wrong lane.
+    expect(gradeId('w:通过', 'h2m')).toBe('w:通过');
+    expect(gradeId('w:通过', 'm2h')).toBe('w:通过');
+    expect(gradeId('w:通过', 'write')).toBe('w:通过#r');
+    expect(gradeId('w:通过', 'dict')).toBe('w:通过#r');
+    expect(laneOf('type')).toBe('recall');
+    expect(laneOf('flash')).toBe('recog');
+  });
+
+  it('seeds the recall lane two boxes below what recognition had earned', () => {
+    const srs: SrsMap = { 'w:A': { box: 5, due: Date.now() + 1e6 }, 'g:g1': { box: 4, due: 0 } };
+    const out = seedRecallLanes(srs);
+    expect(out['w:A#r'].box).toBe(3);
+    expect(out['w:A'].box).toBe(5);
+    // Only vocabulary has two lanes; grammar and the rest keep a single entry.
+    expect(out['g:g1#r']).toBeUndefined();
+  });
+
+  it('does not re-seed on a second run', () => {
+    const srs: SrsMap = { 'w:A': { box: 5, due: 0 } };
+    const once = seedRecallLanes(srs);
+    once['w:A#r'] = { box: 0, due: 0 };
+    expect(seedRecallLanes(once)['w:A#r'].box).toBe(0);
+  });
+
+  it('asks a word once per session, on whichever lane is more overdue', () => {
+    const now = Date.now();
+    const [w] = pools(ALL_TOPICS).vocab;
+    const srs: SrsMap = {
+      [laneId('w:' + w.h, 'recog')]: { box: 2, due: now - 1000 },
+      [laneId('w:' + w.h, 'recall')]: { box: 1, due: now - 90000 },
+    };
+    const { picks } = pickWords(srs, [w], 5, 10);
+    expect(picks).toHaveLength(1);
+    expect(picks[0].lane).toBe('recall');
+    expect(picks[0].box).toBe(1);
+  });
+
+  it('treats an untouched recall lane as a new skill, not a new word', () => {
+    const [w] = pools(ALL_TOPICS).vocab;
+    const srs: SrsMap = { [laneId('w:' + w.h, 'recog')]: { box: 3, due: Date.now() + 1e9 } };
+    // newLimit 0 — a brand-new word would be excluded, this one must not be.
+    const { picks, newUsed } = pickWords(srs, [w], 5, 0);
+    expect(picks).toHaveLength(1);
+    expect(picks[0].lane).toBe('recall');
+    expect(newUsed).toBe(0);
+  });
+});
+
+describe('daily new-word budget', () => {
+  it('spends down and refuses to go negative', () => {
+    expect(newBudget(10)).toBe(10);
+    spendNewBudget(4);
+    expect(newBudget(10)).toBe(6);
+    spendNewBudget(99);
+    expect(newBudget(10)).toBe(0);
+  });
+
+  it('holds a first session to the budget instead of the session size', () => {
+    const size = { ...DEFAULT_SETTINGS, sessionSize: 40, newPerDay: 5 };
+    const first = buildSession('flash', ALL_TOPICS, {}, size);
+    expect(first).toHaveLength(5);
+    // Budget already spent — a second run the same day finds nothing new to teach.
+    expect(buildSession('flash', ALL_TOPICS, {}, size)).toHaveLength(0);
+  });
+});
+
+describe('tone drill', () => {
+  const toneQs = build('tone');
+
+  it('builds a full session of tone questions', () => {
+    expect(toneQs.length).toBeGreaterThan(10);
+    toneQs.forEach((q) => expect(q.kind).toBe('tone'));
+  });
+
+  it('offers four distinct spellings, one of them the deck’s own pinyin', () => {
+    toneQs.forEach((q) => {
+      if (q.kind !== 'tone') return;
+      expect(q.opts).toHaveLength(4);
+      expect(new Set(q.opts).size).toBe(4);
+      expect(q.opts[q.ans]).toBe(q.word.p);
+    });
+  });
+
+  it('never changes anything but the tone in a tone trap', () => {
+    toneQs.forEach((q) => {
+      if (q.kind !== 'tone' || q.trap !== 'tone') return;
+      // Strip the marks and every option collapses onto the same syllables.
+      const bare = q.opts.map(stripTones);
+      expect(new Set(bare).size).toBe(1);
+    });
+  });
+
+  it('keeps the tones intact in a sound trap', () => {
+    toneQs.forEach((q) => {
+      if (q.kind !== 'tone' || q.trap !== 'sound') return;
+      const patterns = q.opts.map(tonePattern);
+      // At least the distractors built from consonant swaps share the real pattern.
+      expect(patterns.filter((p) => p === tonePattern(q.word.p)).length).toBeGreaterThan(1);
+    });
+  });
+});
+
+describe('example-sentence cloze', () => {
+  it('only draws on words whose example really contains them', () => {
+    clozeable(pools(ALL_TOPICS).vocab).forEach((w) => expect(w.ex).toContain(w.h));
+  });
+
+  it('cuts the word out and never leaks it through a distractor', () => {
+    build('cloze').forEach((q) => {
+      if (q.kind !== 'cloze') return;
+      expect(q.sent).not.toContain(q.word.h);
+      expect(q.sent).toContain('____');
+      expect(q.opts[q.ans].h).toBe(q.word.h);
+      q.opts.forEach((o, i) => {
+        if (i !== q.ans) expect(q.word.ex).not.toContain(o.h);
+      });
+    });
+  });
+});
+
+describe('leech mode', () => {
+  it('collects the words that keep being missed, worst first', () => {
+    const [a, b, c] = pools(ALL_TOPICS).vocab;
+    const srs: SrsMap = {
+      [laneId('w:' + a.h, 'recog')]: { box: 0, due: 0, lapses: LEECH_AT },
+      [laneId('w:' + b.h, 'recall')]: { box: 0, due: 0, lapses: LEECH_AT + 4 },
+      [laneId('w:' + c.h, 'recog')]: { box: 0, due: 0, lapses: LEECH_AT - 1 },
+    };
+    const stuck = leechesOf(srs, [a, b, c]);
+    expect(stuck.map((w) => w.h)).toEqual([b.h, a.h]);
+    expect(buildSession('leech', ALL_TOPICS, srs, DEFAULT_SETTINGS)).toHaveLength(2);
+  });
+
+  it('is empty when nothing has gone wrong enough to qualify', () => {
+    expect(build('leech')).toHaveLength(0);
   });
 });

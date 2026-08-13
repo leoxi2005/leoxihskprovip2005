@@ -24,7 +24,13 @@ const KEY_BADGE: CSSProperties = {
 export function OptionGrid({ q, st }: { q: AnyChoiceQ; st: GameState }) {
   const engine = useEngine();
   const hanziOpt =
-    q.kind === 'm2h' || q.kind === 'a2h' || q.kind === 'gram' || q.kind === 'pass' || q.kind === 'song' || q.kind === 'conf';
+    q.kind === 'm2h' ||
+    q.kind === 'a2h' ||
+    q.kind === 'gram' ||
+    q.kind === 'pass' ||
+    q.kind === 'song' ||
+    q.kind === 'conf' ||
+    q.kind === 'cloze';
   const meaningQ = q.kind === 'h2m' || q.kind === 'flash';
   // Sentence meanings are long — one per row, left-aligned.
   const left = q.kind === 'sent';
@@ -69,13 +75,13 @@ export function OptionGrid({ q, st }: { q: AnyChoiceQ; st: GameState }) {
 
         let main: string;
         if (meaningQ || q.kind === 'sent') main = typeof o === 'string' ? o : o.m;
-        else if (q.kind === 'gram' || q.kind === 'pass' || q.kind === 'conf') main = o as string;
+        else if (q.kind === 'gram' || q.kind === 'pass' || q.kind === 'conf' || q.kind === 'tone') main = o as string;
         else main = (o as { h: string }).h;
 
         // Revealing pinyin only after the check keeps it from giving the answer away.
         let sub = '';
         if (st.checked && typeof o !== 'string') {
-          if (q.kind === 'm2h' || q.kind === 'a2h') sub = o.p + ' · ' + o.m;
+          if (q.kind === 'm2h' || q.kind === 'a2h' || q.kind === 'cloze') sub = o.p + ' · ' + o.m;
           else if (meaningQ) sub = o.h + ' · ' + o.p;
         }
 
@@ -117,7 +123,9 @@ export function OptionGrid({ q, st }: { q: AnyChoiceQ; st: GameState }) {
                     }
                   : {
                       fontFamily: F.ui,
-                      fontSize: left ? 15 : 17,
+                      // Tone marks are the whole question — they need room to be told apart.
+                      fontSize: q.kind === 'tone' ? 30 : left ? 15 : 17,
+                      letterSpacing: q.kind === 'tone' ? '.03em' : undefined,
                       fontWeight: 700,
                       color: C.ink,
                       lineHeight: 1.45,
