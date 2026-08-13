@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { Confetti } from './components/Confetti';
 import { GameEngine } from './engine/GameEngine';
 import { EngineContext, useGameState } from './engine/useEngine';
+import { Exam } from './screens/Exam';
 import { Home } from './screens/Home';
 import { Notebook } from './screens/Notebook';
 import { Quiz } from './screens/Quiz';
 import { Result } from './screens/Result';
+import { Stats } from './screens/Stats';
 import { C, F } from './theme';
 
 function Loading() {
@@ -38,6 +40,10 @@ function Screens() {
       return <Result />;
     case 'book':
       return <Notebook />;
+    case 'exam':
+      return <Exam />;
+    case 'stats':
+      return <Stats />;
     default:
       return <Home />;
   }

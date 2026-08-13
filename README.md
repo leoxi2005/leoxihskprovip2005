@@ -2,15 +2,19 @@
 
 **Chơi thử: https://leoxi2005.github.io/leoxihskprovip2005/**
 
-Ứng dụng luyện từ vựng tiếng Trung HSK 3–4 cho người Việt, theo kiểu game: lặp lại ngắt quãng
-(SRS), XP, lên cấp, chuỗi ngày, đấu trùm, và 12 chế độ chơi. Toàn bộ tiến độ lưu ngay trong
-trình duyệt — không cần tài khoản, không cần server.
+Ứng dụng luyện thi **HSK 4** cho người Việt, theo kiểu game: lặp lại ngắt quãng (SRS) hai làn,
+XP, lên cấp, chuỗi ngày, đấu trùm, 13 chế độ chơi, một đề thi thử đúng cấu trúc thật, và một lộ
+trình đếm ngược tới ngày thi. Toàn bộ tiến độ lưu ngay trong trình duyệt — không cần tài khoản,
+không cần server.
 
 Tác giả: **leoxi**
 
 ## Nội dung
 
-- **373 từ vựng** · 55 điểm ngữ pháp · 35 bài đọc · 8 câu sắp xếp · 8 cặp từ dễ nhầm
+- **1232 từ vựng — phủ trọn đại cương 1200 từ của HSK 4** · 67 điểm ngữ pháp · 35 bài đọc ·
+  8 câu sắp xếp · 8 cặp từ dễ nhầm
+- **1 đề thi thử HSK 4 đầy đủ 100 câu** đúng cấu trúc đề thật (45 nghe · 40 đọc · 15 viết)
+- 1223/1232 từ có câu ví dụ song ngữ, dùng cho chế độ điền từ
 - 59 ảnh minh hoạ AI + 111 mẹo nhớ Hán Việt
 - Hoạt hình viết từng nét (bộ thủ tô đỏ) cho mọi chữ Hán
 - 3 bài chant tự soạn + 1 bài hát thật, lời đã gióng với bản thu theo từng giây
@@ -20,7 +24,7 @@ Tác giả: **leoxi**
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm test         # 73 test cho engine + nội dung
+npm test         # 145 test cho engine, nội dung và đề thi
 npm run build
 ```
 
@@ -37,12 +41,61 @@ npm run build
 | 🔗 | Ghép Cặp | `5` | 6 bàn × 4 cặp |
 | 🧠 | Nhớ Nhanh | `6` | Chữ hiện 1.8s rồi biến mất |
 | 📚 | Ngữ pháp & Đọc | `7` | Cloze · câu · đoạn văn |
-| 🎵 | Học qua nhạc | `8` | Điền từ vào lời chant |
-| 🎤 | 若把你 | `9` | Bài hát thật — video hát đúng câu đang hỏi rồi tự dừng |
+| 🎚️ | **Thanh Điệu** | `8` | mǎi hay mài? Bốn pinyin chỉ khác dấu — kèm bẫy zh/z · sh/s · -n/-ng |
+| 🧩 | Điền Từ | `9` | Khoét từ khỏi chính câu ví dụ của nó |
 | ⚔️ | **Cặp Dễ Nhầm** | `0` | 经过 hay 通过? Chọn 1 trong 2, có lời giải thích tại sao |
+| 🔥 | Từ Khắc Tinh | `K` | Chỉ hiện khi có từ sai ≥ 6 lần — dạy lại thay vì cày tiếp |
+| 🎵 | Học qua nhạc | `J` | Điền từ vào lời chant |
+| 🎤 | 若把你 | `L` | Bài hát thật — video hát đúng câu đang hỏi rồi tự dừng |
+| 📝 | **Thi thử HSK 4** | — | 100 câu · 95 phút · đồng hồ từng phần · nghe một lần duy nhất |
 
 Trong lúc chơi: `1–9` chọn đáp án · `Enter` kiểm tra & chuyển câu · `Backspace` xoá ·
-`Esc` thoát ô tìm kiếm.
+`Esc` thoát ô tìm kiếm. Phím tắt của mỗi chế độ được in ngay trên thẻ game
+(`src/engine/games.ts` là nguồn duy nhất cho cả lưới thẻ lẫn bàn phím).
+
+## Luyện thi HSK 4
+
+Mục tiêu của bản này là kỳ thi HSK 4 ngày **07/11/2026** tại ĐHSP TP.HCM. Ba điều đáng ghi lại
+vì rất dễ nhầm:
+
+- Trường **không tự ra đề** — là điểm thi HSK chính thức, đề do Hán Ban soạn dùng chung toàn cầu.
+- Kỳ 7/11 **vẫn là HSK 2.0**. HSK 3.0 chỉ áp dụng tại Việt Nam từ **13/12/2026**.
+- Cấu trúc đề khoá trong `src/engine/exam.ts`: 100 câu, 30 + 40 + 25 phút, 300 điểm, đạt 180.
+
+Chế độ thi thử **cố ý không có nút nghe lại** — đề thật chỉ phát mỗi câu một lần, và câu hỏi ở
+phần nghe nằm trong băng chứ không in trên đề. Cho nghe lại là luyện một kỳ thi không tồn tại.
+
+Trang chủ mở lên là thấy đếm ngược và **danh sách nhiệm vụ bắt buộc hôm nay**. Bốn chế độ chơi
+cho vui (Học qua nhạc · 若把你 · Sinh Tồn · Đấu Trùm) bị khoá cho tới khi xong; mọi chế độ ôn
+tập thật thì luôn mở — cái khoá không bao giờ được phép cản việc học.
+
+## Lõi SRS: hai làn cho mỗi từ
+
+Nhận diện và tái tạo là hai kỹ năng quên với tốc độ khác nhau, nên mỗi từ mang **hai ô nhớ độc
+lập**: làn nhận diện giữ nguyên id cũ `w:<chữ Hán>`, làn tái tạo là `w:<chữ Hán>#r`. Nhờ giữ
+nguyên id cũ, tiến trình của bản trước rơi đúng vào làn nhận diện mà không phải viết lại dữ liệu.
+Một từ chỉ tính là "đã thuộc" khi **cả hai làn** đạt hộp 3.
+
+Kèm theo đó:
+
+- Thang hộp **8 mức** tới 75 ngày, mỗi khoảng cách jitter ±10% để một mẻ từ học cùng ngày không
+  quay lại thành một cục.
+- Đúng **nhưng chậm** thì lên hộp mà chỉ được 0.6× khoảng cách — do dự là hình dạng của kiến
+  thức sắp mất.
+- **Hạn mức từ mới mỗi ngày**. Không có nó, mọi phiên đều nạp từ chưa gặp và hai tuần sau hàng
+  đợi không thể dọn nổi — cách một bộ thẻ SRS chết một cách kinh điển.
+- Sai ≥ 6 lần thì gắn cờ **từ khắc tinh** và gom vào chế độ riêng.
+- Mọi lượt trả lời ghi vào nhật ký vòng (5000 dòng). Nhật ký này nuôi cả màn Thống kê lẫn việc
+  tick nhiệm vụ hằng ngày.
+
+`HSK1 · Đợt *` và `HSK2 · Đợt *` **mặc định tắt**: chúng có mặt để phủ đủ 1200 từ của đại cương,
+không phải để dạy lại 我 và 好. Bật lên nếu muốn rà lại phần nền.
+
+## Sao lưu tiến trình
+
+Tiến trình chỉ nằm trong `localStorage` của đúng trình duyệt đó. Cài đặt có nút **Xuất / Nhập**
+tệp JSON — xoá cache hay đổi máy là mất trắng nếu không có bản sao. Bản nhập được kiểm tra trước
+khi ghi, nên một tệp lạ sẽ bị từ chối chứ không ghi đè nửa vời.
 
 ## Chế độ bài hát thật hoạt động thế nào
 
@@ -96,11 +149,37 @@ Tám từ trong danh sách gốc đã có sẵn trong deck nên không thêm l�
 应聘 · 判断 · 顾客 (deck.json) và 取得 (extra.ts). Id SRS là `w:<chữ Hán>`, thêm bản thứ hai thì
 hai thẻ sẽ tranh nhau cùng một hộp.
 
+## Bài 17–19 (đợt từ mới thứ hai)
+
+35 từ HSK4 nữa, chia thành 3 chủ đề — vẫn theo luật "mỗi chủ đề ≥ 8 từ để tự chơi được một mình".
+
+| Chủ đề | Từ | Nội dung |
+| --- | --- | --- |
+| `Bài 17 · Thái độ & Kết quả` | 10 | 支持 是否 祝贺 尽管 单纯 成绩 坏 联系 继续 按照 |
+| `Bài 18 · Sinh hoạt & Công việc` | 12 | 棉 吹 舒服 老板 海鲜 耐心 发展 各种 批评 仍然 终于 被 |
+| `Bài 19 · Sức khoẻ & Ngôn ngữ` | 13 | 减轻 压力 另外 皮肤 效果 流利 其实 查 词典 空儿 世界 怀疑 清楚 |
+
+Thêm **12 câu cloze** nữa cho nhóm hư từ và kết cấu (是否, 尽管, 按照, 继续, 被, 仍然, 终于,
+各种, 另外, 其实, 说清楚, 有空儿) — 清楚 vào đây không phải vì nghĩa mà vì **vị trí**: nó là bổ
+ngữ kết quả (看清楚 · 听清楚 · 说清楚), thứ thẻ nghĩa ↔ chữ không dạy được.
+
+Hai mục trong danh sách là cụm chứ không phải từ, nên tách ra: 查词典 → **查** + **词典** (cả
+hai đều là từ HSK4 độc lập), 风吹 → **吹** (风 thì đã quá quen).
+
+Mười chín từ đã có sẵn trong deck nên không thêm lại: 至少 · 判断 · 经历 · 仔细 · 粗心 · 过程 ·
+结果 · 窗户 · 凉快 · 专门 · 讨论 · 伤心 · 失望 · 放弃 · 减肥 · 诚实 · 售货员 (deck.json) và
+科技 · 翻译 · 羡慕 (extra2.ts). Vẫn cùng lý do: id SRS là `w:<chữ Hán>`.
+
+Nút **⭐ Từ mới** giờ lọc cả 77 từ của Bài 13–19. Cạm bẫy đã dính khi làm đợt này: `extra.ts` đã
+dùng id `g:x1…g:x5`, nên 12 câu cloze mới phải đánh `g:v1…g:v12` — id trùng thì một trong hai
+mục lặng lẽ biến mất. Test `engine.test.ts` giờ chặn luôn việc đó.
+
 ## Kiến trúc
 
 ```
 src/
   data/          nội dung (JSON) + extra.ts (bài 通过 & 经过) + extra2.ts (Bài 13–16)
+                 + extra3.ts (Bài 17–19)
   engine/        toàn bộ luật chơi, không dính React
     GameEngine.ts  máy trạng thái + side effect (timer, giọng đọc, ghi SRS)
     session.ts     mỗi chế độ ra câu gì, theo thứ tự SRS

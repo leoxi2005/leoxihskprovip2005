@@ -1,34 +1,16 @@
-import { DECK, EXTRA2_TOPICS, IMAGES } from '../data';
+import { DECK, IMAGES, NEW_TOPICS } from '../data';
+import { GAME_CARDS } from '../engine/games';
+import { LOCKED_UNTIL_CLEAR } from '../engine/plan';
 import type { GameId } from '../engine/types';
 import { useEngine, useGameState } from '../engine/useEngine';
 import { Bar } from '../components/Bar';
+import { DailyPlan } from '../components/DailyPlan';
+import { SettingsPanel } from '../components/SettingsPanel';
 import { SoundCheck } from '../components/SoundCheck';
 import { C, F, shadow } from '../theme';
 
 /** Size of the newest batch of words, shown on the ⭐ shortcut that isolates it. */
-const NEW_WORD_COUNT = DECK.vocab.filter((v) => (EXTRA2_TOPICS as readonly string[]).includes(v.t)).length;
-
-interface GameCard {
-  icon: string;
-  name: string;
-  desc: string;
-  bg: string;
-  g: GameId;
-}
-
-/** Order matters — this is also the 1–9 hotkey order (see `GameEngine.handleKey`). */
-const GAME_CARDS: GameCard[] = [
-  { icon: '🐉', name: 'Đấu Trùm', desc: '8 câu · 3 tim', bg: C.bossDark, g: 'boss' },
-  { icon: '⚡', name: 'Tia Chớp', desc: '12 câu · 6 giây/câu', bg: '#b07f1f', g: 'tf' },
-  { icon: '✍️', name: 'Luyện Viết', desc: 'Ghép · gõ · nghe viết', bg: C.green, g: 'write' },
-  { icon: '🎧', name: 'Luyện Nghe', desc: 'Nghe chọn + nghe viết', bg: C.purple, g: 'listen' },
-  { icon: '🔗', name: 'Ghép Cặp', desc: '6 bàn × 4 cặp', bg: '#5a8f4f', g: 'match' },
-  { icon: '🧠', name: 'Nhớ Nhanh', desc: 'Chữ biến mất — nhớ nghĩa', bg: '#e0653a', g: 'flash' },
-  { icon: '📚', name: 'Ngữ pháp & Đọc', desc: 'Cloze · câu · đoạn văn', bg: '#2f6f8f', g: 'read' },
-  { icon: '🎵', name: 'Học qua nhạc', desc: 'Điền từ vào lời bài hát', bg: C.pink, g: 'song' },
-  { icon: '🎤', name: '绝弦的美', desc: 'Bài hát thật + video', bg: '#b3446c', g: 'mysong' },
-  { icon: '⚔️', name: 'Cặp Dễ Nhầm', desc: '经过 hay 通过? · có giải thích', bg: '#7a5cc4', g: 'confuse' },
-];
+const NEW_WORD_COUNT = DECK.vocab.filter((v) => (NEW_TOPICS as readonly string[]).includes(v.t)).length;
 
 const STAT_COLORS = [C.red, C.blue, C.green, C.ochre];
 
@@ -69,6 +51,9 @@ export function Home() {
   // controls would silently do nothing. Say so instead.
   const canPlay = engine.pools().vocab.length > 0;
   const best = engine.bestEndless();
+  // Read once: every card asks the same question, and the plan walks the whole deck.
+  const planClear = engine.plan().clear;
+  const lockedGame = (g: GameId) => !planClear && LOCKED_UNTIL_CLEAR.includes(g);
 
   return (
     <div
@@ -199,6 +184,8 @@ export function Home() {
           ))}
         </div>
 
+        <DailyPlan />
+
         <section
           style={{
             textAlign: 'left',
@@ -232,8 +219,8 @@ export function Home() {
             </span>
             <span style={{ display: 'flex', gap: 8 }}>
               <button
-                onClick={() => engine.selOnly(EXTRA2_TOPICS)}
-                title="Chỉ ôn 42 từ của Bài 13–16"
+                onClick={() => engine.selOnly(NEW_TOPICS)}
+                title="Chỉ ôn các từ mới của Bài 13–19"
                 style={{
                   border: `2px solid ${C.ink}`,
                   background: C.soft,
@@ -333,26 +320,43 @@ export function Home() {
           </button>
           <button
             onClick={() => engine.startGame('endless')}
-            disabled={!canPlay}
-            title="Phím S"
-            className={canPlay ? 'lift lift-5' : undefined}
+            disabled={!canPlay || lockedGame('endless')}
+            title={lockedGame('endless') ? 'Xong nhiệm vụ bắt buộc hôm nay để mở khoá' : 'Phím S'}
+            className={canPlay && !lockedGame('endless') ? 'lift lift-5' : undefined}
             style={{
-              background: canPlay ? C.ink : C.edge,
-              color: canPlay ? C.soft : '#fff',
-              border: `3px solid ${canPlay ? C.ink : C.edge}`,
+              background: canPlay && !lockedGame('endless') ? C.ink : C.edge,
+              color: canPlay && !lockedGame('endless') ? C.soft : '#fff',
+              border: `3px solid ${canPlay && !lockedGame('endless') ? C.ink : C.edge}`,
               borderRadius: 18,
               padding: '15px 32px',
               fontSize: 20,
               fontWeight: 800,
-              cursor: canPlay ? 'pointer' : 'not-allowed',
-              boxShadow: canPlay ? shadow(5, C.red) : 'none',
+              cursor: canPlay && !lockedGame('endless') ? 'pointer' : 'not-allowed',
+              boxShadow: canPlay && !lockedGame('endless') ? shadow(5, C.red) : 'none',
             }}
           >
-            ♾️ Sinh Tồn{best > 0 ? ` · KL ${best}` : ''}
+            {lockedGame('endless') ? '🔒' : '♾️'} Sinh Tồn{best > 0 ? ` · KL ${best}` : ''}
           </button>
         </div>
 
-        <div style={{ marginTop: 12 }}>
+        <div style={{ marginTop: 12, display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button
+            onClick={engine.openExam}
+            className="lift lift-4 lift-static"
+            style={{
+              background: C.bossDark,
+              color: '#fff',
+              border: `3px solid ${C.ink}`,
+              borderRadius: 16,
+              padding: '11px 26px',
+              fontSize: 16,
+              fontWeight: 800,
+              cursor: 'pointer',
+              boxShadow: shadow(4),
+            }}
+          >
+            📝 Thi thử HSK 4 — 100 câu · 95 phút
+          </button>
           <button
             onClick={engine.openBook}
             className="lift lift-4 lift-static"
@@ -361,14 +365,31 @@ export function Home() {
               color: C.ink,
               border: `3px solid ${C.ink}`,
               borderRadius: 16,
-              padding: '11px 28px',
+              padding: '11px 26px',
               fontSize: 16,
               fontWeight: 800,
               cursor: 'pointer',
               boxShadow: shadow(4),
             }}
           >
-            📒 Sổ tay từ vựng — nét chữ · ảnh · mẹo nhớ
+            📒 Sổ tay từ vựng
+          </button>
+          <button
+            onClick={engine.openStats}
+            className="lift lift-4 lift-static"
+            style={{
+              background: C.card,
+              color: C.ink,
+              border: `3px solid ${C.ink}`,
+              borderRadius: 16,
+              padding: '11px 26px',
+              fontSize: 16,
+              fontWeight: 800,
+              cursor: 'pointer',
+              boxShadow: shadow(4),
+            }}
+          >
+            📊 Thống kê
           </button>
         </div>
 
@@ -387,25 +408,28 @@ export function Home() {
             Hoặc chọn game 🎮
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(140px,1fr))', gap: 12 }}>
-            {GAME_CARDS.map((c, i) => (
+            {GAME_CARDS.filter((c) => !c.needsLeech || p.leeches > 0).map((c) => {
+              const locked = lockedGame(c.g);
+              const on = canPlay && !locked;
+              return (
               <button
                 key={c.g}
                 onClick={() => engine.startGame(c.g)}
-                disabled={!canPlay}
-                title={`Phím ${i + 1}`}
-                className={canPlay ? 'lift lift-4' : undefined}
+                disabled={!on}
+                title={locked ? 'Xong nhiệm vụ bắt buộc hôm nay để mở khoá' : `Phím ${c.key.toUpperCase()}`}
+                className={on ? 'lift lift-4' : undefined}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   gap: 2,
                   background: C.card,
-                  border: `3px solid ${canPlay ? C.ink : C.edge}`,
+                  border: `3px solid ${on ? C.ink : C.edge}`,
                   borderRadius: 18,
                   padding: '14px 10px 12px',
-                  cursor: canPlay ? 'pointer' : 'not-allowed',
-                  boxShadow: canPlay ? shadow(4) : 'none',
-                  opacity: canPlay ? 1 : 0.5,
+                  cursor: on ? 'pointer' : 'not-allowed',
+                  boxShadow: on ? shadow(4) : 'none',
+                  opacity: on ? 1 : 0.5,
                   fontFamily: F.ui,
                 }}
               >
@@ -423,12 +447,19 @@ export function Home() {
                     marginBottom: 4,
                   }}
                 >
-                  {c.icon}
+                  {locked ? '🔒' : c.icon}
                 </span>
                 <span style={{ fontSize: 16, fontWeight: 800 }}>{c.name}</span>
-                <span style={{ fontSize: 11, fontWeight: 700, color: C.muted, lineHeight: 1.3 }}>{c.desc}</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: C.muted, lineHeight: 1.3 }}>
+                  {locked
+                    ? 'Xong bài bắt buộc để mở'
+                    : c.g === 'leech'
+                      ? `${p.leeches} từ đang mắc kẹt`
+                      : c.desc}
+                </span>
               </button>
-            ))}
+              );
+            })}
           </div>
         </section>
 
@@ -478,13 +509,14 @@ export function Home() {
         )}
 
         <p style={{ margin: '16px 0 0', fontSize: 13, fontWeight: 600, color: C.muted2 }}>
-          Phím <b>1–9</b> · <b>0</b> chọn game · <b>S</b> Sinh Tồn · <b>Enter</b> kiểm tra &amp; chuyển câu ·{' '}
+          Phím tắt in ngay trên mỗi thẻ game · <b>S</b> Sinh Tồn · <b>Enter</b> kiểm tra &amp; chuyển câu ·{' '}
           <b>Backspace</b> xoá
         </p>
         <p style={{ margin: '5px 0 0', fontSize: 12, color: '#b3a488' }}>
           Giọng đọc tiếng Trung chuẩn (zh-CN) — dùng Chrome/Edge để có giọng hay nhất 🔊
         </p>
         <SoundCheck />
+        <SettingsPanel />
       </div>
     </div>
   );
