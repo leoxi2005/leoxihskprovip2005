@@ -5,20 +5,73 @@ import songsJson from './songs.json';
 import mysongJson from './mysong.json';
 import oldIdsJson from './oldids.json';
 import { EXTRA_GRAMMAR, EXTRA_STORIES, EXTRA_VOCAB } from './extra';
-import { EXTRA2_GRAMMAR, EXTRA2_STORIES, EXTRA2_VOCAB } from './extra2';
-import type { Deck, MySong, Song } from './types';
+import { EXTRA2_GRAMMAR, EXTRA2_STORIES, EXTRA2_TOPICS, EXTRA2_VOCAB } from './extra2';
+import { EXTRA3_GRAMMAR, EXTRA3_STORIES, EXTRA3_TOPICS, EXTRA3_VOCAB } from './extra3';
+import { splitHsk123 } from './hsk123';
+import { splitHsk4 } from './hsk4';
+import type { Deck, MySong, Song, Vocab } from './types';
 
 export * from './types';
 export { CONFUSABLES, EXTRA_TOPIC, type Confusable } from './extra';
 export { EXTRA2_TOPICS, TOPIC_ART, TOPIC_JOB, TOPIC_LANG, TOPIC_STUDY } from './extra2';
+export { EXTRA3_TOPICS, TOPIC_ATT, TOPIC_BODY, TOPIC_LIFE } from './extra3';
+
+/**
+ * Every topic added after the designer's bundle — what the ⭐ shortcut on the
+ * home screen isolates. Order follows the order the words appear in `DECK`, so
+ * `selOnly` lines up with `engine.topics`.
+ */
+export const NEW_TOPICS = [...EXTRA2_TOPICS, ...EXTRA3_TOPICS] as const;
 
 const bundled = deckJson as Deck;
 
-/** The handoff bundle plus everything in `extra.ts` and `extra2.ts`. */
+/** The textbook deck: the handoff bundle plus `extra.ts`, `extra2.ts` and `extra3.ts`. */
+const TEXTBOOK: Vocab[] = [...bundled.vocab, ...EXTRA_VOCAB, ...EXTRA2_VOCAB, ...EXTRA3_VOCAB];
+
+const HSK4 = splitHsk4(new Set(TEXTBOOK.map((v) => v.h)));
+
+// Level 1–3 is split against the textbook deck *and* the level-4 list, so a word can
+// only ever enter the deck once, under the lowest level that claims it.
+const HSK123 = splitHsk123(new Set([...TEXTBOOK.map((v) => v.h), ...HSK4.fresh.map((v) => v.h)]));
+
+/**
+ * Words the textbook deck already had keep their own topic, meaning and illustration —
+ * moving them would orphan their SRS history and their mnemonics. The official lists
+ * only fill in an example sentence where the deck had none, which is what the cloze
+ * mode runs on.
+ */
+const ENRICHED: Vocab[] = TEXTBOOK.map((v) => {
+  const official = v.ex ? undefined : (HSK4.known.get(v.h) ?? HSK123.known.get(v.h));
+  return official ? { ...v, ex: official.ex, exVi: official.exVi } : v;
+});
+
+/** Batch topics for the HSK 4 words the textbook deck did not cover. */
+export const HSK4_TOPICS = HSK4.topics;
+
+/** Batch topics for the HSK 1–3 base the deck did not cover. */
+export const HSK123_TOPICS = HSK123.topics;
+
+export { HSK4_BATCH, HSK4_COUNT } from './hsk4';
+export { HSK123_BATCH, HSK123_COUNT } from './hsk123';
+
+/** How many of each official list the textbook deck already contained. */
+export const HSK4_OVERLAP = HSK4.known.size;
+export const HSK123_OVERLAP = HSK123.known.size;
+
+/**
+ * Topics that start switched off.
+ *
+ * HSK 1–2 is here for coverage of the full 1200-word syllabus, not for drilling.
+ * Someone sitting HSK 4 knows 我 and 好, and letting those words consume the daily
+ * new-word budget would be the most expensive kind of busywork. The chips are still
+ * there to switch on for anyone who wants to check the base.
+ */
+export const DEFAULT_OFF_TOPICS: readonly string[] = HSK123.offByDefault;
+
 export const DECK: Deck = {
   ...bundled,
-  vocab: [...bundled.vocab, ...EXTRA_VOCAB, ...EXTRA2_VOCAB],
-  grammar: [...bundled.grammar, ...EXTRA_GRAMMAR, ...EXTRA2_GRAMMAR],
+  vocab: [...ENRICHED, ...HSK123.fresh, ...HSK4.fresh],
+  grammar: [...bundled.grammar, ...EXTRA_GRAMMAR, ...EXTRA2_GRAMMAR, ...EXTRA3_GRAMMAR],
 };
 
 /**
@@ -40,6 +93,7 @@ export const STORIES: Record<string, string> = {
   ...storiesJson,
   ...EXTRA_STORIES,
   ...EXTRA2_STORIES,
+  ...EXTRA3_STORIES,
 };
 
 /** Built-in vocabulary chants. */
