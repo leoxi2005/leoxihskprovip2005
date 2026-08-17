@@ -65,6 +65,13 @@ vì rất dễ nhầm:
 Chế độ thi thử **cố ý không có nút nghe lại** — đề thật chỉ phát mỗi câu một lần, và câu hỏi ở
 phần nghe nằm trong băng chứ không in trên đề. Cho nghe lại là luyện một kỳ thi không tồn tại.
 
+Nhưng ngồi 95 phút ngay từ đầu là nước đi sai: nó chấm bạn trước khi bạn được dạy kỹ thuật của
+bất kỳ phần nào. Nên còn có **chế độ luyện từng phần** — mở riêng một trong tám phần của đề, đọc
+hướng dẫn cách làm và bẫy hay dính, rồi luyện đúng phần đó với chấm điểm ngay từng câu, có giải
+thích, và được nghe lại. Đây là chỗ đi ngược đề thật một cách có chủ đích: bạn đang học kỹ thuật,
+chưa phải tập điều kiện phòng thi. Kế hoạch hằng ngày gợi ý một phần khác nhau mỗi ngày, một tuần
+là chạm hết tám phần.
+
 Trang chủ mở lên là thấy đếm ngược và **danh sách nhiệm vụ bắt buộc hôm nay**. Bốn chế độ chơi
 cho vui (Học qua nhạc · 若把你 · Sinh Tồn · Đấu Trùm) bị khoá cho tới khi xong; mọi chế độ ôn
 tập thật thì luôn mở — cái khoá không bao giờ được phép cản việc học.

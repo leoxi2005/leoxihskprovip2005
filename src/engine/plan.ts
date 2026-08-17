@@ -1,3 +1,4 @@
+import { guideFor, partOfDay } from './exam';
 import type { GameId, Kind, Settings } from './types';
 import { todayByKind, startOfDay } from './stats';
 import type { LogRow } from './storage';
@@ -279,6 +280,19 @@ export function dayPlan(input: PlanInput): DayPlan {
       required: false,
     });
   }
+
+  // Offered every day, never required: it rotates so a week touches all eight parts,
+  // and it is the way in for someone who has not sat a full paper yet.
+  const part = guideFor(partOfDay(daysLeft));
+  tasks.push({
+    id: 'part',
+    label: `Luyện ${part.vi}`,
+    detail: `${part.id} — có hướng dẫn cách làm và bẫy hay dính. Mỗi ngày một phần khác nhau, một tuần là chạm hết tám phần của đề.`,
+    exam: true,
+    target: 1,
+    done: 0,
+    required: false,
+  });
 
   if (examDay) {
     tasks.push({

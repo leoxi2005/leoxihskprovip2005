@@ -2,10 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { EXAM_1 } from '../data/exam1';
 import {
   EXAM_SPEC,
+  PART_GUIDES,
   PASS_MARK,
   TOTAL_QUESTIONS,
   flatten,
   isRight,
+  partOfDay,
+  partQuestions,
   passageFor,
   score,
   sectionRanges,
@@ -181,5 +184,53 @@ describe('marking', () => {
     expect(s.sections[0].points).toBe(100);
     expect(s.total).toBe(100);
     expect(s.passed).toBe(false);
+  });
+});
+
+describe('part-by-part practice', () => {
+  it('has a guide for every part of the paper, and no orphans', () => {
+    const partsInPaper = [...new Set(QS.map((x) => x.q.part))].sort();
+    expect(PART_GUIDES.map((g) => g.id).sort()).toEqual(partsInPaper);
+  });
+
+  it('counts each part the way the official blueprint does', () => {
+    PART_GUIDES.forEach((g) => {
+      expect(partQuestions(QS, g.id), g.id).toHaveLength(g.count);
+      // 排列顺序 is three fragments marked as one question, so seconds-per-question
+      // has to be generous there; every part still needs a usable pacing figure.
+      expect(g.secPerQ, g.id).toBeGreaterThan(5);
+    });
+  });
+
+  it('files every part under the section it is actually sat in', () => {
+    PART_GUIDES.forEach((g) => {
+      partQuestions(QS, g.id).forEach((x) => expect(x.section, g.id).toBe(g.section));
+    });
+  });
+
+  it('gives every part real coaching rather than a stub', () => {
+    PART_GUIDES.forEach((g) => {
+      expect(g.what.length, g.id).toBeGreaterThan(40);
+      expect(g.steps.length, g.id).toBeGreaterThanOrEqual(3);
+      expect(g.traps.length, g.id).toBeGreaterThanOrEqual(2);
+      expect(g.vi, g.id).toBeTruthy();
+    });
+  });
+
+  /**
+   * Left to choose freely, people drill the part they are already best at. Rotation
+   * puts the awkward ones in front of you without nagging — so a week has to cover
+   * all eight, and the same day must always give the same part.
+   */
+  it('rotates through every part across eight days, deterministically', () => {
+    const week = Array.from({ length: PART_GUIDES.length }, (_, k) => partOfDay(82 - k));
+    expect(new Set(week).size).toBe(PART_GUIDES.length);
+    expect(partOfDay(82)).toBe(partOfDay(82));
+  });
+
+  it('never goes out of range, whatever the countdown says', () => {
+    [-9, 0, 1, 365].forEach((d) => {
+      expect(PART_GUIDES.some((g) => g.id === partOfDay(d)), String(d)).toBe(true);
+    });
   });
 });

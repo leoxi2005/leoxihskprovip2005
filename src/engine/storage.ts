@@ -22,6 +22,8 @@ export const KEYS = {
   exam: 'hskq_exam',
   /** `{ date, done }` — the daily plan's completion ticks. */
   plan: 'hskq_plan',
+  /** Best result per exam part, from the part-by-part practice mode. */
+  drill: 'hskq_drill',
 } as const;
 
 /** localStorage can throw (private mode, quota) — progress is best-effort. */
@@ -259,6 +261,7 @@ const BACKED_UP: string[] = [
   KEYS.mig,
   KEYS.exam,
   KEYS.plan,
+  KEYS.drill,
 ];
 
 export interface Backup {
