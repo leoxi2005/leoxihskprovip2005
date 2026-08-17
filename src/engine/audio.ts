@@ -2,6 +2,31 @@
 
 const PREFERRED_VOICE = /Xiaoxiao|Yunxi|Tingting|Ting-Ting|Meijia|Mei-Jia|Huihui|Yaoyao|Lili|普通话/i;
 
+/**
+ * Voices that are actually male. The Web Speech API exposes no gender field, so the
+ * only handle is the name — these are the shipped Mandarin voices across macOS,
+ * Windows and Chrome that read as male.
+ */
+const MALE_VOICE = /Yunxi|Yunyang|Yunjian|Yunfeng|Yunhao|Kangkang|Zhiyu|Liang/i;
+
+const FEMALE_VOICE = /Xiaoxiao|Xiaoyi|Tingting|Ting-Ting|Huihui|Yaoyao|Meijia|Mei-Jia|Lili|Xiaomo/i;
+
+export type SpeakerRole = 'male' | 'female' | 'narrator';
+
+/**
+ * Strips the 男：/女：/问： label the script carries.
+ *
+ * The real recording never says these out loud — you hear two different people and a
+ * narrator. Reading the labels aloud both wastes listening time and hands over the
+ * speaker cue for free, which is one of the things the paper is testing.
+ */
+export function splitRole(line: string): { role: SpeakerRole; text: string } {
+  const m = line.match(/^\s*(男|女|问)\s*[：:]\s*/);
+  if (!m) return { role: 'narrator', text: line.trim() };
+  const role: SpeakerRole = m[1] === '男' ? 'male' : m[1] === '女' ? 'female' : 'narrator';
+  return { role, text: line.slice(m[0].length).trim() };
+}
+
 export class Audio {
   muted = false;
   rate = 0.9;
@@ -78,6 +103,75 @@ export class Audio {
     }
   }
 
+  /** Every distinct Mandarin voice the browser offers. */
+  private zhVoices(): SpeechSynthesisVoice[] {
+    if (typeof speechSynthesis === 'undefined') return [];
+    return (speechSynthesis.getVoices() || []).filter((v) => /^zh/i.test(v.lang));
+  }
+
+  /** A separate voice per speaker, where the system actually has one. */
+  private voiceFor(role: SpeakerRole): SpeechSynthesisVoice | null {
+    const vs = this.zhVoices();
+    if (role === 'male') {
+      const male = vs.find((v) => MALE_VOICE.test(v.name));
+      if (male) return male;
+    }
+    if (role === 'female') {
+      const female = vs.find((v) => FEMALE_VOICE.test(v.name));
+      if (female) return female;
+    }
+    return this.pickVoice();
+  }
+
+  /**
+   * Pitch fallback for the common case of a machine with only one Mandarin voice.
+   *
+   * Not an impression of a man and a woman — just enough separation that you can tell
+   * the turns apart, which is the cue the real recording gives you for free.
+   */
+  private pitchFor(role: SpeakerRole, distinctVoices: boolean): number {
+    if (distinctVoices) return 1;
+    return role === 'male' ? 0.75 : role === 'female' ? 1.2 : 1;
+  }
+
+  /**
+   * Reads a listening item the way the paper presents it: one turn per speaker, with
+   * the 男/女/问 labels stripped and a different voice (or pitch) for each.
+   *
+   * `minRate` exists for the exam, which must never play slower than natural even if
+   * the learner has turned the practice voice down.
+   */
+  speakDialogue(lines: string[], minRate = 0): void {
+    if (typeof speechSynthesis === 'undefined' || !lines.length || this.muted) return;
+    const parts = lines.map(splitRole).filter((p) => p.text);
+    if (!parts.length) return;
+
+    this.seq += 1;
+    const seq = this.seq;
+    const rate = Math.max(this.rate, minRate);
+    const roles = new Set(parts.map((p) => p.role));
+    const voices = new Map([...roles].map((r) => [r, this.voiceFor(r)]));
+    // Distinct only if the roles genuinely landed on different voices.
+    const distinct = new Set([...voices.values()].map((v) => v?.name ?? '')).size > 1;
+
+    try {
+      clearTimeout(this.watchdog);
+      speechSynthesis.resume();
+      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+      parts.forEach((p, i) => {
+        // Only the first line gets the watchdog: once the queue is running, `pending`
+        // is true and the "nothing happened" check would fire on every later line.
+        this.utter(p.text, seq, i === 0, {
+          voice: voices.get(p.role) ?? null,
+          pitch: this.pitchFor(p.role, distinct),
+          rate,
+        });
+      });
+    } catch {
+      /* ignore */
+    }
+  }
+
   /**
    * Hands one utterance to the synth and watches that it actually starts.
    *
@@ -88,24 +182,29 @@ export class Audio {
    * second — if nothing is speaking or pending shortly after, the utterance was lost,
    * so try once more. Without this the app just goes quiet until a reload.
    */
-  private utter(text: string, seq: number, mayRetry: boolean): void {
+  private utter(
+    text: string,
+    seq: number,
+    mayRetry: boolean,
+    opts?: { voice: SpeechSynthesisVoice | null; pitch: number; rate: number },
+  ): void {
     try {
       // Harmless when not paused, and the only way back when it is.
       speechSynthesis.resume();
 
       const u = new SpeechSynthesisUtterance(text);
-      const v = this.pickVoice();
+      const v = opts ? opts.voice : this.pickVoice();
       if (v) u.voice = v;
       u.lang = 'zh-CN';
-      u.rate = this.rate;
-      u.pitch = 1;
+      u.rate = opts?.rate ?? this.rate;
+      u.pitch = opts?.pitch ?? 1;
 
       let started = false;
       u.onstart = () => (started = true);
       // "interrupted"/"canceled" are our own cancel() — expected, not a failure.
       u.onerror = (e) => {
         if (mayRetry && seq === this.seq && e.error !== 'interrupted' && e.error !== 'canceled') {
-          this.utter(text, seq, false);
+          this.utter(text, seq, false, opts);
         }
       };
 
@@ -116,7 +215,7 @@ export class Audio {
         if (!speechSynthesis.speaking && !speechSynthesis.pending) {
           // Silently swallowed — one retry, and never loop on it.
           speechSynthesis.cancel();
-          this.utter(text, seq, false);
+          this.utter(text, seq, false, opts);
         }
       }, 400);
     } catch {

@@ -81,7 +81,9 @@ export function PartDrill({ part, onExit }: { part: PartId; onExit: () => void }
 
   const speak = () => {
     const lines = q.kind === 'tf' ? [q.item.say] : q.kind === 'qa' ? (q.item.say ?? []) : [];
-    if (lines.length) engine.audio.speak(lines.join('……'));
+    // Practice keeps the learner's own rate — this is where you are still building
+    // the ear, so a slower pass is a legitimate thing to want.
+    if (lines.length) engine.audio.speakDialogue(lines);
   };
 
   // Auto-play once on arrival. Unlike the exam, the replay button below stays

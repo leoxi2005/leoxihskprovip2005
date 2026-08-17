@@ -138,9 +138,9 @@ export function Exam() {
     played.current.add(i);
     const lines = q.kind === 'tf' ? [q.item.say] : q.kind === 'qa' ? (q.item.say ?? []) : [];
     if (!lines.length) return;
-    // One utterance with ellipses between turns: chaining separate calls is unreliable
-    // because each `speak` cancels the one before it.
-    engine.audio.speak(lines.join('……'));
+    // Natural pace, whatever the practice voice is set to: the real recording does not
+    // slow down for anyone, and rehearsing at 0.8× rehearses the wrong exam.
+    engine.audio.speakDialogue(lines, 1);
   }, [i, phase, section, q, engine]);
 
   // -- answering ------------------------------------------------------------
@@ -232,6 +232,11 @@ export function Exam() {
               margin: '14px 0',
             }}
           >
+            🔊 Giọng đọc ở đây là giọng máy của trình duyệt, <b>không phải giọng thu của đề thật</b> — ngữ
+            điệu phẳng hơn và chất giọng khác. Dùng để quen dạng bài và quen tốc độ thì tốt; trước ngày
+            thi vẫn nên nghe thêm file audio đề thật ít nhất vài đề.
+            <br />
+            <br />
             ⚠️ Như đề thật: <b>mỗi câu nghe CHỈ MỘT LẦN</b>, không có nút nghe lại. Hết giờ một phần là tự
             động chuyển sang phần sau. Không có phản hồi đúng/sai cho tới khi nộp bài.
           </div>
