@@ -67,6 +67,57 @@ describe('the sample paper cut into questions', () => {
     shared.forEach((n) => expect(H41001_LISTEN[n - 2].sharesPassage).toBeFalsy());
   });
 
+  it('carries the recording\'s own words for every question', () => {
+    H41001_LISTEN.forEach((q) => {
+      expect(q.script.length, `câu ${q.n}`).toBeGreaterThan(0);
+      expect(q.script.every((l) => l.trim().length > 5), `câu ${q.n}`).toBe(true);
+      // Part 1 reads one paragraph and prints the statement; parts 2–3 always ask a 问.
+      if (q.n <= TF_COUNT) {
+        expect(q.script, `câu ${q.n}`).toHaveLength(1);
+        expect(q.ask, `câu ${q.n}`).toBeUndefined();
+      } else {
+        expect(q.ask, `câu ${q.n}`).toBeTruthy();
+      }
+    });
+  });
+
+  /**
+   * The script was cut out of one long transcript, and the first attempt let the part-2
+   * worked example slide onto the end of question 10 — plausible-looking Chinese
+   * attached to the wrong question, which is worse than no script at all.
+   */
+  it('never carries a neighbour\'s lines', () => {
+    H41001_LISTEN.filter((q) => q.n > TF_COUNT && q.n < 36).forEach((q) => {
+      expect(q.script.length, `câu ${q.n}`).toBeGreaterThan(1);
+      expect(q.script.every((l) => /^[男女]：/.test(l)), `câu ${q.n}`).toBe(true);
+    });
+    // 36–45 are read as monologues, so no speaker labels at all.
+    H41001_LISTEN.filter((q) => q.n >= 36).forEach((q) => {
+      expect(q.script.some((l) => /^[男女]：/.test(l)), `câu ${q.n}`).toBe(false);
+    });
+  });
+
+  it('quotes the deciding words straight out of the script', () => {
+    H41001_LISTEN.forEach((q) => {
+      const spoken = q.script.join('') + (q.ask ?? '');
+      // A cue typed by hand rather than copied would explain the wrong sentence
+      // convincingly, which is the one failure mode worth a test of its own.
+      expect(spoken.includes(q.cue), `câu ${q.n}: ${q.cue}`).toBe(true);
+      // Three characters is a real cue — 没纸了 decides question 11 on its own — but a
+      // shorter fragment would highlight noise.
+      expect(q.cue.length, `câu ${q.n}`).toBeGreaterThanOrEqual(3);
+    });
+  });
+
+  it('gives both questions of a shared passage the same passage', () => {
+    H41001_LISTEN.filter((q) => q.sharesPassage).forEach((q) => {
+      const first = H41001_LISTEN[q.n - 2];
+      expect(q.script, `câu ${q.n}`).toEqual(first.script);
+      // …but their own questions differ, or one of them is a copy of the other.
+      expect(q.ask, `câu ${q.n}`).not.toBe(first.ask);
+    });
+  });
+
   it('has an answer waiting for every question it asks', () => {
     expect(paper).toBeTruthy();
     H41001_LISTEN.forEach((q) => {

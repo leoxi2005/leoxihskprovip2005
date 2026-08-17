@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { H41001_LISTEN, H41001_PARTS } from '../../data/h41001';
+import { H41001_LISTEN, H41001_PARTS, type RealListenQuestion } from '../../data/h41001';
 import { optionsFor, type BuiltinPaper, type KeyAnswer } from '../../engine/realpaper';
 import { C, F, shadow } from '../../theme';
 
@@ -30,6 +30,81 @@ type Phase = 'intro' | 'run' | 'done';
 
 /** Part 1's answers are true/false; "đáp án là T" means nothing to a learner. */
 const show = (a: KeyAnswer | null): string => (a === 'T' ? '✓' : a === 'F' ? '✗' : (a ?? '—'));
+
+/**
+ * What the recording said, with the deciding words struck through in highlighter.
+ *
+ * A listening question is missed at one specific moment — a 没, a 几乎, a 房租 where you
+ * expected 房子. Naming that moment is the only feedback worth giving: the learner can
+ * replay the clip and hear the syllables they walked past.
+ */
+function Script({ q }: { q: RealListenQuestion }) {
+  const mark = (line: string) => {
+    const at = line.indexOf(q.cue);
+    if (at < 0) return line;
+    return (
+      <>
+        {line.slice(0, at)}
+        <span
+          style={{
+            background: 'rgba(232,169,60,.45)',
+            borderRadius: 4,
+            padding: '1px 2px',
+            fontWeight: 800,
+          }}
+        >
+          {q.cue}
+        </span>
+        {line.slice(at + q.cue.length)}
+      </>
+    );
+  };
+
+  return (
+    <div
+      style={{
+        background: C.panel,
+        border: `2px solid ${C.line}`,
+        borderRadius: 14,
+        padding: '12px 16px',
+        marginTop: 12,
+      }}
+    >
+      <div
+        style={{
+          fontSize: 11.5,
+          fontWeight: 800,
+          textTransform: 'uppercase',
+          letterSpacing: '.06em',
+          color: C.muted,
+          marginBottom: 6,
+        }}
+      >
+        Băng đọc gì — chỗ quyết định tô vàng
+      </div>
+      {q.script.map((line, k) => (
+        <div key={k} style={{ fontFamily: F.han, fontSize: 16.5, lineHeight: 1.85, color: C.ink }}>
+          {mark(line)}
+        </div>
+      ))}
+      {q.ask && (
+        <div
+          style={{
+            fontFamily: F.han,
+            fontSize: 16.5,
+            lineHeight: 1.85,
+            color: C.body,
+            marginTop: 4,
+            paddingTop: 4,
+            borderTop: `1px dashed ${C.edge}`,
+          }}
+        >
+          问：{mark(q.ask)}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /**
  * One listening part of the real paper, drilled with the real recording.
@@ -169,7 +244,8 @@ export function RealDrill({
           </div>
           <p style={{ fontSize: 13.5, fontWeight: 600, color: C.body, lineHeight: 1.65 }}>{meta.how}</p>
           <p style={{ fontSize: 13, fontWeight: 600, color: C.muted2, lineHeight: 1.6 }}>
-            Ở đây được nghe lại thoải mái và chấm ngay từng câu — cố ý khác phòng thi. Muốn đúng
+            Ở đây được nghe lại thoải mái, chấm ngay từng câu, và chọn xong là thấy luôn{' '}
+            <b>băng đã đọc gì</b> cùng chỗ chữ quyết định đáp án — cố ý khác phòng thi. Muốn đúng
             luật thi thì quay ra bấm “Làm cả đề”.
           </p>
 
@@ -282,21 +358,19 @@ export function RealDrill({
           </div>
 
           {picked && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
-              <span
-                style={{
-                  fontSize: 16,
-                  fontWeight: 800,
-                  color: picked === answer ? C.okInk : C.badInk,
-                }}
-              >
+            <>
+              <div style={{ marginTop: 16, fontSize: 16, fontWeight: 800, color: picked === answer ? C.okInk : C.badInk }}>
                 {picked === answer ? '✓ Đúng rồi' : `✗ Sai — đáp án là ${show(answer)}`}
-              </span>
-              <span style={{ flex: 1 }} />
-              <button onClick={next} style={btn(C.ink, C.soft)}>
-                {i + 1 < items.length ? 'Câu tiếp →' : 'Xem kết quả →'}
-              </button>
-            </div>
+              </div>
+
+              <Script q={q} />
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 14 }}>
+                <button onClick={next} style={btn(C.ink, C.soft)}>
+                  {i + 1 < items.length ? 'Câu tiếp →' : 'Xem kết quả →'}
+                </button>
+              </div>
+            </>
           )}
         </div>
       )}
