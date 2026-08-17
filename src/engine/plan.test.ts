@@ -1,5 +1,17 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { LOCKED_UNTIL_CLEAR, dayPlan, daysUntil, newPerDayFor, phaseFor, type PlanInput } from './plan';
+import {
+  LOCKED_UNTIL_CLEAR,
+  MAX_NEW,
+  MIN_NEW,
+  dayPlan,
+  daysUntil,
+  newPerDayFor,
+  paceCapacity,
+  paceFor,
+  phaseFor,
+  requiredPace,
+  type PlanInput,
+} from './plan';
 import { DEFAULT_SETTINGS } from './types';
 import { exportProgress, importProgress, KEYS, save, type LogRow } from './storage';
 import { forecast, recentDays, streakFrom, topMissed, byKind } from './stats';
@@ -175,5 +187,81 @@ describe('backup', () => {
     const data = JSON.parse(exportProgress()).data;
     expect(data[KEYS.muted]).toBeUndefined();
     expect(data[KEYS.rot + 'vocab']).toBeUndefined();
+  });
+});
+
+describe('pace', () => {
+  /**
+   * The trap this exists to close: a learner reads "12 a day, 82 days left" and
+   * concludes they will cover 984 words. The taper means they will cover 655.
+   */
+  it('counts the taper rather than multiplying days by pace', () => {
+    expect(paceCapacity(12, 82)).toBeLessThan(12 * 82);
+    expect(paceCapacity(12, 82)).toBeGreaterThan(600);
+  });
+
+  it('gives zero capacity once only the final week is left', () => {
+    expect(paceCapacity(20, 6)).toBe(0);
+  });
+
+  it('grows with pace and with time', () => {
+    expect(paceCapacity(20, 82)).toBeGreaterThan(paceCapacity(12, 82));
+    expect(paceCapacity(12, 82)).toBeGreaterThan(paceCapacity(12, 40));
+  });
+
+  it('finds the smallest pace that still finishes the deck', () => {
+    const need = requiredPace(800, 82);
+    expect(paceCapacity(need, 82)).toBeGreaterThanOrEqual(800);
+    expect(paceCapacity(need - 1, 82)).toBeLessThan(800);
+  });
+
+  it('never asks for less than the floor or more than the ceiling', () => {
+    expect(requiredPace(1, 82)).toBe(MIN_NEW);
+    expect(requiredPace(99999, 82)).toBe(MAX_NEW);
+  });
+
+  it('reports a shortfall instead of silently under-delivering', () => {
+    const settings = { ...DEFAULT_SETTINGS, autoPace: false, newPerDay: 5, examDate: iso(82) };
+    const p = paceFor(900, 82, settings);
+    expect(p.base).toBe(5);
+    expect(p.shortfall).toBeGreaterThan(0);
+    // Reachable: some higher pace would have covered it, the chosen one just doesn't.
+    expect(p.reachable).toBe(true);
+  });
+
+  it('flags a deck that no pace can cover in the time left', () => {
+    const p = paceFor(900, 20, { ...DEFAULT_SETTINGS, examDate: iso(20) });
+    expect(p.reachable).toBe(false);
+    expect(p.shortfall).toBeGreaterThan(0);
+  });
+
+  it('auto mode tracks the deck instead of holding a stale number', () => {
+    const settings = { ...DEFAULT_SETTINGS, autoPace: true, newPerDay: 12, examDate: iso(82) };
+    const heavy = paceFor(900, 82, settings).base;
+    const light = paceFor(100, 82, settings).base;
+    expect(heavy).toBeGreaterThan(light);
+    // The stored newPerDay is ignored entirely while auto is on.
+    expect(paceFor(900, 82, { ...settings, newPerDay: 3 }).base).toBe(heavy);
+  });
+
+  it('drives the day plan’s new-word target', () => {
+    const auto = dayPlan(input({ unseen: 900, settings: { ...DEFAULT_SETTINGS, examDate: iso(82) } }));
+    const manual = dayPlan(
+      input({
+        unseen: 900,
+        settings: { ...DEFAULT_SETTINGS, examDate: iso(82), autoPace: false, newPerDay: 5 },
+      }),
+    );
+    expect(auto.tasks.find((t) => t.id === 'new')!.target).toBeGreaterThan(
+      manual.tasks.find((t) => t.id === 'new')!.target,
+    );
+    expect(auto.pace.shortfall).toBe(0);
+  });
+
+  it('estimates the day’s load from the required work only', () => {
+    const p = dayPlan(input({ due: 40, unseen: 100 }));
+    const required = p.tasks.filter((t) => t.required).reduce((n, t) => n + t.target, 0);
+    expect(p.questions).toBe(required);
+    expect(p.questions).toBeGreaterThan(40);
   });
 });

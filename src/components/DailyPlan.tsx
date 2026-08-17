@@ -1,11 +1,20 @@
 import { PHASES } from '../engine/plan';
 import { loadLog } from '../engine/storage';
-import { streakFrom, todayCount } from '../engine/stats';
+import { secondsPerQuestion, streakFrom, todayCount } from '../engine/stats';
 import { useEngine, useGameState } from '../engine/useEngine';
 import { C, F, shadow } from '../theme';
 
 const pct = (done: number, target: number): number =>
   target <= 0 ? 100 : Math.min(100, Math.round((done / target) * 100));
+
+const chip = (bg: string, color: string) => ({
+  background: bg,
+  color,
+  border: `1.5px solid ${C.line}`,
+  borderRadius: 99,
+  padding: '3px 12px',
+  whiteSpace: 'nowrap' as const,
+});
 
 /**
  * The countdown and today's required work.
@@ -22,6 +31,8 @@ export function DailyPlan() {
   const today = todayCount(log);
   const streak = streakFrom(log);
   const past = plan.daysLeft < 0;
+  // Measured from the learner's own answers once there are enough of them.
+  const minutes = Math.max(1, Math.round((plan.questions * secondsPerQuestion(log)) / 60));
 
   return (
     <section
@@ -49,8 +60,42 @@ export function DailyPlan() {
       </div>
 
       <div style={{ fontSize: 13, fontWeight: 800, color: C.gold, marginTop: 6 }}>{plan.phase.name}</div>
-      <div style={{ fontSize: 13, color: C.body, fontWeight: 600, lineHeight: 1.5, marginBottom: 10 }}>
+      <div style={{ fontSize: 13, color: C.body, fontWeight: 600, lineHeight: 1.5, marginBottom: 8 }}>
         {plan.phase.goal}
+      </div>
+
+      {/* What today actually costs, and whether the pace still reaches the exam. */}
+      <div
+        style={{
+          display: 'flex',
+          gap: 8,
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          fontSize: 12.5,
+          fontWeight: 700,
+          marginBottom: 10,
+        }}
+      >
+        {/* Auto pace can demand more than anyone will actually sit through. Saying so
+            beats letting the plan quietly become the thing you avoid opening. */}
+        <span style={chip(minutes > 60 ? C.badBg : C.soft, minutes > 60 ? C.badInk : C.body)}>
+          📋 Hôm nay ≈ {plan.questions} câu · ~{minutes} phút
+          {minutes > 60 ? ' — nặng, cân nhắc tắt bớt chủ đề' : ''}
+        </span>
+        <span style={chip(C.soft, C.body)}>
+          ⚙️ Nhịp {plan.pace.base} từ/ngày{engine.settings.autoPace ? ' (tự động)' : ''}
+        </span>
+        {!plan.pace.reachable ? (
+          <span style={chip(C.badBg, C.badInk)}>
+            ⚠️ Còn {plan.pace.shortfall} từ không kịp phủ — nên tắt bớt chủ đề
+          </span>
+        ) : plan.pace.shortfall > 0 ? (
+          <span style={chip(C.badBg, C.badInk)}>
+            ⚠️ Nhịp hiện tại hụt {plan.pace.shortfall} từ — cần {plan.pace.required}/ngày
+          </span>
+        ) : (
+          <span style={chip(C.okBg, C.okInk)}>✓ Đúng nhịp phủ hết trước ngày thi</span>
+        )}
       </div>
 
       {plan.tasks.map((t) => {

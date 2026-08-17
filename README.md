@@ -82,8 +82,13 @@ Kèm theo đó:
   quay lại thành một cục.
 - Đúng **nhưng chậm** thì lên hộp mà chỉ được 0.6× khoảng cách — do dự là hình dạng của kiến
   thức sắp mất.
-- **Hạn mức từ mới mỗi ngày**. Không có nó, mọi phiên đều nạp từ chưa gặp và hai tuần sau hàng
-  đợi không thể dọn nổi — cách một bộ thẻ SRS chết một cách kinh điển.
+- **Hạn mức từ mới mỗi ngày, tự tính từ ngày thi.** Không có hạn mức thì mọi phiên đều nạp từ
+  chưa gặp và hai tuần sau hàng đợi không thể dọn nổi — cách một bộ thẻ SRS chết kinh điển. Còn
+  bắt người học tự đặt con số đó cũng sai: nó phụ thuộc số từ còn lại và số ngày còn lại, mà cả
+  hai đều đổi mỗi ngày. App tính ngược từ ngày thi và **có tính cả phần giảm dần về cuối** — ở
+  82 ngày, nhịp 12/ngày chỉ phủ được 655 từ chứ không phải 984. Trang chủ nói thẳng hôm nay tốn
+  bao nhiêu câu và bao nhiêu phút (đo từ chính tốc độ trả lời của bạn), và cảnh báo khi nhịp cần
+  thiết vượt quá sức ngồi.
 - Sai ≥ 6 lần thì gắn cờ **từ khắc tinh** và gom vào chế độ riêng.
 - Mọi lượt trả lời ghi vào nhật ký vòng (5000 dòng). Nhật ký này nuôi cả màn Thống kê lẫn việc
   tick nhiệm vụ hằng ngày.

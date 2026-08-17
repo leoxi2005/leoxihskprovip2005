@@ -3,6 +3,15 @@ import { exportProgress, importProgress } from '../engine/storage';
 import { useEngine, useGameState } from '../engine/useEngine';
 import { C, F, shadow } from '../theme';
 
+/**
+ * The pace control is deliberately not a plain number box.
+ *
+ * "How many new words a day" is unanswerable without knowing how many words are left
+ * and how many days remain — and both change daily. Auto mode reads those two numbers
+ * and works backwards from the exam date; the manual slider stays for anyone who
+ * wants to override it, with the shortfall spelled out when they do.
+ */
+
 const row = {
   display: 'flex',
   alignItems: 'center',
@@ -69,6 +78,9 @@ export function SettingsPanel() {
   const engine = useEngine();
   useGameState();
   const s = engine.settings;
+  const plan = engine.plan();
+  const pace = plan.pace;
+  const unseen = engine.progress().newCount;
   const [open, setOpen] = useState(false);
   const [msg, setMsg] = useState('');
   const file = useRef<HTMLInputElement>(null);
@@ -143,9 +155,60 @@ export function SettingsPanel() {
         </span>
       </div>
 
-      <div style={row}>
+      <div style={{ ...row, alignItems: 'flex-start' }}>
         <span style={label}>Từ mới mỗi ngày</span>
-        <Slider value={s.newPerDay} min={3} max={40} suffix="từ" onChange={(v) => engine.setSettings({ newPerDay: v })} />
+        <div style={{ flex: 1, minWidth: 240 }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
+            {[true, false].map((auto) => (
+              <button
+                key={String(auto)}
+                onClick={() => engine.setSettings({ autoPace: auto, ...(auto ? {} : { newPerDay: pace.base }) })}
+                aria-pressed={s.autoPace === auto}
+                style={{
+                  border: `2px solid ${s.autoPace === auto ? C.ink : C.edge}`,
+                  background: s.autoPace === auto ? C.ink : C.card,
+                  color: s.autoPace === auto ? C.soft : C.muted,
+                  borderRadius: 99,
+                  padding: '4px 14px',
+                  fontSize: 12.5,
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  fontFamily: F.ui,
+                }}
+              >
+                {auto ? `Tự động — ${pace.base} từ` : 'Tự đặt'}
+              </button>
+            ))}
+          </div>
+
+          {!s.autoPace && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
+              <Slider
+                value={s.newPerDay}
+                min={3}
+                max={40}
+                suffix="từ"
+                onChange={(v) => engine.setSettings({ newPerDay: v })}
+              />
+            </div>
+          )}
+
+          <div style={{ fontSize: 12, fontWeight: 600, color: C.muted2, lineHeight: 1.5 }}>
+            {plan.daysLeft < 0
+              ? 'Ngày thi đã qua — đặt ngày mới ở trên để tính lại nhịp.'
+              : `Còn ${unseen} từ chưa gặp và ${plan.daysLeft} ngày. Lộ trình giảm dần lượng từ mới về cuối, nên nhịp ${pace.base}/ngày phủ được ${pace.capacity} từ chứ không phải ${pace.base * plan.daysLeft}.`}
+            {pace.shortfall > 0 && (
+              <>
+                {' '}
+                <b style={{ color: C.badInk }}>
+                  {pace.reachable
+                    ? `Mức đang đặt hụt ${pace.shortfall} từ — cần ít nhất ${pace.required}/ngày.`
+                    : `Ngay cả mức tối đa cũng hụt ${pace.shortfall} từ. Hãy tắt bớt chủ đề bạn đã vững.`}
+                </b>
+              </>
+            )}
+          </div>
+        </div>
       </div>
       <div style={row}>
         <span style={label}>Số câu mỗi phiên</span>

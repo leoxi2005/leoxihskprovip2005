@@ -251,8 +251,18 @@ export interface Settings {
    *
    * Without a cap every session front-loads unseen words, and a fortnight later the
    * due pile is unclearable — the classic way an SRS deck dies.
+   *
+   * Ignored while `autoPace` is on.
    */
   newPerDay: number;
+  /**
+   * Let the plan work out the pace instead of using `newPerDay`.
+   *
+   * A number typed in once goes stale the same week: every word learned lowers the
+   * pace needed, every day skipped raises it. Recomputing daily is the only version
+   * of this setting that stays true.
+   */
+  autoPace: boolean;
   /** Target exam day, `YYYY-MM-DD`. Drives the countdown and the daily plan. */
   examDate: string;
 }
@@ -267,6 +277,7 @@ export const DEFAULT_SETTINGS: Settings = {
   dailyGoal: 150,
   flashMs: 1800,
   newPerDay: 12,
+  autoPace: true,
   examDate: DEFAULT_EXAM_DATE,
 };
 

@@ -273,9 +273,11 @@ export class GameEngine {
   startGame = (g: GameId): void => {
     // No lock check here on purpose: locking is a choice made where the user picks a
     // mode (the home screen and the keyboard), not a property of starting a session.
-    // The plan tapers new words to nothing in the final week; the session builder has
-    // to see that number rather than the raw setting.
-    const perDay = newPerDayFor(this.plan().phase.id, this.settings.newPerDay);
+    // The plan owns the pace: it works out how fast the deck has to be covered, then
+    // tapers that to nothing in the final week. The session builder needs the number
+    // that comes out of both steps, not the raw setting.
+    const plan = this.plan();
+    const perDay = newPerDayFor(plan.phase.id, plan.pace.base);
     const session = buildSession(g, this.sel, this.srs, { ...this.settings, newPerDay: perDay });
     if (!session.length) return;
     this.clearTimers();

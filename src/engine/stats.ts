@@ -135,6 +135,24 @@ export function forecast(srs: SrsMap, days = 7): ForecastDay[] {
   return out;
 }
 
+/** Fallback pace before there is any history to measure, in seconds per question. */
+const DEFAULT_SECONDS = 9;
+
+/**
+ * Typical seconds per question, from the learner's own history.
+ *
+ * Median rather than mean: a session left open over lunch produces one 40-minute
+ * answer, and that single row would drag an average into fiction.
+ */
+export function secondsPerQuestion(log: LogRow[]): number {
+  const recent = log.slice(-400).map((r) => r[4]);
+  if (recent.length < 20) return DEFAULT_SECONDS;
+  const sorted = recent.slice().sort((a, b) => a - b);
+  const median = sorted[Math.floor(sorted.length / 2)] / 1000;
+  // Clamp: a burst of guessing or one stalled tab should not redraw the estimate.
+  return Math.max(3, Math.min(30, median));
+}
+
 /** Longest run of consecutive days with at least one answer, ending today or yesterday. */
 export function streakFrom(log: LogRow[]): number {
   const days = new Set(byDay(log).map((d) => d.day));

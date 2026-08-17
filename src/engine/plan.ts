@@ -80,6 +80,62 @@ export function newPerDayFor(phase: PhaseId, setting: number): number {
   }
 }
 
+export const MIN_NEW = 3;
+export const MAX_NEW = 40;
+
+/**
+ * Total new words a given base pace delivers between now and the exam.
+ *
+ * Not `daysLeft × base`: the plan tapers deliberately, so a pace of 12 buys nowhere
+ * near 12 a day averaged over the run. Exam day itself is excluded — nobody learns
+ * vocabulary on the morning of the paper.
+ */
+export function paceCapacity(base: number, daysLeft: number): number {
+  let total = 0;
+  for (let d = Math.max(0, daysLeft); d >= 1; d--) total += newPerDayFor(phaseFor(d).id, base);
+  return total;
+}
+
+export interface Pace {
+  /** The base pace in use today. */
+  base: number;
+  /** Smallest base that still covers every unseen word in time. */
+  required: number;
+  /** Words `base` will deliver before the exam. */
+  capacity: number;
+  /** False when even the maximum pace cannot cover the deck in the days left. */
+  reachable: boolean;
+  /** Words that will not be reached at `base`. Zero when on track. */
+  shortfall: number;
+}
+
+/**
+ * The smallest pace that still finishes the deck, given the taper.
+ *
+ * Monotonic in `base`, so a plain scan is both correct and cheap.
+ */
+export function requiredPace(unseen: number, daysLeft: number): number {
+  for (let n = MIN_NEW; n < MAX_NEW; n++) {
+    if (paceCapacity(n, daysLeft) >= unseen) return n;
+  }
+  return MAX_NEW;
+}
+
+export function paceFor(unseen: number, daysLeft: number, settings: Settings): Pace {
+  const required = requiredPace(unseen, daysLeft);
+  const base = settings.autoPace
+    ? required
+    : Math.max(MIN_NEW, Math.min(MAX_NEW, settings.newPerDay));
+  const capacity = paceCapacity(base, daysLeft);
+  return {
+    base,
+    required,
+    capacity,
+    reachable: paceCapacity(MAX_NEW, daysLeft) >= unseen,
+    shortfall: Math.max(0, unseen - capacity),
+  };
+}
+
 export interface PlanTask {
   id: string;
   label: string;
@@ -103,6 +159,9 @@ export interface DayPlan {
   clear: boolean;
   /** A mock exam is scheduled for today. */
   examDay: boolean;
+  pace: Pace;
+  /** Roughly how many questions today's required work comes to. */
+  questions: number;
 }
 
 const sum = (m: Map<Kind, number>, kinds: Kind[]): number =>
@@ -132,8 +191,9 @@ export function dayPlan(input: PlanInput): DayPlan {
   const daysLeft = daysUntil(settings.examDate);
   const phase = phaseFor(daysLeft);
   const k = todayByKind(log);
+  const pace = paceFor(unseen, daysLeft, settings);
 
-  const newTarget = Math.min(unseen, newPerDayFor(phase.id, settings.newPerDay));
+  const newTarget = Math.min(unseen, newPerDayFor(phase.id, pace.base));
   // Two mock papers a week once the papers phase starts, one a fortnight before that.
   const examDay =
     phase.id === 'papers' ? daysLeft % 3 === 0 : phase.id === 'grammar' ? daysLeft % 7 === 0 : false;
@@ -238,6 +298,10 @@ export function dayPlan(input: PlanInput): DayPlan {
     tasks,
     clear: tasks.every((t) => !t.required || t.done >= t.target),
     examDay,
+    pace,
+    // Only the required tasks: the optional ones are offered, not owed, and folding
+    // them in would make every day look heavier than it is.
+    questions: tasks.filter((t) => t.required).reduce((n, t) => n + t.target, 0),
   };
 }
 
