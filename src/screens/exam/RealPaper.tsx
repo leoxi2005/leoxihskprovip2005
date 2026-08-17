@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   LISTEN_COUNT,
+  PAPER_PRESETS,
   PAPER_SOURCES,
   TF_COUNT,
   deletePaper,
@@ -477,6 +478,31 @@ function Setup({ onDone, onCancel }: { onDone: () => void; onCancel: () => void 
         )}
 
         <div style={label}>3 · Đáp án phần nghe ({LISTEN_COUNT} câu)</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
+          {PAPER_PRESETS.map((preset) => (
+            <button
+              key={preset.id}
+              onClick={() => {
+                setKeyText(preset.key);
+                if (!name.trim()) setName(preset.id);
+              }}
+              title={preset.note}
+              style={{
+                border: `2px solid ${C.ink}`,
+                background: C.soft,
+                color: C.ink,
+                borderRadius: 99,
+                padding: '5px 14px',
+                fontSize: 12.5,
+                fontWeight: 800,
+                cursor: 'pointer',
+                fontFamily: F.ui,
+              }}
+            >
+              Điền sẵn: {preset.id}
+            </button>
+          ))}
+        </div>
         <p style={{ margin: '0 0 6px', fontSize: 12.5, fontWeight: 600, color: C.muted2, lineHeight: 1.55 }}>
           Chép từ bảng đáp án trong PDF. Câu 1–{TF_COUNT} là đúng/sai — gõ được cả ✓ ✗ · T F · 对 错 ·
           + −. Câu {TF_COUNT + 1}–{LISTEN_COUNT} gõ A B C D. Dấu cách, dấu phẩy và số thứ tự đều được

@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { LISTEN_COUNT, TF_COUNT, optionsFor, parseKey, scoreKey, type KeyAnswer } from './realpaper';
+import {
+  LISTEN_COUNT,
+  PAPER_PRESETS,
+  TF_COUNT,
+  optionsFor,
+  parseKey,
+  scoreKey,
+  type KeyAnswer,
+} from './realpaper';
 
 /** A well-formed key: ten true/false then thirty-five letters. */
 const GOOD = '✓✗✓✓✗✗✓✗✓✓' + 'ABCD'.repeat(8) + 'ABC';
@@ -92,5 +100,33 @@ describe('marking a real paper', () => {
     // Only the ones actually mismatched, and in question order.
     expect(wrong.every((i) => given[i] !== key[i])).toBe(true);
     expect(wrong).toEqual([...wrong].sort((a, b) => a - b));
+  });
+});
+
+describe('built-in answer keys', () => {
+  /**
+   * These are transcribed from published answer sheets by hand, which is exactly the
+   * kind of thing that goes wrong silently — a dropped answer shifts every question
+   * after it and the learner is marked against nonsense.
+   */
+  it('parses cleanly, so no preset can ship mis-transcribed', () => {
+    PAPER_PRESETS.forEach((p) => {
+      const { key, error } = parseKey(p.key);
+      expect(error, `${p.id}: ${error}`).toBeUndefined();
+      expect(key, p.id).toHaveLength(LISTEN_COUNT);
+      expect(p.name, p.id).toBeTruthy();
+      expect(p.note, p.id).toBeTruthy();
+    });
+  });
+
+  it('gives every preset a distinct id', () => {
+    expect(new Set(PAPER_PRESETS.map((p) => p.id)).size).toBe(PAPER_PRESETS.length);
+  });
+
+  it('holds the H41001 sample key exactly as published', () => {
+    const key = parseKey(PAPER_PRESETS.find((p) => p.id === 'H41001')!.key).key;
+    expect(key.slice(0, 10).join('')).toBe('TFTTTFFTFF');
+    expect(key.slice(10, 25).join('')).toBe('ADCBBABDBDACBBA');
+    expect(key.slice(25).join('')).toBe('CBBABDBDDADCBDDBAACD');
   });
 });

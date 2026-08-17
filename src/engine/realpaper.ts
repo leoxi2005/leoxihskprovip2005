@@ -182,6 +182,37 @@ export async function listPapers(): Promise<PaperInfo[]> {
     .sort((a, b) => b.at - a.at);
 }
 
+export interface PaperPreset {
+  id: string;
+  name: string;
+  /** Listening answers 1–45, exactly as the official answer sheet prints them. */
+  key: string;
+  note: string;
+}
+
+/**
+ * Answer keys for papers worth having to hand, so the only thing left to supply is
+ * the recording.
+ *
+ * Only the keys are here — 45 characters transcribed from the published answer sheet.
+ * The papers themselves and their recordings are the exam body's copyright and are
+ * never bundled: those you download yourself, from the links below.
+ */
+export const PAPER_PRESETS: PaperPreset[] = [
+  {
+    id: 'H41001',
+    name: 'Đề mẫu chính thức HSK 4 (H41001 样卷)',
+    key: '√×√√√××√×× ADCBB ABDBD ACBBA CBBAB DBDDA DCBDD BAACD',
+    note: 'Đề mẫu do đơn vị ra đề phát hành. File nghe tải ở chinesetest.cn (level-4.wma — cần đổi sang mp3).',
+  },
+  {
+    id: 'H41332',
+    name: 'Đề thật HSK 4 · H41332',
+    key: '√××√√××√×√ CCDCB DDCAA BCBAD BDDCD BACAC ACADA DBBBD',
+    note: 'Đề thi thật đã công bố. Tải PDF ở my-hsk.com; file nghe tìm ở các nguồn bên dưới.',
+  },
+];
+
 /** Where a learner can legitimately get a paper and its recording. */
 export const PAPER_SOURCES: { name: string; url: string; note: string }[] = [
   {
