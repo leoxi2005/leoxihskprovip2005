@@ -14,7 +14,7 @@ import {
 } from './plan';
 import { DEFAULT_SETTINGS } from './types';
 import { exportProgress, importProgress, KEYS, save, type LogRow } from './storage';
-import { forecast, recentDays, streakFrom, topMissed, byKind } from './stats';
+import { byKind, forecast, recentDays, secondsPerQuestion, streakFrom, topMissed } from './stats';
 
 const iso = (offsetDays: number): string => {
   const d = new Date(Date.now() + offsetDays * 864e5);
@@ -263,5 +263,34 @@ describe('pace', () => {
     const required = p.tasks.filter((t) => t.required).reduce((n, t) => n + t.target, 0);
     expect(p.questions).toBe(required);
     expect(p.questions).toBeGreaterThan(40);
+  });
+});
+
+describe('workload estimate', () => {
+  const row = (kind: 'tf' | 'match' | 'h2m', ms: number): LogRow => [Date.now(), 'w:x', kind, 1, ms];
+
+  /**
+   * The bug this closes: the lightning round runs on a six-second clock and a match
+   * board is logged as four answers off one sitting, so both land at two or three
+   * seconds. With them counted, a 51-question day was estimated at three minutes.
+   */
+  it('ignores burst modes when measuring how fast the learner works', () => {
+    const study = Array.from({ length: 30 }, () => row('h2m', 12000));
+    const burst = Array.from({ length: 200 }, () => row('tf', 2000));
+    expect(secondsPerQuestion([...study, ...burst])).toBe(12);
+  });
+
+  it('never estimates faster than a person can read four options', () => {
+    expect(secondsPerQuestion(Array.from({ length: 40 }, () => row('h2m', 500)))).toBe(5);
+  });
+
+  it('falls back to a default until there is enough history', () => {
+    expect(secondsPerQuestion([])).toBe(9);
+    expect(secondsPerQuestion(Array.from({ length: 5 }, () => row('h2m', 20000)))).toBe(9);
+  });
+
+  it('is not dragged around by one session left open', () => {
+    const normal = Array.from({ length: 40 }, () => row('h2m', 10000));
+    expect(secondsPerQuestion([...normal, row('h2m', 40 * 60 * 1000)])).toBe(10);
   });
 });

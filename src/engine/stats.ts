@@ -139,18 +139,32 @@ export function forecast(srs: SrsMap, days = 7): ForecastDay[] {
 const DEFAULT_SECONDS = 9;
 
 /**
+ * Kinds excluded from the pace estimate.
+ *
+ * The lightning round runs on a six-second clock and a match board is graded as four
+ * answers off one sitting, so both land in the log at two or three seconds each. They
+ * are real answers but they are not the speed anyone studies at — leaving them in
+ * pulled the estimate down to "51 câu · 3 phút", which is not a day of work.
+ */
+const BURST_KINDS = new Set<Kind>(['tf', 'match']);
+
+/**
  * Typical seconds per question, from the learner's own history.
  *
  * Median rather than mean: a session left open over lunch produces one 40-minute
  * answer, and that single row would drag an average into fiction.
  */
 export function secondsPerQuestion(log: LogRow[]): number {
-  const recent = log.slice(-400).map((r) => r[4]);
+  const recent = log
+    .filter((r) => !BURST_KINDS.has(r[KIND]))
+    .slice(-400)
+    .map((r) => r[4]);
   if (recent.length < 20) return DEFAULT_SECONDS;
   const sorted = recent.slice().sort((a, b) => a - b);
   const median = sorted[Math.floor(sorted.length / 2)] / 1000;
-  // Clamp: a burst of guessing or one stalled tab should not redraw the estimate.
-  return Math.max(3, Math.min(30, median));
+  // The floor is a reading-and-deciding cost: nobody meets a question, reads four
+  // options and answers in under five seconds, whatever a fast streak logged.
+  return Math.max(5, Math.min(30, median));
 }
 
 /** Longest run of consecutive days with at least one answer, ending today or yesterday. */

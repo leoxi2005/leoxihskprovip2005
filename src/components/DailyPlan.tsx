@@ -76,26 +76,39 @@ export function DailyPlan() {
           marginBottom: 10,
         }}
       >
-        {/* Auto pace can demand more than anyone will actually sit through. Saying so
-            beats letting the plan quietly become the thing you avoid opening. */}
+        {/* Two chips when things are fine. A third only appears when something is
+            actually wrong — a permanent "everything is on track" badge is noise. */}
         <span style={chip(minutes > 60 ? C.badBg : C.soft, minutes > 60 ? C.badInk : C.body)}>
           📋 Hôm nay ≈ {plan.questions} câu · ~{minutes} phút
-          {minutes > 60 ? ' — nặng, cân nhắc tắt bớt chủ đề' : ''}
         </span>
         <span style={chip(C.soft, C.body)}>
-          ⚙️ Nhịp {plan.pace.base} từ/ngày{engine.settings.autoPace ? ' (tự động)' : ''}
+          ⚙️ {plan.pace.base} từ mới/ngày{engine.settings.autoPace ? ' · tự tính' : ''}
         </span>
-        {!plan.pace.reachable ? (
-          <span style={chip(C.badBg, C.badInk)}>
-            ⚠️ Còn {plan.pace.shortfall} từ không kịp phủ — nên tắt bớt chủ đề
-          </span>
-        ) : plan.pace.shortfall > 0 ? (
-          <span style={chip(C.badBg, C.badInk)}>
-            ⚠️ Nhịp hiện tại hụt {plan.pace.shortfall} từ — cần {plan.pace.required}/ngày
-          </span>
-        ) : (
-          <span style={chip(C.okBg, C.okInk)}>✓ Đúng nhịp phủ hết trước ngày thi</span>
+        {minutes > 60 && (
+          <span style={chip(C.badBg, C.badInk)}>⚠️ Hơi nặng — cân nhắc tắt bớt chủ đề</span>
         )}
+        {plan.pace.shortfall > 0 && (
+          <span style={chip(C.badBg, C.badInk)}>
+            {plan.pace.reachable
+              ? `⚠️ Nhịp này hụt ${plan.pace.shortfall} từ — cần ${plan.pace.required}/ngày`
+              : `⚠️ Còn ${plan.pace.shortfall} từ không kịp phủ — nên tắt bớt chủ đề`}
+          </span>
+        )}
+      </div>
+
+      {/* The whole method in one line. Everything else on this card is detail. */}
+      <div
+        style={{
+          fontSize: 13.5,
+          fontWeight: 800,
+          color: plan.clear ? C.okInk : C.ink,
+          borderTop: `1px solid ${C.line}`,
+          paddingTop: 10,
+        }}
+      >
+        {plan.clear
+          ? '✅ Xong nhiệm vụ hôm nay. Quay lại vào ngày mai.'
+          : '👉 Chỉ cần làm hết các mục 🔴 dưới đây là đủ cho hôm nay.'}
       </div>
 
       {plan.tasks.map((t) => {
