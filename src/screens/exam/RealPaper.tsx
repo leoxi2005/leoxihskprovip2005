@@ -55,6 +55,9 @@ const label = {
   margin: '16px 0 6px',
 };
 
+/** Part 1's answers are true/false; the bare letters T and F mean nothing on screen. */
+const show = (a: KeyAnswer | null): string => (a === 'T' ? '✓' : a === 'F' ? '✗' : (a ?? '—'));
+
 const clock = (s: number): string =>
   `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
@@ -106,11 +109,6 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
     () => () => { if (current?.temporary) URL.revokeObjectURL(current.url); },
     [current],
   );
-
-  // The clock reads off the recording rather than off a timer of its own: a bundled
-  // file arrives over the network, and a wall clock started at Play would keep counting
-  // through a stall, telling the learner they took longer than the tape actually ran.
-
 
   const result = useMemo(
     () => (current ? scoreKey(current.key, given) : null),
@@ -362,7 +360,7 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
                       fontVariantNumeric: 'tabular-nums',
                     }}
                   >
-                    {i + 1}. {given[i] ?? '—'} → {current.key[i]}
+                    {i + 1}. {show(given[i])} → {show(current.key[i])}
                   </span>
                 ))}
               </div>
@@ -436,6 +434,10 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
             preload="auto"
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
+            // The clock reads off the recording rather than off a timer of its own: the
+            // bundled file arrives over the network, and a wall clock started at Play
+            // would keep counting through a stall, telling the learner they took longer
+            // than the tape actually ran.
             onTimeUpdate={(e) => setElapsed(e.currentTarget.currentTime)}
             onWaiting={() => setLoading(true)}
             onPlaying={() => setLoading(false)}

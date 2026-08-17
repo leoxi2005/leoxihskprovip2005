@@ -124,11 +124,26 @@ describe('built-in answer keys', () => {
     expect(new Set(PAPER_PRESETS.map((p) => p.id)).size).toBe(PAPER_PRESETS.length);
   });
 
-  it('holds the H41001 sample key exactly as published', () => {
+  /**
+   * Read off the sample paper's own 听力材料 script, question by question, after a key
+   * copied from a PDF labelled "H41001 答案" turned out to belong to some other paper
+   * and marked 37 of 45 questions wrongly. The spot checks below quote the line of
+   * script that decides the answer, so a key swapped back in silently cannot pass.
+   */
+  it('holds the H41001 sample key as its own script gives it', () => {
     const key = parseKey(PAPER_PRESETS.find((p) => p.id === 'H41001')!.key).key;
-    expect(key.slice(0, 10).join('')).toBe('TFTTTFFTFF');
-    expect(key.slice(10, 25).join('')).toBe('ADCBBABDBDACBBA');
-    expect(key.slice(25).join('')).toBe('CBBABDBDDADCBDDBAACD');
+    expect(key.slice(0, 10).join('')).toBe('TFFTFTTFTF');
+    expect(key.slice(10, 25).join('')).toBe('ACCBCDCACABBACB');
+    expect(key.slice(25).join('')).toBe('ADDCCBDCABBDDBDADBDA');
+
+    // 3: 经理几乎没发现他有什么缺点 → the statement about spotting faults is false.
+    expect(key[2]).toBe('F');
+    // 5: 您的材料我已经翻译完了 → he did translate part two.
+    expect(key[4]).toBe('F');
+    // 12: 这本小说讲了一个爱情故事 → they are discussing a novel, option C.
+    expect(key[11]).toBe('C');
+    // 45: 下面我听听大家的意见 → the speaker is running a meeting, option A.
+    expect(key[44]).toBe('A');
   });
 });
 

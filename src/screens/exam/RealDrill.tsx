@@ -28,6 +28,9 @@ const card = {
 
 type Phase = 'intro' | 'run' | 'done';
 
+/** Part 1's answers are true/false; "đáp án là T" means nothing to a learner. */
+const show = (a: KeyAnswer | null): string => (a === 'T' ? '✓' : a === 'F' ? '✗' : (a ?? '—'));
+
 /**
  * One listening part of the real paper, drilled with the real recording.
  *
@@ -287,7 +290,7 @@ export function RealDrill({
                   color: picked === answer ? C.okInk : C.badInk,
                 }}
               >
-                {picked === answer ? '✓ Đúng rồi' : `✗ Sai — đáp án là ${answer}`}
+                {picked === answer ? '✓ Đúng rồi' : `✗ Sai — đáp án là ${show(answer)}`}
               </span>
               <span style={{ flex: 1 }} />
               <button onClick={next} style={btn(C.ink, C.soft)}>
@@ -331,7 +334,7 @@ export function RealDrill({
                       fontVariantNumeric: 'tabular-nums',
                     }}
                   >
-                    {it.n}. {given[k] ?? '—'} → {paper.key[it.n - 1]}
+                    {it.n}. {show(given[k])} → {show(paper.key[it.n - 1])}
                   </span>
                 ),
               )}

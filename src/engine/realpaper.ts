@@ -210,16 +210,22 @@ export interface PaperPreset {
  * Answer keys for papers worth having to hand, so the only thing left to supply is
  * the recording.
  *
- * The keys are 45 characters transcribed from the published answer sheet. Recordings
- * are the exam body's copyright and are not bundled — except the official sample,
- * which that same body publishes for free practice.
+ * Recordings are the exam body's copyright and are not bundled — except the official
+ * sample, which that same body publishes for free practice.
+ *
+ * A key found floating on the web is worth nothing on its own. The first key shipped
+ * for the sample paper came off a PDF that said "H41001 答案" at the top and was wrong
+ * on 37 of 45 questions: it marked 经理发现了小王的一些缺点 as true when the recording
+ * says 经理几乎没发现他有什么缺点. Both keys below are now derived from the paper itself —
+ * read the 听力材料 script against the printed options and the answer follows — and
+ * H41332's agrees with the answer sheet published alongside it.
  */
 export const PAPER_PRESETS: PaperPreset[] = [
   {
     id: 'H41001',
     name: 'Đề mẫu chính thức HSK 4 (H41001 样卷)',
-    key: '√×√√√××√×× ADCBB ABDBD ACBBA CBBAB DBDDA DCBDD BAACD',
-    note: 'Đề mẫu do đơn vị ra đề phát hành. File nghe đã kèm sẵn trong app.',
+    key: '√××√×√√×√× ACCBC DCACA BBACB ADDCC BDCAB BDDBD ADBDA',
+    note: 'Đề mẫu do đơn vị ra đề phát hành. File nghe đã kèm sẵn; đáp án dò từ chính bản lời thoại 听力材料 của đề.',
     audio: 'hsk4-h41001.mp3',
   },
   {
