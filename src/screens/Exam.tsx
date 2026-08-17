@@ -264,7 +264,7 @@ export function Exam() {
               fontFamily: F.ui,
             }}
           >
-            🎧 Nghe bằng đề thật — nạp file audio của bạn
+            🎧 Nghe bằng đề thật — có sẵn bản thu đề mẫu
           </button>
 
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>

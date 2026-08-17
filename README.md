@@ -67,10 +67,13 @@ phần nghe nằm trong băng chứ không in trên đề. Cho nghe lại là lu
 
 Giọng đọc trong app là giọng tổng hợp của trình duyệt, **không phải bản thu của đề thật** — ngữ
 điệu phẳng hơn và chất giọng khác. Nó đủ tốt để quen dạng bài và quen áp lực nghe-một-lần, nhưng
-không thay được bản thu. Nên có thêm chế độ **nghe bằng đề thật**: tải một đề HSK 4 về, nạp file
-audio kèm đáp án 45 câu phần nghe, app phát đúng bản thu đó, đưa lưới phiếu trả lời, bấm giờ và
-chấm. File nằm lại trong máy (IndexedDB), không tải lên đâu cả — và app không kèm sẵn đề vì bản
-quyền đề thi thuộc đơn vị ra đề.
+không thay được bản thu. Nên có thêm chế độ **nghe bằng đề thật**: app phát đúng bản thu của đề,
+đưa lưới phiếu trả lời 45 câu, bấm giờ theo băng và chấm theo đáp án chính thức.
+
+Bản thu đề mẫu chính thức (H41001) **đi kèm luôn trong app** — mở lên bấm Làm là chạy, không phải
+chuẩn bị gì. Đơn vị ra đề phát hành đề mẫu này miễn phí cho người học; những đề thi thật khác là
+bản quyền của họ nên không kèm, muốn thêm thì tự tải file nghe về rồi nạp vào — file đó nằm lại
+trong máy (IndexedDB), không tải lên đâu cả.
 
 Ngồi 95 phút ngay từ đầu cũng là nước đi sai: nó chấm bạn trước khi bạn được dạy kỹ thuật của
 bất kỳ phần nào. Nên còn có **chế độ luyện từng phần** — mở riêng một trong tám phần của đề, đọc

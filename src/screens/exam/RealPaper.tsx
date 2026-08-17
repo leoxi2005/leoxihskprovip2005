@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  BUILTIN_PAPERS,
   LISTEN_COUNT,
   PAPER_PRESETS,
   PAPER_SOURCES,
@@ -11,6 +12,7 @@ import {
   parseKey,
   savePaper,
   scoreKey,
+  type BuiltinPaper,
   type KeyAnswer,
   type PaperInfo,
 } from '../../engine/realpaper';
@@ -61,6 +63,16 @@ interface ExamLogRow {
   sections: number[];
 }
 
+/** A paper loaded and ready to sit, whichever side its recording came from. */
+interface Live {
+  id: string;
+  name: string;
+  key: KeyAnswer[];
+  url: string;
+  /** True when `url` is an object URL over a local blob, and so has to be released. */
+  temporary: boolean;
+}
+
 /**
  * The listening section of a real past paper, driven by its own recording.
  *
@@ -72,38 +84,57 @@ interface ExamLogRow {
 export function RealPaper({ onExit }: { onExit: () => void }) {
   const [phase, setPhase] = useState<Phase>('menu');
   const [papers, setPapers] = useState<PaperInfo[]>([]);
-  const [current, setCurrent] = useState<{ info: PaperInfo; url: string } | null>(null);
+  const [current, setCurrent] = useState<Live | null>(null);
   const [given, setGiven] = useState<(KeyAnswer | null)[]>(() => Array(LISTEN_COUNT).fill(null));
   const [elapsed, setElapsed] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [broken, setBroken] = useState(false);
   const audioEl = useRef<HTMLAudioElement | null>(null);
 
   const refresh = () => void listPapers().then(setPapers);
   useEffect(refresh, []);
 
-  // The object URL is the only thing holding the decoded blob; release it on the way out.
-  useEffect(() => () => { if (current) URL.revokeObjectURL(current.url); }, [current]);
+  // The object URL is the only thing holding the decoded blob; release it on the way
+  // out. A bundled file's plain path must survive — revoking it would do nothing, but
+  // it is not ours to release either.
+  useEffect(
+    () => () => { if (current?.temporary) URL.revokeObjectURL(current.url); },
+    [current],
+  );
 
-  useEffect(() => {
-    if (phase !== 'run' || !playing) return;
-    const t = setInterval(() => setElapsed((s) => s + 1), 1000);
-    return () => clearInterval(t);
-  }, [phase, playing]);
+  // The clock reads off the recording rather than off a timer of its own: a bundled
+  // file arrives over the network, and a wall clock started at Play would keep counting
+  // through a stall, telling the learner they took longer than the tape actually ran.
+
 
   const result = useMemo(
-    () => (current ? scoreKey(current.info.key, given) : null),
+    () => (current ? scoreKey(current.key, given) : null),
     [current, given],
   );
 
-  const start = async (id: string) => {
-    const p = await getPaper(id);
-    if (!p) return;
-    setCurrent({ info: p, url: URL.createObjectURL(p.audio) });
+  const begin = (live: Live) => {
+    setCurrent(live);
     setGiven(Array(LISTEN_COUNT).fill(null));
     setElapsed(0);
     setPlaying(false);
+    setLoading(true);
+    setBroken(false);
     setPhase('run');
   };
+
+  const startStored = async (id: string) => {
+    const p = await getPaper(id);
+    if (!p) return;
+    begin({ id: p.id, name: p.name, key: p.key, url: URL.createObjectURL(p.audio), temporary: true });
+  };
+
+  const startBuiltin = (b: BuiltinPaper) =>
+    begin({ id: b.id, name: b.name, key: b.key, url: b.url, temporary: false });
+
+  // Sitting it again needs no reload: the same URL still points at the same recording,
+  // and the audio element is rebuilt from scratch when the run screen comes back.
+  const again = () => { if (current) begin(current); };
 
   const submit = () => {
     audioEl.current?.pause();
@@ -114,7 +145,7 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
       // full mocks without pretending a reading or writing score exists.
       save(KEYS.exam, [
         ...rows,
-        { at: Date.now(), paper: 'real:' + current.info.name, total: result.points, sections: [result.points, 0, 0] },
+        { at: Date.now(), paper: 'real:' + current.name, total: result.points, sections: [result.points, 0, 0] },
       ]);
     }
     setPhase('result');
@@ -132,13 +163,61 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
 
           <h2 style={{ margin: '14px 0 4px', fontSize: 25, fontWeight: 800 }}>🎧 Nghe bằng đề thật</h2>
           <p style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 600, color: C.body, lineHeight: 1.6 }}>
-            Tải một đề HSK 4 thật (PDF + file nghe), nạp file audio vào đây kèm đáp án phần nghe. App
-            sẽ phát đúng bản thu đó, cho bạn lưới 45 câu để tick, bấm giờ và chấm điểm.
+            Bản thu thật của người bản xứ, chạy một mạch 30 phút như phòng thi. App cho bạn lưới 45
+            câu để tick, bấm giờ và chấm điểm ngay khi băng hết.
           </p>
           <p style={{ margin: '0 0 4px', fontSize: 12.5, fontWeight: 600, color: C.muted2, lineHeight: 1.55 }}>
-            File nằm lại trong máy bạn, không tải lên đâu cả. App không kèm sẵn đề vì bản quyền đề thi
-            thuộc đơn vị ra đề.
+            Đề mẫu chính thức đã kèm sẵn file nghe — bấm Làm là chạy. Muốn thêm đề thật khác thì tải
+            PDF + file nghe về rồi nạp vào; file đó nằm lại trong máy bạn, không tải lên đâu cả.
           </p>
+
+          <div style={label}>Có sẵn trong app</div>
+          {BUILTIN_PAPERS.map((b) => (
+            <div
+              key={b.id}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                padding: '10px 14px',
+                background: C.soft,
+                border: `2px solid ${C.ink}`,
+                borderRadius: 14,
+                marginBottom: 8,
+                flexWrap: 'wrap',
+              }}
+            >
+              <span style={{ flex: 1, minWidth: 160 }}>
+                <span style={{ display: 'block', fontSize: 15, fontWeight: 800 }}>{b.name}</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: C.muted2 }}>
+                  Kèm file nghe · 45 câu · ~30 phút
+                </span>
+              </span>
+              <button onClick={() => startBuiltin(b)} style={{ ...btn(C.red), padding: '7px 18px', fontSize: 14 }}>
+                Làm ▶
+              </button>
+            </div>
+          ))}
+
+          {papers.length === 0 && (
+            <div
+              style={{
+                background: C.soft,
+                border: `2px dashed ${C.ochre}`,
+                borderRadius: 14,
+                padding: '12px 16px',
+                margin: '12px 0 4px',
+                fontSize: 13.5,
+                fontWeight: 700,
+                color: C.body,
+                lineHeight: 1.65,
+              }}
+            >
+              <b>Muốn thêm đề nữa?</b> Bấm “Nạp đề mới” → chọn đề có sẵn đáp án → chọn file nghe
+              trong máy → Lưu. Từ lần sau mở lên là bấm “Làm ▶” luôn, không phải chọn file lại: đề
+              được giữ trong trình duyệt này.
+            </div>
+          )}
 
           {papers.length > 0 && (
             <>
@@ -162,7 +241,7 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
                   <span style={{ fontSize: 12, fontWeight: 700, color: C.muted }}>
                     nạp {new Date(p.at).toLocaleDateString('vi-VN')}
                   </span>
-                  <button onClick={() => void start(p.id)} style={{ ...btn(C.red), padding: '7px 18px', fontSize: 14 }}>
+                  <button onClick={() => void startStored(p.id)} style={{ ...btn(C.red), padding: '7px 18px', fontSize: 14 }}>
                     Làm ▶
                   </button>
                   <button
@@ -225,7 +304,7 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
             {result.right}/{result.count} đúng · {result.points}/100 điểm nghe
           </h2>
           <p style={{ margin: '0 0 16px', fontWeight: 700, color: C.muted, fontSize: 14 }}>
-            {current.info.name} · làm trong {clock(elapsed)} · bỏ trống {result.blank}
+            {current.name} · làm trong {clock(elapsed)} · bỏ trống {result.blank}
           </p>
 
           {result.wrong.length > 0 && (
@@ -246,7 +325,7 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
                       fontVariantNumeric: 'tabular-nums',
                     }}
                   >
-                    {i + 1}. {given[i] ?? '—'} → {current.info.key[i]}
+                    {i + 1}. {given[i] ?? '—'} → {current.key[i]}
                   </span>
                 ))}
               </div>
@@ -259,7 +338,7 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
           </p>
 
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 18, flexWrap: 'wrap' }}>
-            <button onClick={() => void start(current.info.id)} style={btn(C.ink, C.soft)}>
+            <button onClick={again} style={btn(C.ink, C.soft)}>
               Làm lại đề này
             </button>
             <button onClick={() => setPhase('menu')} style={btn(C.card, C.ink)}>
@@ -291,7 +370,7 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
             padding: '10px 16px',
           }}
         >
-          <span style={{ fontSize: 16, fontWeight: 900 }}>{current.info.name}</span>
+          <span style={{ fontSize: 16, fontWeight: 900 }}>{current.name}</span>
           <span style={{ flex: 1 }} />
           <span style={{ fontSize: 13, fontWeight: 800, color: C.muted }}>đã tick {answered}/{LISTEN_COUNT}</span>
           <span
@@ -314,8 +393,17 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
           <audio
             ref={audioEl}
             src={current.url}
+            // The bundled recording is 20 MB coming off the network the first time;
+            // fetching it while the learner reads the instructions means Play starts
+            // instantly instead of stalling on question 1.
+            preload="auto"
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
+            onTimeUpdate={(e) => setElapsed(e.currentTarget.currentTime)}
+            onWaiting={() => setLoading(true)}
+            onPlaying={() => setLoading(false)}
+            onCanPlay={() => setLoading(false)}
+            onError={() => setBroken(true)}
             onEnded={submit}
           />
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -331,7 +419,11 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
               {playing ? '⏸ Tạm dừng' : elapsed ? '▶ Tiếp tục' : '▶ Bắt đầu phát'}
             </button>
             <span style={{ fontSize: 12.5, fontWeight: 700, color: C.muted2, flex: 1, minWidth: 220 }}>
-              Không có thanh tua — bản thu thật chạy một mạch từ đầu đến cuối. Nghe xong app tự nộp bài.
+              {broken
+                ? 'Không mở được file nghe. Kiểm tra mạng rồi vào lại đề này.'
+                : loading
+                  ? 'Đang tải bản thu… lần đầu hơi lâu, các lần sau máy nhớ sẵn.'
+                  : 'Không có thanh tua — bản thu thật chạy một mạch từ đầu đến cuối. Nghe xong app tự nộp bài.'}
             </span>
             <button onClick={submit} style={btn(C.card, C.ink)}>
               Nộp sớm
@@ -411,6 +503,7 @@ function Setup({ onDone, onCancel }: { onDone: () => void; onCancel: () => void 
   const [keyText, setKeyText] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   const parsed = parseKey(keyText);
   const ready = !!file && !!name.trim() && !parsed.error;
@@ -418,7 +511,7 @@ function Setup({ onDone, onCancel }: { onDone: () => void; onCancel: () => void 
   const commit = async () => {
     if (!ready || !file) return;
     setBusy(true);
-    await savePaper({
+    const ok = await savePaper({
       id: String(Date.now()),
       name: name.trim(),
       key: parsed.key,
@@ -426,6 +519,7 @@ function Setup({ onDone, onCancel }: { onDone: () => void; onCancel: () => void 
       at: Date.now(),
     });
     setBusy(false);
+    if (!ok) return setFailed(true);
     onDone();
   };
 
@@ -527,6 +621,24 @@ function Setup({ onDone, onCancel }: { onDone: () => void; onCancel: () => void 
             ? (parsed.error ?? `✓ Đọc được đủ ${LISTEN_COUNT} đáp án`)
             : `Đang trống — cần ${LISTEN_COUNT} đáp án`}
         </div>
+
+        {failed && (
+          <div
+            style={{
+              background: C.badBg,
+              border: `2px solid ${C.red}`,
+              borderRadius: 12,
+              padding: '10px 14px',
+              marginTop: 14,
+              fontSize: 13,
+              fontWeight: 700,
+              color: C.badInk,
+            }}
+          >
+            Không lưu được file. Trình duyệt đang chặn bộ nhớ cục bộ — thường là do chế độ ẩn danh
+            hoặc cài đặt chặn cookie/dữ liệu trang. Mở lại ở cửa sổ thường rồi thử lại nhé.
+          </div>
+        )}
 
         <div style={{ marginTop: 18 }}>
           <button

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  BUILTIN_PAPERS,
   LISTEN_COUNT,
   PAPER_PRESETS,
   TF_COUNT,
@@ -128,5 +129,33 @@ describe('built-in answer keys', () => {
     expect(key.slice(0, 10).join('')).toBe('TFTTTFFTFF');
     expect(key.slice(10, 25).join('')).toBe('ADCBBABDBDACBBA');
     expect(key.slice(25).join('')).toBe('CBBABDBDDADCBDDBAACD');
+  });
+});
+
+describe('papers that ship with their recording', () => {
+  /**
+   * The sample paper is the one a learner can sit with nothing set up, so both halves
+   * have to be there: a usable key, and a file the browser can actually reach.
+   */
+  it('carries a full key and a playable url', () => {
+    expect(BUILTIN_PAPERS.length).toBeGreaterThan(0);
+    BUILTIN_PAPERS.forEach((b) => {
+      expect(b.key, b.id).toHaveLength(LISTEN_COUNT);
+      // A key that failed to parse comes back short or empty, never usable silently.
+      expect(b.key.every(Boolean), b.id).toBe(true);
+      expect(b.url, b.id).toMatch(/audio\/.+\.(mp3|m4a|wav)$/);
+    });
+  });
+
+  it('serves the recording from the site root, so a sub-path deploy still finds it', () => {
+    BUILTIN_PAPERS.forEach((b) => expect(b.url.startsWith('/'), b.url).toBe(true));
+  });
+
+  it('names a preset that really declares an audio file', () => {
+    BUILTIN_PAPERS.forEach((b) => {
+      const preset = PAPER_PRESETS.find((p) => p.id === b.id);
+      expect(preset?.audio, b.id).toBeTruthy();
+      expect(b.url.endsWith(preset!.audio!), b.id).toBe(true);
+    });
   });
 });

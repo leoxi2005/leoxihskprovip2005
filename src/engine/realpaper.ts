@@ -5,9 +5,9 @@
  * the exam sounds like — flat prosody, one speaker, no studio recording. The fix is
  * not to fake it better; it is to let a real recording drive the session.
  *
- * The audio never leaves the machine and is never bundled with the app: HSK papers
- * are Hanban's copyright, so the learner supplies a file they obtained themselves and
- * the browser keeps it locally.
+ * The official sample paper's recording ships with the app — the exam body publishes
+ * it free for practice. Real past papers are its copyright, so those the learner
+ * supplies as their own file, which then stays in this browser and is never uploaded.
  */
 
 /** 听力 is 45 questions: ten true/false, then thirty-five four-option. */
@@ -166,8 +166,17 @@ function tx<T>(mode: IDBTransactionMode, run: (s: IDBObjectStore) => IDBRequest<
   );
 }
 
-export const savePaper = (p: StoredPaper): Promise<unknown> =>
-  tx('readwrite', (s) => s.put(p) as IDBRequest<unknown>);
+/**
+ * Stores a paper, reporting whether it actually landed.
+ *
+ * `tx` swallows a missing or refused IndexedDB so the app survives private mode — but
+ * a save that quietly does nothing leaves the learner staring at an empty list with no
+ * idea why, so this one call has to say so.
+ */
+export async function savePaper(p: StoredPaper): Promise<boolean> {
+  const done = await tx('readwrite', (s) => s.put(p) as IDBRequest<unknown>);
+  return done !== null;
+}
 
 export const deletePaper = (id: string): Promise<unknown> =>
   tx('readwrite', (s) => s.delete(id) as unknown as IDBRequest<unknown>);
@@ -188,22 +197,30 @@ export interface PaperPreset {
   /** Listening answers 1–45, exactly as the official answer sheet prints them. */
   key: string;
   note: string;
+  /**
+   * Filename under `public/audio/` when the recording ships with the app.
+   *
+   * Only the sample paper qualifies: the exam body publishes it free for anyone to
+   * practise on. Every other paper's recording stays the learner's own file.
+   */
+  audio?: string;
 }
 
 /**
  * Answer keys for papers worth having to hand, so the only thing left to supply is
  * the recording.
  *
- * Only the keys are here — 45 characters transcribed from the published answer sheet.
- * The papers themselves and their recordings are the exam body's copyright and are
- * never bundled: those you download yourself, from the links below.
+ * The keys are 45 characters transcribed from the published answer sheet. Recordings
+ * are the exam body's copyright and are not bundled — except the official sample,
+ * which that same body publishes for free practice.
  */
 export const PAPER_PRESETS: PaperPreset[] = [
   {
     id: 'H41001',
     name: 'Đề mẫu chính thức HSK 4 (H41001 样卷)',
     key: '√×√√√××√×× ADCBB ABDBD ACBBA CBBAB DBDDA DCBDD BAACD',
-    note: 'Đề mẫu do đơn vị ra đề phát hành. File nghe tải ở chinesetest.cn (level-4.wma — cần đổi sang mp3).',
+    note: 'Đề mẫu do đơn vị ra đề phát hành. File nghe đã kèm sẵn trong app.',
+    audio: 'hsk4-h41001.mp3',
   },
   {
     id: 'H41332',
@@ -212,6 +229,31 @@ export const PAPER_PRESETS: PaperPreset[] = [
     note: 'Đề thi thật đã công bố. Tải PDF ở my-hsk.com; file nghe tìm ở các nguồn bên dưới.',
   },
 ];
+
+/** A paper whose recording ships with the app — playable without loading anything. */
+export interface BuiltinPaper {
+  id: string;
+  name: string;
+  key: KeyAnswer[];
+  /** Ready to hand straight to an `<audio src>`. */
+  url: string;
+  note: string;
+}
+
+/**
+ * The papers that need no setup at all.
+ *
+ * Built from the presets rather than listed twice, so a key can never drift apart
+ * from the recording it marks. `BASE_URL` is what makes this work on GitHub Pages,
+ * where the site sits under a repository path rather than at the domain root.
+ */
+export const BUILTIN_PAPERS: BuiltinPaper[] = PAPER_PRESETS.filter((p) => p.audio).map((p) => ({
+  id: p.id,
+  name: p.name,
+  key: parseKey(p.key).key,
+  url: `${import.meta.env.BASE_URL}audio/${p.audio}`,
+  note: p.note,
+}));
 
 /** Where a learner can legitimately get a paper and its recording. */
 export const PAPER_SOURCES: { name: string; url: string; note: string }[] = [
