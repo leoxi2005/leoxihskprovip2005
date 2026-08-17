@@ -237,8 +237,10 @@ export function Exam() {
             }}
           >
             🔊 Giọng đọc ở đây là giọng máy của trình duyệt, <b>không phải giọng thu của đề thật</b> — ngữ
-            điệu phẳng hơn và chất giọng khác. Dùng để quen dạng bài và quen tốc độ thì tốt; trước ngày
-            thi vẫn nên nghe thêm file audio đề thật ít nhất vài đề.
+            điệu phẳng hơn và chất giọng khác. Bộ 100 câu này là đề app tự soạn nên không có bản thu
+            người thật; muốn nghe đúng giọng phòng thi thì xuống dưới bấm{' '}
+            <b>🎧 Nghe bằng đề thật</b> — bản thu đề mẫu chính thức đã kèm sẵn, làm được cả đề hoặc
+            luyện riêng từng phần nghe.
             <br />
             <br />
             ⚠️ Như đề thật: <b>mỗi câu nghe CHỈ MỘT LẦN</b>, không có nút nghe lại. Hết giờ một phần là tự
@@ -264,7 +266,7 @@ export function Exam() {
               fontFamily: F.ui,
             }}
           >
-            🎧 Nghe bằng đề thật — có sẵn bản thu đề mẫu
+            🎧 Nghe bằng đề thật — giọng thu thật, cả đề hoặc từng phần
           </button>
 
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -483,7 +485,8 @@ function PartMenu({ onPick }: { onPick: (id: PartId) => void }) {
       </div>
       <p style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 600, color: C.muted2, lineHeight: 1.5 }}>
         Mỗi phần có hướng dẫn cách làm và bẫy hay dính, rồi luyện riêng phần đó — chấm ngay từng câu,
-        không bấm giờ.
+        không bấm giờ. Ba phần 听力 ở đây đọc bằng giọng máy; bản luyện <b>giọng thu thật</b> của ba
+        phần đó nằm trong 🎧 Nghe bằng đề thật, ngay bên dưới.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 8 }}>

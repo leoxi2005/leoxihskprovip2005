@@ -16,8 +16,10 @@ import {
   type KeyAnswer,
   type PaperInfo,
 } from '../../engine/realpaper';
+import { H41001_PARTS, H41001_PAPER_ID } from '../../data/h41001';
 import { KEYS, load, save } from '../../engine/storage';
 import { C, F, shadow } from '../../theme';
+import { RealDrill } from './RealDrill';
 
 type Phase = 'menu' | 'setup' | 'run' | 'result';
 
@@ -90,6 +92,8 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
   const [broken, setBroken] = useState(false);
+  /** Which listening part is being drilled with the bundled recording, if any. */
+  const [drill, setDrill] = useState<1 | 2 | 3 | null>(null);
   const audioEl = useRef<HTMLAudioElement | null>(null);
 
   const refresh = () => void listPapers().then(setPapers);
@@ -151,6 +155,13 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
     setPhase('result');
   };
 
+  // -- drilling one part with the bundled recording --------------------------
+
+  const drilled = BUILTIN_PAPERS.find((b) => b.id === H41001_PAPER_ID);
+  if (drill && drilled) {
+    return <RealDrill part={drill} paper={drilled} onExit={() => setDrill(null)} />;
+  }
+
   // -- menu -----------------------------------------------------------------
 
   if (phase === 'menu') {
@@ -194,10 +205,36 @@ export function RealPaper({ onExit }: { onExit: () => void }) {
                 </span>
               </span>
               <button onClick={() => startBuiltin(b)} style={{ ...btn(C.red), padding: '7px 18px', fontSize: 14 }}>
-                Làm ▶
+                Làm cả đề ▶
               </button>
             </div>
           ))}
+
+          {BUILTIN_PAPERS.some((b) => b.id === H41001_PAPER_ID) && (
+            <>
+              <div style={{ ...label, margin: '10px 0 6px' }}>
+                Hoặc luyện từng phần bằng chính giọng thu đó
+              </div>
+              <p style={{ margin: '0 0 8px', fontSize: 12.5, fontWeight: 600, color: C.muted2, lineHeight: 1.55 }}>
+                Từng câu một, nghe lại bao nhiêu lần cũng được, chấm ngay tại chỗ — thứ mà làm cả đề
+                không cho phép.
+              </p>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {H41001_PARTS.map((p) => (
+                  <button
+                    key={p.part}
+                    onClick={() => setDrill(p.part)}
+                    style={{ ...btn(C.blue), padding: '9px 16px', fontSize: 13.5, textAlign: 'left' }}
+                  >
+                    {p.title}
+                    <span style={{ display: 'block', fontSize: 11.5, fontWeight: 700, opacity: 0.9 }}>
+                      {p.sub}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
 
           {papers.length === 0 && (
             <div
