@@ -17,6 +17,7 @@ import {
   type SelfMark,
 } from '../engine/exam';
 import { PartDrill } from './exam/PartDrill';
+import { RealPaper } from './exam/RealPaper';
 import { QuestionView, ReviewList } from './exam/Question';
 import { KEYS, load, save } from '../engine/storage';
 import { useEngine } from '../engine/useEngine';
@@ -72,6 +73,8 @@ export function Exam() {
   const [left, setLeft] = useState(0);
   /** Set while practising a single part instead of sitting the whole paper. */
   const [drill, setDrill] = useState<PartId | null>(null);
+  /** Set while working through a real past paper's own recording. */
+  const [real, setReal] = useState(false);
   /** Questions whose recording has already played — the paper plays each one once. */
   const played = useRef(new Set<number>());
 
@@ -184,6 +187,7 @@ export function Exam() {
   // -- screens --------------------------------------------------------------
 
   if (drill) return <PartDrill part={drill} onExit={() => setDrill(null)} />;
+  if (real) return <RealPaper onExit={() => setReal(false)} />;
 
   if (phase === 'intro') {
     return (
@@ -242,6 +246,26 @@ export function Exam() {
           </div>
 
           <PartMenu onPick={setDrill} />
+
+          <button
+            onClick={() => setReal(true)}
+            className="lift lift-4 lift-static"
+            style={{
+              background: C.blue,
+              color: '#fff',
+              border: `3px solid ${C.ink}`,
+              borderRadius: 16,
+              padding: '11px 24px',
+              fontSize: 15,
+              fontWeight: 800,
+              cursor: 'pointer',
+              boxShadow: shadow(4),
+              margin: '16px 0 0',
+              fontFamily: F.ui,
+            }}
+          >
+            🎧 Nghe bằng đề thật — nạp file audio của bạn
+          </button>
 
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <button

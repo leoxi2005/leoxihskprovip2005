@@ -65,7 +65,14 @@ vì rất dễ nhầm:
 Chế độ thi thử **cố ý không có nút nghe lại** — đề thật chỉ phát mỗi câu một lần, và câu hỏi ở
 phần nghe nằm trong băng chứ không in trên đề. Cho nghe lại là luyện một kỳ thi không tồn tại.
 
-Nhưng ngồi 95 phút ngay từ đầu là nước đi sai: nó chấm bạn trước khi bạn được dạy kỹ thuật của
+Giọng đọc trong app là giọng tổng hợp của trình duyệt, **không phải bản thu của đề thật** — ngữ
+điệu phẳng hơn và chất giọng khác. Nó đủ tốt để quen dạng bài và quen áp lực nghe-một-lần, nhưng
+không thay được bản thu. Nên có thêm chế độ **nghe bằng đề thật**: tải một đề HSK 4 về, nạp file
+audio kèm đáp án 45 câu phần nghe, app phát đúng bản thu đó, đưa lưới phiếu trả lời, bấm giờ và
+chấm. File nằm lại trong máy (IndexedDB), không tải lên đâu cả — và app không kèm sẵn đề vì bản
+quyền đề thi thuộc đơn vị ra đề.
+
+Ngồi 95 phút ngay từ đầu cũng là nước đi sai: nó chấm bạn trước khi bạn được dạy kỹ thuật của
 bất kỳ phần nào. Nên còn có **chế độ luyện từng phần** — mở riêng một trong tám phần của đề, đọc
 hướng dẫn cách làm và bẫy hay dính, rồi luyện đúng phần đó với chấm điểm ngay từng câu, có giải
 thích, và được nghe lại. Đây là chỗ đi ngược đề thật một cách có chủ đích: bạn đang học kỹ thuật,
