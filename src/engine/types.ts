@@ -241,6 +241,10 @@ export interface Settings {
   /**
    * Hệ số phát bản thu sẵn, 0.6–1.2. **1 = đúng tốc độ băng thi** (3.5 chữ/giây).
    *
+   * Mặc định để 1.15, tức nhanh hơn phòng thi một nhịp: quen tai ở tốc độ khó hơn
+   * thì hôm thi nghe sẽ thấy thong thả. Riêng đề mô phỏng KHÔNG chạy theo con số
+   * này mà luôn đúng 1 — xem `speakExam`.
+   *
    * Con số này từng có nghĩa khác: hồi app còn đọc bằng giọng máy của trình duyệt,
    * 1 là "tốc độ mặc định của giọng đó" — nhanh hơn phòng thi khá nhiều. Từ khi có
    * bản thu sẵn thì 1 là một mốc thật, nên mặc định mới là 1 chứ không phải 0.9.
@@ -278,7 +282,7 @@ export const DEFAULT_EXAM_DATE = '2026-11-07';
 
 export const DEFAULT_SETTINGS: Settings = {
   autoPlayAudio: true,
-  voiceRate: 1,
+  voiceRate: 1.15,
   sessionSize: 18,
   dailyGoal: 150,
   flashMs: 1800,

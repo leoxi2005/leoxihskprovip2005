@@ -140,21 +140,44 @@ describe('bản kê khoá', () => {
 });
 
 describe('tốc độ đọc mặc định', () => {
-  it('mặc định là 1 — đúng tốc độ băng thi', () => {
-    expect(DEFAULT_SETTINGS.voiceRate).toBe(1);
+  it('mặc định nhanh hơn băng thi một nhịp', () => {
+    expect(DEFAULT_SETTINGS.voiceRate).toBe(1.15);
+    // Thanh trượt phải bước 0.05 mới chọn lại được đúng con số này.
+    expect(Math.round(DEFAULT_SETTINGS.voiceRate * 100) % 5).toBe(0);
   });
 
-  it('nâng 0.9 cũ lên 1 đúng một lần', () => {
+  it('nâng cả 0.9 lẫn 1 lên mặc định mới, mỗi mốc đúng một lần', () => {
     localStorage.clear();
-    const out = migrateVoiceRate({ ...DEFAULT_SETTINGS, voiceRate: 0.9 });
-    expect(out.voiceRate).toBe(1);
-    // Lần thứ hai không đụng vào nữa: người học kéo xuống 0.8 xong tải lại trang
-    // mà bị kéo về 1 thì thanh trượt coi như hỏng.
+    // 0.9 là mặc định thời giọng máy, 1 là mặc định của bản kế tiếp — cả hai đều là
+    // con số người học chưa từng chọn, nên đi thẳng lên 1.15.
+    expect(migrateVoiceRate({ ...DEFAULT_SETTINGS, voiceRate: 0.9 }).voiceRate).toBe(1.15);
+    // Lần thứ hai không đụng vào nữa: kéo xuống 0.8 xong tải lại trang mà bị kéo về
+    // thì thanh trượt coi như hỏng.
     expect(migrateVoiceRate({ ...DEFAULT_SETTINGS, voiceRate: 0.8 }).voiceRate).toBe(0.8);
   });
 
   it('không đụng tới tốc độ người học tự chọn', () => {
     localStorage.clear();
     expect(migrateVoiceRate({ ...DEFAULT_SETTINGS, voiceRate: 0.6 }).voiceRate).toBe(0.6);
+  });
+});
+
+describe('đề mô phỏng không chạy theo tốc độ luyện', () => {
+  it('vẫn đúng tốc độ băng thi khi người học để nhanh', () => {
+    const el = fakeAudioTag();
+    synthSpy();
+    const a = new Audio();
+    a.rate = 1.15;
+    a.speakExam(['男：你好']);
+    expect(el.playbackRate).toBe(1);
+  });
+
+  it('và cũng đúng tốc độ đó khi người học để chậm', () => {
+    const el = fakeAudioTag();
+    synthSpy();
+    const a = new Audio();
+    a.rate = 0.7;
+    a.speakExam(['男：你好']);
+    expect(el.playbackRate).toBe(1);
   });
 });

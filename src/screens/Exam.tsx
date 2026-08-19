@@ -141,9 +141,9 @@ export function Exam() {
     played.current.add(i);
     const lines = q.kind === 'tf' ? [q.item.say] : q.kind === 'qa' ? (q.item.say ?? []) : [];
     if (!lines.length) return;
-    // Natural pace, whatever the practice voice is set to: the real recording does not
-    // slow down for anyone, and rehearsing at 0.8× rehearses the wrong exam.
-    engine.audio.speakDialogue(lines, 1);
+    // Đúng tốc độ băng thi, bất kể tốc độ luyện đang để bao nhiêu: băng thi không
+    // chậm lại cho ai, mà cũng không nhanh lên cho ai.
+    engine.audio.speakExam(lines);
   }, [i, phase, section, q, engine]);
 
   // -- answering ------------------------------------------------------------

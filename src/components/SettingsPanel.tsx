@@ -244,7 +244,7 @@ export function SettingsPanel() {
           value={s.voiceRate}
           min={0.6}
           max={1.2}
-          step={0.1}
+          step={0.05}
           suffix="×"
           onChange={(v) => engine.setSettings({ voiceRate: v })}
         />

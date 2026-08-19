@@ -184,11 +184,16 @@ export function migrateSrs(srs: SrsMap): SrsMap {
  * thức — đổi giúp họ mới là thô lỗ.
  */
 export function migrateVoiceRate(s: Settings): Settings {
-  if (migDone().rate) return s;
-  markMig('rate');
-  if (s.voiceRate !== 0.9) return s;
-  const out = { ...s, voiceRate: 1 };
-  save(KEYS.settings, out);
+  const done = migDone();
+  let rate = s.voiceRate;
+  // 0.9 là mặc định thời app đọc bằng giọng máy, 1 là mặc định của bản ngay sau đó.
+  // Cả hai đều là con số người học chưa từng chọn, nên nâng lên mặc định hiện tại.
+  if (!done.rate && rate === 0.9) rate = 1;
+  if (!done.rate115 && rate === 1) rate = 1.15;
+  const out = rate === s.voiceRate ? s : { ...s, voiceRate: rate };
+  if (!done.rate) markMig('rate');
+  if (!done.rate115) markMig('rate115');
+  if (out !== s) save(KEYS.settings, out);
   return out;
 }
 

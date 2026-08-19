@@ -30,6 +30,9 @@ const FEMALE_VOICE = /Xiaoxiao|Xiaoyi|Tingting|Ting-Ting|Huihui|Yaoyao|Meijia|Me
 
 export type SpeakerRole = 'male' | 'female' | 'narrator';
 
+/** Tốc độ của bản thu chính thức — bản thu sẵn được dựng đúng ở mức này. */
+export const EXAM_RATE = 1;
+
 /** Khoá của những câu đã có bản thu sẵn. Do `tools/tts/render.py` ghi ra. */
 const CLIPS = new Set<string>(clipKeys as string[]);
 
@@ -277,19 +280,35 @@ export class Audio {
    * Reads a listening item the way the paper presents it: one turn per speaker, with
    * the 男/女/问 labels stripped and a different voice (or pitch) for each.
    *
-   * `minRate` exists for the exam, which must never play slower than natural even if
-   * the learner has turned the practice voice down.
+   * `minRate` là SÀN cho lúc luyện: người học kéo chậm bao nhiêu cũng được, nhưng
+   * không chậm hơn mức này. Đề thi thì cần một con số CHÍNH XÁC — dùng `speakExam`.
    */
   speakDialogue(lines: string[], minRate = 0): void {
+    this.speakDialogueAt(lines, Math.max(this.rate, minRate));
+  }
+
+  /** Phần chung của `speakDialogue` và `speakExam` — chỉ khác nhau ở chỗ chốt tốc độ. */
+  private speakDialogueAt(lines: string[], rate: number): void {
     if (!lines.length || this.muted) return;
     this.seq += 1;
     const seq = this.seq;
-    const rate = Math.max(this.rate, minRate);
     // Cả lượt nghe là MỘT file: hai giọng và các khoảng nghỉ giữa lượt đã nằm sẵn
     // trong đó, đúng như băng thi — ghép ở đây thì mỗi máy lại ra một nhịp khác.
     const key = ttsKey(spoken(lines).join('\n'));
     if (this.playClip(key, rate, () => this.dialogueSynth(lines, rate, seq))) return;
     this.dialogueSynth(lines, rate, seq);
+  }
+
+  /**
+   * Đọc một lượt nghe của đề mô phỏng: luôn đúng tốc độ băng thi.
+   *
+   * Không phải `speakDialogue(lines, 1)` — cái đó chỉ chặn phía chậm, nên khi tốc độ
+   * luyện để trên 1 thì đề mô phỏng chạy nhanh hơn cả phòng thi. Một bài thi thử chạy
+   * sai tốc độ thì điểm của nó không nói lên điều gì, mà đó lại đúng là thứ duy nhất
+   * bài thi thử để làm.
+   */
+  speakExam(lines: string[]): void {
+    this.speakDialogueAt(lines, EXAM_RATE);
   }
 
   /** Đường dự phòng cho lượt nghe: ghép từng lượt bằng giọng máy. */
