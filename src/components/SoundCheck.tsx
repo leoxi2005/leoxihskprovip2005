@@ -11,12 +11,19 @@ interface Report {
   speech: Result;
   speechNote: string;
   beep: boolean;
+  /** Bản thu sẵn — đường đọc chính của app. */
+  clip: Result;
+  clipNote: string;
 }
 
 /**
  * Silence has too many possible causes to guess at from the outside: the app's own
- * mute, no Mandarin voice installed, a browser that blocks speech, or the synth
- * getting wedged. This asks the browser directly and says which one it is.
+ * mute, a browser that blocks audio, or the synth getting wedged. This asks the
+ * browser directly and says which one it is.
+ *
+ * Thứ tự các mục ở đây theo đúng thứ tự app dùng: bản thu sẵn trước, giọng máy của
+ * trình duyệt chỉ là đường dự phòng. Thiếu giọng tiếng Trung trong máy giờ không còn
+ * là lỗi nữa — nói ngược lại sẽ đẩy người học đi cài giọng một cách vô ích.
  */
 export function SoundCheck() {
   const engine = useEngine();
@@ -31,6 +38,8 @@ export function SoundCheck() {
       speech: 'đang chạy',
       speechNote: '',
       beep: false,
+      clip: 'đang chạy',
+      clipNote: '',
     };
     setR({ ...report });
 
@@ -41,6 +50,32 @@ export function SoundCheck() {
     } catch {
       report.beep = false;
     }
+
+    // Thử bản thu sẵn trước — đây là thứ app phát ra trong 99% trường hợp.
+    const url = engine.audio.clipUrl('你好');
+    if (!url) {
+      report.clip = 'lỗi';
+      report.clipNote = 'Bản thu sẵn chưa được nạp vào app.';
+    } else {
+      const played = await new Promise<{ ok: boolean; note: string }>((res) => {
+        try {
+          const el = document.createElement('audio');
+          el.src = url;
+          el.onplaying = () => res({ ok: true, note: 'Đã phát bản thu 你好 (nǐ hǎo).' });
+          el.onerror = () => res({ ok: false, note: 'Không tải được file thu — kiểm tra mạng lần đầu vào app.' });
+          const p = el.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch((e: unknown) => res({ ok: false, note: 'Trình duyệt chặn phát: ' + String(e) }));
+          }
+          setTimeout(() => res({ ok: false, note: 'Quá 3 giây chưa phát được.' }), 3000);
+        } catch (e) {
+          res({ ok: false, note: 'Không phát được: ' + String(e) });
+        }
+      });
+      report.clip = played.ok ? 'ok' : 'lỗi';
+      report.clipNote = played.note;
+    }
+    setR({ ...report });
 
     if (typeof speechSynthesis === 'undefined') {
       report.speech = 'lỗi';
@@ -63,7 +98,7 @@ export function SoundCheck() {
 
     if (!report.voices.length) {
       report.speech = 'lỗi';
-      report.speechNote = 'Máy không có giọng tiếng Trung nào.';
+      report.speechNote = 'Máy không có giọng tiếng Trung nào (chỉ ảnh hưởng đường dự phòng).';
       setR({ ...report });
       return;
     }
@@ -163,12 +198,17 @@ export function SoundCheck() {
 
             {line('Bíp thử', r.beep ? 'đã phát — bạn có nghe tiếng "bíp" không?' : 'không phát được', !r.beep)}
             {line(
+              'Bản thu sẵn',
+              r.clip === 'đang chạy' ? 'đang thử…' : r.clipNote,
+              r.clip === 'lỗi',
+            )}
+            {line(
               'App có tắt tiếng?',
               r.muted ? 'CÓ — đây là nguyên nhân' : 'không',
               r.muted,
             )}
             {line(
-              'Giọng tiếng Trung',
+              'Giọng máy dự phòng',
               r.voices.length ? `${r.voices.length} giọng: ${r.voices.slice(0, 3).join(', ')}` : 'KHÔNG CÓ',
               !r.voices.length,
             )}
@@ -193,13 +233,11 @@ export function SoundCheck() {
             >
               {r.muted
                 ? '→ App đang tắt tiếng. Bấm nút đỏ "Đang tắt tiếng" ở góc trên phải khi vào học để bật lại.'
-                : !r.voices.length
-                  ? '→ Máy chưa có giọng tiếng Trung. Trên Mac: Cài đặt hệ thống → Trợ năng → Nội dung đọc → Giọng nói hệ thống → Quản lý giọng nói → tải giọng Tiếng Trung (Trung Quốc đại lục).'
-                  : r.speech === 'ok'
-                    ? '→ Trình duyệt phát tiếng bình thường. Nếu tai bạn vẫn không nghe thấy gì: kiểm tra âm lượng máy, và bấm chuột phải lên tab Chrome xem có đang "Mute site" không.'
-                    : r.speech === 'lỗi'
-                      ? '→ Engine đọc của trình duyệt đang kẹt. Đóng hẳn Chrome rồi mở lại (không chỉ tải lại trang). Nếu vẫn vậy, thử Chrome ở cửa sổ ẩn danh.'
-                      : '→ Đang kiểm tra…'}
+                : r.clip === 'ok'
+                  ? '→ Giọng đọc chính chạy tốt. Nếu tai bạn vẫn không nghe thấy gì: kiểm tra âm lượng máy, và bấm chuột phải lên tab Chrome xem có đang "Mute site" không.'
+                  : r.clip === 'lỗi'
+                    ? '→ Bản thu sẵn không phát được, app sẽ phải dùng giọng máy của trình duyệt (khác giọng thi). Thử tải lại trang khi có mạng; nếu vẫn vậy, xem dòng "Giọng máy dự phòng" bên trên.'
+                    : '→ Đang kiểm tra…'}
             </div>
 
             <button

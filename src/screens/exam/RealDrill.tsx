@@ -239,7 +239,7 @@ export function RealDrill({
               lineHeight: 1.65,
             }}
           >
-            🎧 <b>Giọng thu thật của đề</b> — cắt ra từ bản thu {paper.name}. Không phải giọng máy:
+            🎧 <b>Giọng thu thật của đề</b> — cắt ra từ bản thu {paper.name}. Không phải giọng dựng:
             đúng người thật, đúng tốc độ, đúng tiếng ồn nền của phòng thu.
           </div>
           <p style={{ fontSize: 13.5, fontWeight: 600, color: C.body, lineHeight: 1.65 }}>{meta.how}</p>

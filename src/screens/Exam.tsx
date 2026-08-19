@@ -236,9 +236,10 @@ export function Exam() {
               margin: '14px 0',
             }}
           >
-            🔊 Giọng đọc ở đây là giọng máy của trình duyệt, <b>không phải giọng thu của đề thật</b> — ngữ
-            điệu phẳng hơn và chất giọng khác. Bộ 100 câu này là đề app tự soạn nên không có bản thu
-            người thật; muốn nghe đúng giọng phòng thi thì xuống dưới bấm{' '}
+            🔊 Giọng đọc ở đây là <b>bản thu sẵn của app</b>: giọng máy chất lượng cao, đã chỉnh đúng tốc
+            độ đọc và các khoảng nghỉ đo từ bản thu chính thức. Gần phòng thi, nhưng vẫn{' '}
+            <b>không phải chính giọng người thu đề thật</b> — bộ 100 câu này là đề app tự soạn nên
+            không có bản thu người thật. Muốn nghe đúng băng thi thì xuống dưới bấm{' '}
             <b>🎧 Nghe bằng đề thật</b> — bản thu đề mẫu chính thức đã kèm sẵn, làm được cả đề hoặc
             luyện riêng từng phần nghe.
             <br />
@@ -485,8 +486,8 @@ function PartMenu({ onPick }: { onPick: (id: PartId) => void }) {
       </div>
       <p style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 600, color: C.muted2, lineHeight: 1.5 }}>
         Mỗi phần có hướng dẫn cách làm và bẫy hay dính, rồi luyện riêng phần đó — chấm ngay từng câu,
-        không bấm giờ. Ba phần 听力 ở đây đọc bằng giọng máy; bản luyện <b>giọng thu thật</b> của ba
-        phần đó nằm trong 🎧 Nghe bằng đề thật, ngay bên dưới.
+        không bấm giờ. Ba phần 听力 ở đây đọc bằng bản thu sẵn của app (đúng nhịp băng thi); bản luyện
+        bằng <b>chính giọng thu của đề</b> nằm trong 🎧 Nghe bằng đề thật, ngay bên dưới.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 8 }}>

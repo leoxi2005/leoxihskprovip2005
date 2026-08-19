@@ -232,7 +232,14 @@ export function SettingsPanel() {
         />
       </div>
       <div style={row}>
-        <span style={label}>Tốc độ giọng đọc</span>
+        <span style={label}>
+          Tốc độ giọng đọc
+          {/* Bản thu sẵn đọc đúng nhịp băng thi, nên 1.0× ở đây là một mốc thật chứ
+              không phải "mặc định của giọng máy" như trước. */}
+          <span style={{ display: 'block', fontSize: 12, fontWeight: 700, color: C.muted }}>
+            1.0× = đúng tốc độ băng thi
+          </span>
+        </span>
         <Slider
           value={s.voiceRate}
           min={0.6}

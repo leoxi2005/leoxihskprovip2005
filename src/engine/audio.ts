@@ -1,4 +1,21 @@
-/** Mandarin TTS via Web Speech API + oscillator sound effects. */
+/**
+ * Giọng đọc tiếng Trung của app + hiệu ứng âm thanh.
+ *
+ * Có hai đường đọc, theo thứ tự ưu tiên:
+ *
+ * 1. **Bản thu sẵn** trong `public/tts/` — dựng bằng `tools/tts/render.py` với giọng
+ *    neural, đọc đúng 3.5 chữ/giây và nghỉ đúng như bản thu chính thức của đề (số đo
+ *    ở đầu file đó). Đây mới là thứ giống phòng thi.
+ * 2. **Giọng máy của trình duyệt** (Web Speech) — chỉ dùng khi câu đó chưa có bản thu,
+ *    hoặc trình duyệt không phát được mp3. Giọng này là giọng của *máy đang mở app*:
+ *    máy khác cho giọng khác, và không giọng nào đọc theo nhịp đề thi.
+ *
+ * `src/data/tts.test.ts` chặn việc thêm nội dung mà quên thu — nếu không, câu mới sẽ
+ * lặng lẽ tụt xuống đường (2) giữa một buổi học toàn giọng phòng thi.
+ */
+
+import clipKeys from '../data/tts.json';
+import { ttsKey } from './tts';
 
 const PREFERRED_VOICE = /Xiaoxiao|Yunxi|Tingting|Ting-Ting|Meijia|Mei-Jia|Huihui|Yaoyao|Lili|普通话/i;
 
@@ -12,6 +29,13 @@ const MALE_VOICE = /Yunxi|Yunyang|Yunjian|Yunfeng|Yunhao|Kangkang|Zhiyu|Liang/i;
 const FEMALE_VOICE = /Xiaoxiao|Xiaoyi|Tingting|Ting-Ting|Huihui|Yaoyao|Meijia|Mei-Jia|Lili|Xiaomo/i;
 
 export type SpeakerRole = 'male' | 'female' | 'narrator';
+
+/** Khoá của những câu đã có bản thu sẵn. Do `tools/tts/render.py` ghi ra. */
+const CLIPS = new Set<string>(clipKeys as string[]);
+
+/** Đúng bộ lọc `tools/tts/collect.mjs` dùng khi đặt tên file — lệch là trượt khoá. */
+const HAN = /[\u4e00-\u9fff]/;
+const spoken = (lines: string[]): string[] => lines.filter((l) => l && HAN.test(l));
 
 /**
  * Strips the 男：/女：/问： label the script carries.
@@ -29,6 +53,10 @@ export function splitRole(line: string): { role: SpeakerRole; text: string } {
 
 export class Audio {
   muted = false;
+  /**
+   * 1 = đúng tốc độ đề thi. Bản thu sẵn đã ở nhịp đề, nên đây là hệ số phát lại;
+   * mặc định 0.9 là chậm hơn phòng thi một chút, và chế độ thi ép về 1.
+   */
   rate = 0.9;
 
   private voice: SpeechSynthesisVoice | null = null;
@@ -37,6 +65,9 @@ export class Audio {
   private watchdog: ReturnType<typeof setTimeout> | undefined;
   private ctx: AudioContext | null = null;
   private onVisible: (() => void) | undefined;
+  /** Một thẻ <audio> dùng lại cho mọi câu — phát câu mới là câu cũ tự dừng. */
+  private el: HTMLAudioElement | null = null;
+  private canPlayFiles: boolean | null = null;
 
   constructor() {
     if (typeof speechSynthesis === 'undefined') return;
@@ -57,10 +88,49 @@ export class Audio {
     document.addEventListener('visibilitychange', this.onVisible);
   }
 
+  /** Dừng bản thu đang phát, nếu có. */
+  private stopClip(): void {
+    if (!this.el) return;
+    try {
+      this.el.onerror = null;
+      this.el.pause();
+    } catch {
+      /* ignore */
+    }
+  }
+
   /** Detaches listeners — pair with `GameEngine.dispose`. */
   destroy(): void {
     clearTimeout(this.watchdog);
+    this.stopClip();
     if (this.onVisible) document.removeEventListener('visibilitychange', this.onVisible);
+  }
+
+  /**
+   * Địa chỉ bản thu sẵn của một câu, hoặc null nếu câu đó chưa được thu.
+   *
+   * Có để màn kiểm tra âm thanh thử đúng đường mà app dùng thật, thay vì thử giọng
+   * máy rồi kết luận nhầm là "máy không đọc được".
+   */
+  clipUrl(text: string): string | null {
+    const key = ttsKey(text);
+    return CLIPS.has(key) ? `${import.meta.env.BASE_URL}tts/${key}.mp3` : null;
+  }
+
+  /** Có bao nhiêu câu đã thu sẵn. */
+  get clipCount(): number {
+    return CLIPS.size;
+  }
+
+  /**
+   * Máy này có nghe được tiếng Trung từ app không — bằng bản thu sẵn hoặc giọng máy.
+   *
+   * Từ khi có bản thu sẵn, "máy không cài giọng tiếng Trung" không còn là câu chuyện
+   * chết người nữa, nên cảnh báo trong lúc học phải hỏi câu này chứ không hỏi riêng
+   * giọng máy.
+   */
+  canSpeak(): boolean {
+    return (this.useFiles() && CLIPS.size > 0) || this.hasChineseVoice();
   }
 
   /** True when the browser has no Mandarin voice at all — nothing to hear, ever. */
@@ -85,9 +155,18 @@ export class Audio {
   }
 
   speak(text: string): void {
-    if (typeof speechSynthesis === 'undefined' || !text || this.muted) return;
+    if (!text || this.muted) return;
     this.seq += 1;
     const seq = this.seq;
+    // Bản thu sẵn trước: đúng giọng, đúng nhịp đề, và giống nhau trên mọi máy.
+    if (this.playClip(ttsKey(text), this.rate, () => this.speakSynth(text, seq))) return;
+    this.speakSynth(text, seq);
+  }
+
+  /** Đường dự phòng: nhờ giọng máy của trình duyệt đọc. */
+  private speakSynth(text: string, seq: number): void {
+    if (typeof speechSynthesis === 'undefined') return;
+    if (seq !== this.seq) return;
     try {
       clearTimeout(this.watchdog);
       speechSynthesis.resume();
@@ -100,6 +179,66 @@ export class Audio {
       this.utter(text, seq, true);
     } catch {
       /* ignore */
+    }
+  }
+
+  /**
+   * Trình duyệt này có phát nổi mp3 không.
+   *
+   * Hỏi thẳng `canPlayType` chứ không đoán theo tên trình duyệt: jsdom trong bài test
+   * trả về chuỗi rỗng — nó thật sự không phát được gì — nên test chạy đúng đường giọng
+   * máy như trước, còn trình duyệt thật thì trả 'probably'/'maybe'.
+   */
+  private useFiles(): boolean {
+    if (this.canPlayFiles !== null) return this.canPlayFiles;
+    let ok = false;
+    try {
+      const probe = document.createElement('audio');
+      ok = typeof probe.canPlayType === 'function' && !!probe.canPlayType('audio/mpeg');
+    } catch {
+      ok = false;
+    }
+    this.canPlayFiles = ok;
+    return ok;
+  }
+
+  /**
+   * Phát một câu đã thu sẵn. Trả về false khi câu đó chưa có bản thu — lúc đó phía
+   * gọi tự chuyển sang giọng máy.
+   *
+   * `onFail` dành cho trường hợp file có trong bản kê nhưng tải hỏng (mạng đứt giữa
+   * chừng, cache lỗi): thà nghe giọng máy còn hơn ngồi im.
+   */
+  private playClip(key: string, rate: number, onFail: () => void): boolean {
+    if (!this.useFiles() || !CLIPS.has(key)) return false;
+    try {
+      // Đang có giọng máy dở dang thì cắt, kẻo hai giọng chồng lên nhau.
+      if (typeof speechSynthesis !== 'undefined') speechSynthesis.cancel();
+    } catch {
+      /* ignore */
+    }
+    try {
+      const el = this.el ?? (this.el = document.createElement('audio'));
+      const seq = this.seq;
+      el.pause();
+      el.onerror = () => {
+        if (seq === this.seq) onFail();
+      };
+      el.src = `${import.meta.env.BASE_URL}tts/${key}.mp3`;
+      // Chậm lại mà đổi cao độ thì nghe như giọng khác; giữ nguyên cao độ.
+      el.preservesPitch = true;
+      (el as HTMLAudioElement & { webkitPreservesPitch?: boolean }).webkitPreservesPitch = true;
+      el.playbackRate = Math.max(0.5, Math.min(2, rate));
+      el.currentTime = 0;
+      const p = el.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {
+          if (seq === this.seq) onFail();
+        });
+      }
+      return true;
+    } catch {
+      return false;
     }
   }
 
@@ -142,13 +281,23 @@ export class Audio {
    * the learner has turned the practice voice down.
    */
   speakDialogue(lines: string[], minRate = 0): void {
-    if (typeof speechSynthesis === 'undefined' || !lines.length || this.muted) return;
-    const parts = lines.map(splitRole).filter((p) => p.text);
-    if (!parts.length) return;
-
+    if (!lines.length || this.muted) return;
     this.seq += 1;
     const seq = this.seq;
     const rate = Math.max(this.rate, minRate);
+    // Cả lượt nghe là MỘT file: hai giọng và các khoảng nghỉ giữa lượt đã nằm sẵn
+    // trong đó, đúng như băng thi — ghép ở đây thì mỗi máy lại ra một nhịp khác.
+    const key = ttsKey(spoken(lines).join('\n'));
+    if (this.playClip(key, rate, () => this.dialogueSynth(lines, rate, seq))) return;
+    this.dialogueSynth(lines, rate, seq);
+  }
+
+  /** Đường dự phòng cho lượt nghe: ghép từng lượt bằng giọng máy. */
+  private dialogueSynth(lines: string[], rate: number, seq: number): void {
+    if (typeof speechSynthesis === 'undefined' || seq !== this.seq) return;
+    const parts = lines.map(splitRole).filter((p) => p.text);
+    if (!parts.length) return;
+
     const roles = new Set(parts.map((p) => p.role));
     const voices = new Map([...roles].map((r) => [r, this.voiceFor(r)]));
     // Distinct only if the roles genuinely landed on different voices.
@@ -227,6 +376,7 @@ export class Audio {
   hush(): void {
     this.seq += 1;
     clearTimeout(this.watchdog);
+    this.stopClip();
     try {
       // cancel() on a paused queue leaves it paused, and the next speak() would be
       // swallowed — resume first so the synth is left in a usable state.

@@ -10,9 +10,28 @@ import {
   HSK4_OVERLAP,
   HSK4_TOPICS,
 } from '.';
+import deckJson from './deck.json';
+import { EXTRA_VOCAB } from './extra';
+import { EXTRA2_VOCAB } from './extra2';
+import { EXTRA3_VOCAB } from './extra3';
+import { EXTRA4_VOCAB } from './extra4';
 import { splitHsk123 } from './hsk123';
 import { HSK4_ALL, splitHsk4 } from './hsk4';
 import { toneSpots } from '../engine/pinyin';
+
+/**
+ * Deck giáo trình: bundle của designer cộng mọi đợt `extraN.ts`.
+ *
+ * Cộng từ chính các đợt chứ không chép một con số vào đây: viết cứng thì mỗi lần
+ * thêm đợt mới là bài kiểm tra đỏ lên vì một lý do vô nghĩa, và người sửa sẽ chỉ
+ * việc thay số — tức là bài kiểm tra không còn kiểm được gì.
+ */
+const TEXTBOOK_COUNT =
+  deckJson.vocab.length +
+  EXTRA_VOCAB.length +
+  EXTRA2_VOCAB.length +
+  EXTRA3_VOCAB.length +
+  EXTRA4_VOCAB.length;
 
 /** Every HSK 1–3 row, before deduplication — `splitHsk123` with nothing to exclude. */
 const L1_L2_L3 = () => splitHsk123(new Set<string>()).fresh;
@@ -119,7 +138,7 @@ describe('HSK 1–3 base', () => {
       seen.add(v.h);
     });
     expect(DECK.vocab).toHaveLength(
-      408 + (HSK4_COUNT - HSK4_OVERLAP) + (HSK123_COUNT - HSK123_OVERLAP),
+      TEXTBOOK_COUNT + (HSK4_COUNT - HSK4_OVERLAP) + (HSK123_COUNT - HSK123_OVERLAP),
     );
   });
 

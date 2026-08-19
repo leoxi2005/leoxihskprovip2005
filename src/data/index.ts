@@ -7,6 +7,7 @@ import oldIdsJson from './oldids.json';
 import { EXTRA_GRAMMAR, EXTRA_STORIES, EXTRA_VOCAB } from './extra';
 import { EXTRA2_GRAMMAR, EXTRA2_STORIES, EXTRA2_TOPICS, EXTRA2_VOCAB } from './extra2';
 import { EXTRA3_GRAMMAR, EXTRA3_STORIES, EXTRA3_TOPICS, EXTRA3_VOCAB } from './extra3';
+import { EXTRA4_GRAMMAR, EXTRA4_STORIES, EXTRA4_TOPICS, EXTRA4_VOCAB } from './extra4';
 import { splitHsk123 } from './hsk123';
 import { splitHsk4 } from './hsk4';
 import type { Deck, MySong, Song, Vocab } from './types';
@@ -15,18 +16,32 @@ export * from './types';
 export { CONFUSABLES, EXTRA_TOPIC, type Confusable } from './extra';
 export { EXTRA2_TOPICS, TOPIC_ART, TOPIC_JOB, TOPIC_LANG, TOPIC_STUDY } from './extra2';
 export { EXTRA3_TOPICS, TOPIC_ATT, TOPIC_BODY, TOPIC_LIFE } from './extra3';
+export {
+  EXTRA4_TOPICS,
+  TOPIC_PAY,
+  TOPIC_SCHOOL,
+  TOPIC_TALK,
+  TOPIC_TRIP,
+  TOPIC_WORK,
+} from './extra4';
 
 /**
  * Every topic added after the designer's bundle — what the ⭐ shortcut on the
  * home screen isolates. Order follows the order the words appear in `DECK`, so
  * `selOnly` lines up with `engine.topics`.
  */
-export const NEW_TOPICS = [...EXTRA2_TOPICS, ...EXTRA3_TOPICS] as const;
+export const NEW_TOPICS = [...EXTRA2_TOPICS, ...EXTRA3_TOPICS, ...EXTRA4_TOPICS] as const;
 
 const bundled = deckJson as Deck;
 
-/** The textbook deck: the handoff bundle plus `extra.ts`, `extra2.ts` and `extra3.ts`. */
-const TEXTBOOK: Vocab[] = [...bundled.vocab, ...EXTRA_VOCAB, ...EXTRA2_VOCAB, ...EXTRA3_VOCAB];
+/** The textbook deck: the handoff bundle plus every `extraN.ts` drop. */
+const TEXTBOOK: Vocab[] = [
+  ...bundled.vocab,
+  ...EXTRA_VOCAB,
+  ...EXTRA2_VOCAB,
+  ...EXTRA3_VOCAB,
+  ...EXTRA4_VOCAB,
+];
 
 const HSK4 = splitHsk4(new Set(TEXTBOOK.map((v) => v.h)));
 
@@ -71,7 +86,13 @@ export const DEFAULT_OFF_TOPICS: readonly string[] = HSK123.offByDefault;
 export const DECK: Deck = {
   ...bundled,
   vocab: [...ENRICHED, ...HSK123.fresh, ...HSK4.fresh],
-  grammar: [...bundled.grammar, ...EXTRA_GRAMMAR, ...EXTRA2_GRAMMAR, ...EXTRA3_GRAMMAR],
+  grammar: [
+    ...bundled.grammar,
+    ...EXTRA_GRAMMAR,
+    ...EXTRA2_GRAMMAR,
+    ...EXTRA3_GRAMMAR,
+    ...EXTRA4_GRAMMAR,
+  ],
 };
 
 /**
@@ -94,6 +115,7 @@ export const STORIES: Record<string, string> = {
   ...EXTRA_STORIES,
   ...EXTRA2_STORIES,
   ...EXTRA3_STORIES,
+  ...EXTRA4_STORIES,
 };
 
 /** Built-in vocabulary chants. */

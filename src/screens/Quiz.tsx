@@ -32,7 +32,8 @@ export function Quiz() {
 
   // The voice list is empty until the browser fills it in, so ask again on its event.
   useEffect(() => {
-    const check = () => setVoiceOk(engine.audio.hasChineseVoice());
+    // Bản thu sẵn phát được là đủ nghe, kể cả khi máy không cài giọng tiếng Trung nào.
+    const check = () => setVoiceOk(engine.audio.canSpeak());
     check();
     if (typeof speechSynthesis === 'undefined') return;
     speechSynthesis.addEventListener('voiceschanged', check);

@@ -13,6 +13,7 @@ import {
 } from '../data';
 import { EXTRA2_GRAMMAR, EXTRA2_VOCAB } from '../data/extra2';
 import { EXTRA3_GRAMMAR, EXTRA3_VOCAB } from '../data/extra3';
+import { EXTRA4_VOCAB } from '../data/extra4';
 import { GameEngine } from './GameEngine';
 import { stripTones, tonePattern } from './pinyin';
 import { ttsFor } from './questions';
@@ -367,7 +368,9 @@ describe('the ⭐ shortcut', () => {
     // selOnly walks `engine.topics`, so the order here has to match deck order.
     expect(engine.topics.filter((t) => engine.sel[t])).toEqual([...NEW_TOPICS]);
     // The notebook and every game mode read the same pool, so both narrow together.
-    expect(engine.pools().vocab).toHaveLength(EXTRA2_VOCAB.length + EXTRA3_VOCAB.length);
+    expect(engine.pools().vocab).toHaveLength(
+      EXTRA2_VOCAB.length + EXTRA3_VOCAB.length + EXTRA4_VOCAB.length,
+    );
     engine.dispose();
   });
 });
