@@ -1,5 +1,5 @@
 import { OLD_IDS } from '../data';
-import type { Kind, SrsEntry, Stats } from './types';
+import type { Kind, Settings, SrsEntry, Stats } from './types';
 
 export const KEYS = {
   srs: 'hskq_srs',
@@ -170,6 +170,26 @@ export function migrateSrs(srs: SrsMap): SrsMap {
   }
   if (changed) save(KEYS.srs, out);
   return changed ? out : srs;
+}
+
+/**
+ * Nâng tốc độ đọc đã lưu từ 0.9 lên 1 — một lần duy nhất.
+ *
+ * Không phải đổi ý về mặc định, mà là con số ấy đã đổi nghĩa: trước đây nó là phần
+ * trăm tốc độ *của giọng máy trình duyệt*, giờ là phần trăm *tốc độ băng thi*. Ai
+ * chưa từng đụng vào thanh trượt thì đang giữ đúng con số mặc định cũ, và để nguyên
+ * thì họ luyện nghe chậm hơn phòng thi mà không hề biết.
+ *
+ * Chỉ nâng đúng giá trị mặc định cũ. Ai đã tự kéo sang 0.6 hay 1.2 là đã chọn có ý
+ * thức — đổi giúp họ mới là thô lỗ.
+ */
+export function migrateVoiceRate(s: Settings): Settings {
+  if (migDone().rate) return s;
+  markMig('rate');
+  if (s.voiceRate !== 0.9) return s;
+  const out = { ...s, voiceRate: 1 };
+  save(KEYS.settings, out);
+  return out;
 }
 
 /**

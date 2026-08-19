@@ -2,6 +2,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Audio } from './audio';
 import { ttsKey, ttsKeyOf } from './tts';
 import clipKeys from '../data/tts.json';
+import { migrateVoiceRate } from './storage';
+import { DEFAULT_SETTINGS } from './types';
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -134,5 +136,25 @@ describe('chọn đường đọc', () => {
 describe('bản kê khoá', () => {
   it('không có khoá trùng', () => {
     expect(new Set(clipKeys).size).toBe(clipKeys.length);
+  });
+});
+
+describe('tốc độ đọc mặc định', () => {
+  it('mặc định là 1 — đúng tốc độ băng thi', () => {
+    expect(DEFAULT_SETTINGS.voiceRate).toBe(1);
+  });
+
+  it('nâng 0.9 cũ lên 1 đúng một lần', () => {
+    localStorage.clear();
+    const out = migrateVoiceRate({ ...DEFAULT_SETTINGS, voiceRate: 0.9 });
+    expect(out.voiceRate).toBe(1);
+    // Lần thứ hai không đụng vào nữa: người học kéo xuống 0.8 xong tải lại trang
+    // mà bị kéo về 1 thì thanh trượt coi như hỏng.
+    expect(migrateVoiceRate({ ...DEFAULT_SETTINGS, voiceRate: 0.8 }).voiceRate).toBe(0.8);
+  });
+
+  it('không đụng tới tốc độ người học tự chọn', () => {
+    localStorage.clear();
+    expect(migrateVoiceRate({ ...DEFAULT_SETTINGS, voiceRate: 0.6 }).voiceRate).toBe(0.6);
   });
 });

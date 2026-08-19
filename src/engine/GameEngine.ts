@@ -17,6 +17,7 @@ import {
   loadLog,
   loadRaw,
   migrateSrs,
+  migrateVoiceRate,
   newBudget,
   nextEntry,
   save,
@@ -134,7 +135,7 @@ export class GameEngine {
   // -- lifecycle ------------------------------------------------------------
 
   init(): void {
-    this.settings = { ...DEFAULT_SETTINGS, ...load(KEYS.settings, {}) };
+    this.settings = migrateVoiceRate({ ...DEFAULT_SETTINGS, ...load(KEYS.settings, {}) });
     this.audio.rate = this.settings.voiceRate;
     this.stats = { ...DEFAULT_STATS, ...load(KEYS.stats, {}) };
     this.srs = seedRecallLanes(migrateSrs(load<SrsMap>(KEYS.srs, {})));
