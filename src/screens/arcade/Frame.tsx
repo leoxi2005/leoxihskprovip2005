@@ -11,6 +11,14 @@ export interface GameOver {
 }
 
 /**
+ * Bề ngang tối đa của một ván.
+ *
+ * Không phải 820px như phần ôn tập: khung ôn tập hẹp vì đọc một câu dài quá thì mỏi mắt,
+ * còn ở đây thứ cần rộng là **bàn chơi** — sân càng to thì chữ càng to và càng dễ nhắm.
+ */
+const WIDE = 'min(1400px, 95vw)';
+
+/**
  * Khung chung của ba trò chơi: thanh điểm, mạng, kỷ lục, và bảng hết ván.
  *
  * Cố ý KHÔNG có nút Kiểm tra và không có bảng lời giải — đó là nhịp của phần ôn tập,
@@ -50,7 +58,7 @@ export function ArcadeFrame({
         gap: 12,
       }}
     >
-      <div style={{ width: '100%', maxWidth: 820, display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ width: WIDE, display: 'flex', alignItems: 'center', gap: 10 }}>
         <button
           onClick={engine.goHome}
           title="Thoát"
@@ -75,8 +83,8 @@ export function ArcadeFrame({
             color: '#fff',
             border: `2px solid ${C.ink}`,
             borderRadius: 99,
-            padding: '5px 16px',
-            fontSize: 14,
+            padding: '6px 18px',
+            fontSize: 15,
             fontWeight: 800,
             whiteSpace: 'nowrap',
             boxShadow: shadow(3),
@@ -87,7 +95,7 @@ export function ArcadeFrame({
         <span style={{ flex: 1 }} />
         {hud}
         {lives !== null && (
-          <span style={{ fontSize: 17, whiteSpace: 'nowrap' }}>
+          <span style={{ fontSize: 21, whiteSpace: 'nowrap' }}>
             {'❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, 3 - lives))}
           </span>
         )}
@@ -96,8 +104,8 @@ export function ArcadeFrame({
             background: C.ink,
             color: C.soft,
             borderRadius: 99,
-            padding: '5px 16px',
-            fontSize: 15,
+            padding: '6px 20px',
+            fontSize: 19,
             fontWeight: 800,
             whiteSpace: 'nowrap',
           }}
@@ -109,7 +117,7 @@ export function ArcadeFrame({
         </span>
       </div>
 
-      <div style={{ position: 'relative', width: '100%', maxWidth: 820 }}>
+      <div style={{ position: 'relative', width: WIDE }}>
         {children}
 
         {over && (

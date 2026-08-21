@@ -28,6 +28,8 @@ export const KEYS = {
   meta: 'hskq_meta',
   /** Kỷ lục từng trò chơi. */
   arcade: 'hskq_arcade',
+  /** Hạng đấu của trò Đấu Chữ. */
+  rank: 'hskq_rank',
 } as const;
 
 /** localStorage can throw (private mode, quota) — progress is best-effort. */

@@ -1,7 +1,9 @@
 import { useGameState } from '../engine/useEngine';
 import { BlitzGame } from './arcade/BlitzGame';
+import { DuelGame } from './arcade/DuelGame';
 import { RainGame } from './arcade/RainGame';
 import { SnakeGame } from './arcade/SnakeGame';
+import { TowerGame } from './arcade/TowerGame';
 
 /**
  * Chọn trò để chạy.
@@ -18,6 +20,10 @@ export function Arcade() {
       return <SnakeGame key="snake" />;
     case 'blitz':
       return <BlitzGame key="blitz" />;
+    case 'duel':
+      return <DuelGame key="duel" />;
+    case 'tower':
+      return <TowerGame key="tower" />;
     default:
       return null;
   }

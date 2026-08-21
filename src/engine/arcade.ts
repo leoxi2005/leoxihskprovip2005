@@ -13,7 +13,7 @@ import type { Vocab } from '../data';
 import { shuffle } from './questions';
 import { KEYS, load, save } from './storage';
 
-export type ArcadeId = 'rain' | 'snake' | 'blitz';
+export type ArcadeId = 'rain' | 'snake' | 'blitz' | 'duel' | 'tower';
 
 export interface ArcadeCard {
   id: ArcadeId;
@@ -46,6 +46,24 @@ export const ARCADES: ArcadeCard[] = [
     key: 'x',
   },
   {
+    id: 'duel',
+    icon: '⚔️',
+    name: 'Đấu Chữ',
+    desc: 'Đua 10 câu với đối thủ — thắng thì lên hạng, thua thì tụt',
+    skill: 'Trả lời đúng NHANH HƠN người khác',
+    bg: '#7a2d3d',
+    key: 'g',
+  },
+  {
+    id: 'tower',
+    icon: '🗼',
+    name: 'Tháp Vàng',
+    desc: 'Mỗi tầng nhân đôi vàng — rút bây giờ hay leo thêm một tầng?',
+    skill: 'Biết dừng đúng lúc, và nhớ chắc dưới áp lực',
+    bg: '#a4571f',
+    key: 't',
+  },
+  {
     id: 'blitz',
     icon: '⚡',
     name: 'Nối Chữ Cấp Tốc',
@@ -55,6 +73,79 @@ export const ARCADES: ArcadeCard[] = [
     key: 'v',
   },
 ];
+
+/**
+ * Sáu hạng đấu của trò Đấu Chữ.
+ *
+ * Có hạng để leo là thứ giữ người chơi quay lại mạnh hơn mọi điểm số: điểm cao hôm
+ * nay không mất đi đâu, còn hạng thì **tụt được** — và cái có thể mất mới là cái người
+ * ta giữ. Đối thủ máy mạnh dần theo hạng, nên leo lên là thật sự phải chơi khá hơn.
+ */
+export interface Tier {
+  name: string;
+  icon: string;
+  /** Đối thủ trả lời một câu mất bao nhiêu mili giây. */
+  botMs: number;
+  /** Tỉ lệ đối thủ trả lời đúng. */
+  botAcc: number;
+  color: string;
+}
+
+export const TIERS: Tier[] = [
+  { name: 'Đồng', icon: '🥉', botMs: 5200, botAcc: 0.72, color: '#a4761b' },
+  { name: 'Bạc', icon: '🥈', botMs: 4300, botAcc: 0.8, color: '#8a7a5f' },
+  { name: 'Vàng', icon: '🥇', botMs: 3600, botAcc: 0.86, color: '#e8a93c' },
+  { name: 'Bạch Kim', icon: '💎', botMs: 3000, botAcc: 0.9, color: '#3b7ea1' },
+  { name: 'Kim Cương', icon: '👑', botMs: 2500, botAcc: 0.94, color: '#8a63b8' },
+  { name: 'Cao Thủ', icon: '🐉', botMs: 2100, botAcc: 0.97, color: '#c94f38' },
+];
+
+/** Thắng đủ ngần này sao thì lên hạng. */
+export const STARS_PER_TIER = 3;
+
+export interface Rank {
+  /** Chỉ số trong `TIERS`. */
+  tier: number;
+  stars: number;
+  wins: number;
+  losses: number;
+}
+
+export const DEFAULT_RANK: Rank = { tier: 0, stars: 0, wins: 0, losses: 0 };
+
+export const loadRank = (): Rank => ({ ...DEFAULT_RANK, ...load<Partial<Rank>>(KEYS.rank, {}) });
+
+/**
+ * Ghi kết quả một trận.
+ *
+ * Thua ở hạng thấp nhất thì **không tụt xuống dưới 0 sao**: người mới học mà trận đầu
+ * thua đã bị đẩy xuống nữa thì họ đóng app, chứ không chơi lại.
+ */
+export function applyDuel(rank: Rank, won: boolean): { rank: Rank; promoted: boolean; demoted: boolean } {
+  const r = { ...rank, wins: rank.wins + (won ? 1 : 0), losses: rank.losses + (won ? 0 : 1) };
+  if (won) {
+    r.stars += 1;
+    if (r.stars >= STARS_PER_TIER && r.tier < TIERS.length - 1) {
+      r.stars = 0;
+      r.tier += 1;
+      return { rank: r, promoted: true, demoted: false };
+    }
+    if (r.stars > STARS_PER_TIER) r.stars = STARS_PER_TIER;
+    return { rank: r, promoted: false, demoted: false };
+  }
+  r.stars -= 1;
+  if (r.stars < 0) {
+    if (r.tier > 0) {
+      r.tier -= 1;
+      r.stars = STARS_PER_TIER - 1;
+      return { rank: r, promoted: false, demoted: true };
+    }
+    r.stars = 0;
+  }
+  return { rank: r, promoted: false, demoted: false };
+}
+
+export const saveRank = (r: Rank): void => save(KEYS.rank, r);
 
 export const arcadeById = (id: ArcadeId): ArcadeCard => ARCADES.find((a) => a.id === id)!;
 

@@ -5,9 +5,15 @@ import { useEngine } from '../../engine/useEngine';
 import { C, F, shadow } from '../../theme';
 import { ArcadeFrame, type GameOver } from './Frame';
 
-const H = 420;
-/** Cạnh một quân chữ, để nó chạm đáy đúng lúc trông như chạm đáy. */
-const TILE = 62;
+/**
+ * Chiều cao sân, tính theo màn hình chứ không phải một con số cố định.
+ *
+ * Bản đầu khoá cứng 420px: trên màn hình rộng thì sân thành một cái tem, chữ bé tí và
+ * chẳng có cảm giác gì là đang chơi.
+ */
+const BOARD_H = 'clamp(360px, 66vh, 780px)';
+/** Chiều cao mà mọi con số tốc độ bên dưới được chỉnh theo. */
+const REF_H = 480;
 
 interface Drop {
   key: number;
@@ -39,8 +45,18 @@ interface Rain {
 
 /** Mỗi 4 chữ bắt được thì lên một cấp: rơi nhanh hơn và đông hơn. */
 const levelOf = (score: number): number => Math.floor(score / 4);
-const fallSpeed = (level: number): number => 44 + level * 8;
 const dropCount = (level: number): number => Math.min(6, 3 + Math.floor(level / 2));
+
+/**
+ * Tốc độ rơi, tính theo chiều cao SÂN chứ không theo pixel tuyệt đối.
+ *
+ * Sân cao gấp đôi mà tốc độ giữ nguyên thì mỗi chữ có gấp đôi thời gian rơi, tức là
+ * màn hình càng to trò càng dễ. Nhân theo tỉ lệ thì thời gian rơi giữ nguyên trên mọi máy.
+ */
+const fallSpeed = (level: number, h: number): number => (44 + level * 8) * (h / REF_H);
+
+/** Cạnh một quân chữ, co giãn theo sân. */
+const tileSize = (h: number): number => Math.max(58, Math.min(104, h * 0.15));
 
 /**
  * Mưa Chữ — trò tìm-và-bắt.
@@ -64,6 +80,10 @@ export function RainGame() {
   const [pool] = useState(() => engine.pools().vocab);
   const [, force] = useReducer((n: number) => n + 1, 0);
 
+  const boxRef = useRef<HTMLDivElement | null>(null);
+  /** Chiều cao sân thật, đo từ DOM — mọi phép tính rơi đều dựa vào con số này. */
+  const hRef = useRef(REF_H);
+
   const g = useRef<Rain>({
     drops: [],
     target: null,
@@ -78,7 +98,9 @@ export function RainGame() {
   const spawn = (level: number) => {
     const round = arcadeRound(pool, dropCount(level));
     if (!round) return;
-    const v = fallSpeed(level);
+    const h = hRef.current;
+    const tile = tileSize(h);
+    const v = fallSpeed(level, h);
     const lanes = round.opts.length;
     g.current.target = round.word;
     g.current.shownAt = Date.now();
@@ -88,7 +110,7 @@ export function RainGame() {
       target: word.h === round.word.h,
       // Một chữ một làn, lệch ngẫu nhiên trong làn để bàn không thành một hàng thẳng.
       x: ((i + 0.5) / lanes) * 100 + (Math.random() * 8 - 4),
-      y: -TILE - i * 52 - Math.random() * 40,
+      y: -tile - i * (tile * 0.85) - Math.random() * 40,
       vy: v * (0.88 + Math.random() * 0.28),
       hit: null,
       hitAt: 0,
@@ -130,6 +152,18 @@ export function RainGame() {
     force();
   };
 
+  // Đo sân và đo lại mỗi khi cửa sổ đổi cỡ.
+  useEffect(() => {
+    const measure = () => {
+      const h = boxRef.current?.clientHeight;
+      if (h) hRef.current = h;
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (boxRef.current) ro.observe(boxRef.current);
+    return () => ro.disconnect();
+  }, []);
+
   useEffect(() => {
     spawn(0);
     force();
@@ -153,7 +187,7 @@ export function RainGame() {
           continue;
         }
         d.y += d.vy * dt;
-        if (d.y > H) {
+        if (d.y > hRef.current) {
           if (d.target) missed = true;
           continue;
         }
@@ -180,6 +214,7 @@ export function RainGame() {
 
   const s = g.current;
   const level = levelOf(s.score);
+  const tile = tileSize(hRef.current);
 
   return (
     <ArcadeFrame
@@ -187,7 +222,7 @@ export function RainGame() {
       score={s.score}
       lives={s.lives}
       hud={
-        <span style={{ fontSize: 12, fontWeight: 800, color: C.muted, whiteSpace: 'nowrap' }}>
+        <span style={{ fontSize: 13, fontWeight: 800, color: C.muted, whiteSpace: 'nowrap' }}>
           Cấp {level + 1}
         </span>
       }
@@ -196,12 +231,13 @@ export function RainGame() {
     >
       <div
         key={s.shakeAt}
+        ref={boxRef}
         style={{
           background: 'linear-gradient(180deg,#eaf1f6,#fdf8ec)',
           border: `3px solid ${C.ink}`,
           borderRadius: 24,
           boxShadow: shadow(6),
-          height: H,
+          height: BOARD_H,
           position: 'relative',
           overflow: 'hidden',
           animation: s.shakeAt ? 'shake .3s ease' : undefined,
@@ -215,15 +251,15 @@ export function RainGame() {
             right: 0,
             background: C.ink,
             color: C.soft,
-            padding: '10px 16px',
+            padding: '12px 16px',
             textAlign: 'center',
             zIndex: 5,
           }}
         >
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.08em', opacity: 0.7 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '.08em', opacity: 0.7 }}>
             BẮT CHỮ MANG NGHĨA NÀY
           </div>
-          <div style={{ fontSize: 21, fontWeight: 800, lineHeight: 1.3 }}>{s.target?.m ?? '…'}</div>
+          <div style={{ fontSize: 27, fontWeight: 800, lineHeight: 1.3 }}>{s.target?.m ?? '…'}</div>
         </div>
 
         {s.drops.map((d) => (
@@ -235,18 +271,20 @@ export function RainGame() {
               left: d.x + '%',
               top: d.y,
               transform: 'translateX(-50%)',
-              width: TILE,
-              height: TILE,
+              // Bề ngang co theo chữ: 乒乓球 ba chữ mà ép vào ô vuông là tràn ra ngoài.
+              minWidth: tile,
+              height: tile,
+              padding: '0 12px',
+              whiteSpace: 'nowrap',
               borderRadius: 16,
               border: `3px solid ${C.ink}`,
               background: d.hit === 'ok' ? C.green : d.hit === 'bad' ? C.red : C.card,
               color: d.hit ? '#fff' : C.ink,
               fontFamily: F.han,
-              fontSize: 26,
+              fontSize: Math.round(tile * 0.42),
               fontWeight: 700,
               cursor: 'pointer',
               boxShadow: shadow(3),
-              padding: 0,
             }}
           >
             {d.word.h}

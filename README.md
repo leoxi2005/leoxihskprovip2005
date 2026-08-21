@@ -3,7 +3,7 @@
 **Chơi thử: https://leoxi2005.github.io/leoxihskprovip2005/**
 
 Ứng dụng luyện thi **HSK 4** cho người Việt, theo kiểu game: lặp lại ngắt quãng (SRS) hai làn,
-XP, lên cấp, chuỗi ngày, đấu trùm, **18 chế độ ôn + 3 trò chơi thật**, nhiệm vụ hằng ngày đổi
+XP, lên cấp, chuỗi ngày, đấu trùm, **18 chế độ ôn + 5 trò chơi thật**, nhiệm vụ hằng ngày đổi
 mỗi ngày, vàng · rương · linh thú · huy hiệu, một đề thi thử đúng cấu trúc thật, và một lộ trình đếm ngược tới
 ngày thi. Toàn bộ tiến độ lưu ngay trong trình duyệt — không cần tài khoản, không cần server.
 
@@ -60,11 +60,11 @@ Trong lúc chơi: `1–9` chọn đáp án · `Enter` kiểm tra & chuyển câu
 `Esc` thoát ô tìm kiếm. Phím tắt của mỗi chế độ được in ngay trên thẻ game
 (`src/engine/games.ts` là nguồn duy nhất cho cả lưới thẻ lẫn bàn phím).
 
-## Ba trò chơi
+## Năm trò chơi
 
 Mười tám chế độ ở bảng trên đều chung một nhịp: ra câu → chọn → bấm Kiểm tra → đọc lời giải.
 Nhịp đó tốt cho việc học nhưng nó **không phải nhịp của một trò chơi**: không có gì chạy khi bạn
-ngồi im, và không bao giờ thua. Ba trò dưới đây bỏ hẳn nút Kiểm tra — có mạng, có đồng hồ, có kỷ
+ngồi im, và không bao giờ thua. Năm trò dưới đây bỏ hẳn nút Kiểm tra — có mạng, có đồng hồ, có kỷ
 lục riêng, và thua thật.
 
 | | Trò | Phím | Cách chơi |
@@ -72,8 +72,23 @@ lục riêng, và thua thật.
 | 🌧️ | **Mưa Chữ** | `R` | Nghĩa tiếng Việt hiện trên băng, mấy chữ Hán rơi xuống — bắt đúng chữ trước khi nó chạm đất. Bắt nhầm mất một mạng. Cứ 4 chữ lên một cấp: rơi nhanh hơn và đông hơn |
 | 🐍 | **Rắn Săn Chữ** | `X` | Lái rắn tới ăn chữ khớp nghĩa. Ăn nhầm hoặc đâm tường thì mất một mạng, rắn về giữa bàn |
 | ⚡ | **Nối Chữ Cấp Tốc** | `V` | 12 ô, 6 cặp. Nối đúng được **cộng giờ** (combo càng cao cộng càng nhiều), nối sai mất 2,5 giây. Dọn được cặp nào thì có cặp mới điền vào chỗ đó — bàn không bao giờ hết, chỉ có đồng hồ hết |
+| ⚔️ | **Đấu Chữ** | `G` | Đua 10 câu với một đối thủ máy. Thắng được một ⭐, đủ ba ⭐ thì **lên hạng**; thua thì mất ⭐ và có thể **tụt hạng**. Sáu hạng: Đồng → Bạc → Vàng → Bạch Kim → Kim Cương → Cao Thủ |
+| 🗼 | **Tháp Vàng** | `T` | Mỗi tầng leo được **nhân vàng lên 1,6 lần**, đồng hồ mỗi tầng lại siết chặt hơn. Nút "Rút" luôn ở đó — sai một câu là mất sạch số đang treo |
 
-Ba trò này chỉ hỏi được thứ trả lời được trong hai giây — nhận mặt chữ — nên chúng **bổ sung** cho
+**Đấu Chữ** là trò duy nhất trong app mà bạn thua *một người khác* chứ không thua đồng hồ. Điểm số
+thì chỉ có thể tăng, còn hạng thì **tụt được** — và cái có thể mất mới là cái người ta quay lại
+giữ. Đối thủ mạnh dần theo hạng (Đồng trả lời 5,2 giây và sai 28%; Cao Thủ trả lời 2,1 giây và gần
+như không sai), nên leo hạng là phải chơi khá lên thật chứ không phải cày đủ số trận. Nó **không**
+phản ứng theo tốc độ người chơi: một trận lúc nào cũng sát nút thì thắng cũng chẳng còn nghĩa gì.
+Trước mỗi trận có đếm ngược 3 giây — thiếu nó thì đồng hồ đối thủ chạy ngay lúc màn hình hiện ra,
+và người chơi thua khi còn đang đọc câu đầu.
+
+**Tháp Vàng** là trò duy nhất bạn **tự chọn lúc dừng**. Ở tầng 8 bạn đang giữ 270 vàng, leo thêm
+một tầng thành 430 — và phải tự trả lời "mình có thật sự nhớ chắc từ này không?" trước khi bấm.
+Không chế độ ôn nào bắt người học tự đánh giá độ chắc chắn của chính mình, mà đó lại đúng là thứ
+quyết định điểm trong phòng thi.
+
+Cả năm trò chỉ hỏi được thứ trả lời được trong hai giây — nhận mặt chữ — nên chúng **bổ sung** cho
 các chế độ ôn chứ không thay thế. Vài quyết định đi kèm:
 
 - Vẫn **chấm SRS thật**: bốn lựa chọn và vài giây suy nghĩ là bằng chứng thật, và nhiệm vụ hằng
@@ -85,7 +100,11 @@ các chế độ ôn chứ không thay thế. Vài quyết định đi kèm:
 - Từ nhiễu luôn khác nghĩa hẳn từ đích. Trong một trò chơi hai giây, hai nghĩa na ná nhau không
   phải câu hỏi khó — đó là một cái bẫy đọc.
 
-Về mặt kỹ thuật, cả ba giữ toàn bộ trạng thái trong một `ref` và gọi `force()` mỗi khung hình chứ
+Sân chơi rộng theo màn hình (`min(1400px, 95vw)`) và cao theo `vh`, không phải một con số cố định:
+bản đầu khoá cứng 820×420 nên trên màn hình rộng nó thành một cái tem. Tốc độ rơi của Mưa Chữ nhân
+theo chiều cao sân, nếu không thì màn hình càng to trò càng dễ.
+
+Về mặt kỹ thuật, cả năm giữ toàn bộ trạng thái trong một `ref` và gọi `force()` mỗi khung hình chứ
 không dùng `setState` trong vòng lặp. Lý do: `StrictMode` gọi hàm cập nhật state hai lần, mà ở đây
 mỗi lần cập nhật kèm hiệu ứng thật (trừ mạng, ghi SRS, cộng vàng) — chạy hai lần là mất hai mạng
 cho một chữ và cộng đôi phần thưởng.
@@ -299,14 +318,14 @@ src/
     segment.ts     cắt câu tiếng Trung thành quân bài (chế độ Dựng Câu)
     diff.ts        chấm bài chép chính tả bằng chuỗi con chung dài nhất
     numbers.ts     sinh bộ đề bẫy số & giờ, cố định để thu sẵn được
-    arcade.ts      danh sách trò chơi, bốc lượt và kỷ lục
+    arcade.ts      danh sách trò chơi, bốc lượt, kỷ lục và bảng hạng đấu
     quests.ts      ba nhiệm vụ mỗi ngày, bốc theo ngày tháng
     meta.ts        vàng · rương · linh thú · băng giữ chuỗi
     awards.ts      26 huy hiệu, tính lại từ nhật ký
     storage.ts     localStorage, hộp SRS, migrate dữ liệu v1
     audio.ts       TTS tiếng Trung + hiệu ứng âm thanh WebAudio
   screens/       Home · Quiz · Result · Notebook · Stats · Arcade
-    arcade/        RainGame · SnakeGame · BlitzGame + khung chung
+    arcade/        RainGame · SnakeGame · BlitzGame · DuelGame · TowerGame + khung chung
   components/    Bar · Confetti · StrokeAnimation · SongPlayer · Quests · Awards · RewardModal
   theme.ts       design token
 ```
@@ -324,7 +343,7 @@ nhóm cuối được xoay vòng bằng con trỏ lưu sẵn để hai phiên li
 
 Dữ liệu trong localStorage: `hskq_srs`, `hskq_stats`, `hskq_topics_v2`, `hskq_settings`,
 `hskq_best_endless`, `hskq_muted`, `hskq_finale`, `hskq_rot_*`, `hskq_meta` (vàng · rương · linh
-thú), `hskq_arcade` (kỷ lục ba trò chơi).
+thú), `hskq_arcade` (kỷ lục năm trò chơi), `hskq_rank` (hạng đấu).
 
 ## Cấu hình
 

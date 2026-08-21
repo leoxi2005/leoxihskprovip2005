@@ -533,6 +533,19 @@ export class GameEngine {
     else this.audio.wrong();
   };
 
+  /**
+   * Gửi thẳng một khoản vàng vào túi — trò Tháp Vàng dùng khi người chơi rút.
+   *
+   * Tách khỏi `arcadeFinish` vì đây không phải phần thưởng theo điểm mà là số vàng
+   * người chơi đã tự quyết định dừng lại để giữ. Rút thì được, tham thì mất trắng.
+   */
+  arcadeBank = (coins: number): void => {
+    if (coins <= 0) return;
+    this.meta = addCoins(this.meta, coins);
+    saveMeta(this.meta);
+    this.setState({ metaVer: this.state.metaVer + 1 });
+  };
+
   /** Hết ván: cộng XP, cộng vàng, ghi kỷ lục. */
   arcadeFinish = (id: ArcadeId, score: number): { xp: number; coins: number; record: boolean } => {
     const xp = arcadeXp(score);

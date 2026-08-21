@@ -224,10 +224,12 @@ export function BlitzGame() {
           border: `3px solid ${C.ink}`,
           borderRadius: 24,
           boxShadow: shadow(6),
-          padding: 14,
+          padding: 18,
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit,minmax(150px,1fr))',
-          gap: 10,
+          // Bốn cột: mười hai ô trải thành một hàng dài trên màn hình rộng thì mắt
+          // phải quét ngang cả mét, mà quét bàn mới là phần khó của trò này.
+          gridTemplateColumns: 'repeat(4,1fr)',
+          gap: 14,
         }}
       >
         {tiles.map((t) => {
@@ -238,7 +240,7 @@ export function BlitzGame() {
               key={t.id}
               onClick={() => tap(t)}
               style={{
-                minHeight: 74,
+                minHeight: 'clamp(78px, 13vh, 132px)',
                 borderRadius: 16,
                 border: `3px solid ${isBad ? C.red : isSel ? C.ochre : C.edge}`,
                 background: isBad ? C.badBg : isSel ? C.soft : C.panel,
@@ -246,7 +248,7 @@ export function BlitzGame() {
                 cursor: 'pointer',
                 padding: '10px 12px',
                 fontFamily: t.kind === 'h' ? F.han : F.ui,
-                fontSize: t.kind === 'h' ? 30 : 15,
+                fontSize: t.kind === 'h' ? 'clamp(28px, 4.2vh, 44px)' : 'clamp(15px, 2.1vh, 20px)',
                 fontWeight: 700,
                 color: C.ink,
                 lineHeight: 1.35,

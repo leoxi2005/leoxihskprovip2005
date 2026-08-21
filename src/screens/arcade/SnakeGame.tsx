@@ -212,26 +212,31 @@ export function SnakeGame() {
       over={s.over}
       onRetry={retry}
     >
+      {/* Bàn quyết định bề ngang (theo chiều cao × tỉ lệ ô), băng đề bám theo bàn —
+          nên cả hai luôn bằng nhau dù màn hình rộng cỡ nào. */}
+      <div style={{ width: 'fit-content', margin: '0 auto', maxWidth: '100%' }}>
       <div
         style={{
           background: C.ink,
           color: C.soft,
           border: `3px solid ${C.ink}`,
           borderRadius: '20px 20px 0 0',
-          padding: '10px 16px',
+          padding: '12px 16px',
           textAlign: 'center',
         }}
       >
-        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.08em', opacity: 0.7 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '.08em', opacity: 0.7 }}>
           ĂN CHỮ MANG NGHĨA NÀY
         </div>
-        <div style={{ fontSize: 20, fontWeight: 800, lineHeight: 1.3 }}>{s.target?.m ?? '…'}</div>
+        <div style={{ fontSize: 26, fontWeight: 800, lineHeight: 1.3 }}>{s.target?.m ?? '…'}</div>
       </div>
 
       <div
         style={{
           position: 'relative',
-          width: '100%',
+          // Cao trước, rộng suy ra từ tỉ lệ ô: khoá bề ngang bằng 100% thì trên màn
+          // hình rộng bàn cao gần nghìn pixel, phải cuộn mới thấy hết con rắn.
+          height: 'clamp(320px, 62vh, 720px)',
           aspectRatio: `${COLS} / ${ROWS}`,
           background: bg,
           border: `3px solid ${C.ink}`,
@@ -257,7 +262,7 @@ export function SnakeGame() {
               alignItems: 'center',
               justifyContent: 'center',
               fontFamily: F.han,
-              fontSize: 19,
+              fontSize: 'min(2.6vh, 22px)',
               fontWeight: 700,
               color: C.ink,
               background: C.soft,
@@ -286,12 +291,14 @@ export function SnakeGame() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 15,
+              fontSize: 'min(2.4vh, 20px)',
             }}
           >
             {i === 0 ? '🐍' : ''}
           </div>
         ))}
+      </div>
+
       </div>
 
       {/* Bàn phím mũi tên trên màn hình, cho điện thoại. */}
