@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Awards } from '../components/Awards';
 import { DECK } from '../data';
 import { KEYS, load, loadLog } from '../engine/storage';
+import { PASS, SECTION_NAME, advice, predictScore } from '../engine/forecast';
 import { byKind, forecast, recentDays, streakFrom, topMissed } from '../engine/stats';
 import { useEngine, useGameState } from '../engine/useEngine';
 import { C, CHIP_LABELS, F, shadow } from '../theme';
@@ -59,6 +60,9 @@ export function Stats() {
 
   const total = log.length;
   const right = log.reduce((n, r) => n + r[3], 0);
+  /** Ước lượng điểm nếu thi hôm nay, tính từ chính nhật ký. */
+  const pred = useMemo(() => predictScore(log), [log]);
+  const examBest = exams.length ? Math.max(...exams.map((e) => e.total)) : null;
 
   return (
     <div style={{ minHeight: '100vh', maxWidth: 900, margin: '0 auto', padding: '20px 16px 60px' }}>
@@ -85,6 +89,76 @@ export function Stats() {
           {total} lượt trả lời · đúng {total ? Math.round((right / total) * 100) : 0}% · chuỗi {streak} ngày
         </span>
       </div>
+
+      {total > 0 && (
+        <section style={{ ...panel, borderColor: pred.total >= PASS ? C.green : C.ink }}>
+          <h3 style={h2}>Nếu thi hôm nay</h3>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, flexWrap: 'wrap' }}>
+            <span
+              style={{
+                fontSize: 44,
+                fontWeight: 800,
+                lineHeight: 1,
+                color: pred.total >= PASS ? C.okInk : C.badInk,
+              }}
+            >
+              {pred.total}
+            </span>
+            <span style={{ fontSize: 16, fontWeight: 800, color: C.muted }}>/300</span>
+            <span style={{ fontSize: 13, fontWeight: 800, color: pred.total >= PASS ? C.okInk : C.badInk }}>
+              {pred.total >= PASS ? '✓ trên ngưỡng đạt 180' : `dưới ngưỡng đạt 180`}
+            </span>
+            {examBest !== null && (
+              <span style={{ fontSize: 13, fontWeight: 700, color: C.muted }}>
+                · đề thi thử tốt nhất: <b style={{ color: C.body }}>{examBest}/300</b>
+              </span>
+            )}
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, margin: '14px 0 10px' }}>
+            {pred.sections.map((sec) => (
+              <div key={sec.id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ width: 52, fontSize: 13, fontWeight: 800 }}>{SECTION_NAME[sec.id]}</span>
+                <div
+                  style={{
+                    flex: 1,
+                    height: 16,
+                    background: C.track,
+                    border: `2px solid ${C.ink}`,
+                    borderRadius: 99,
+                    overflow: 'hidden',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: sec.pct + '%',
+                      height: '100%',
+                      background: !sec.enough
+                        ? C.edge
+                        : sec.pct >= 60
+                          ? 'linear-gradient(90deg,#4f9d5f,#7bbd6a)'
+                          : 'linear-gradient(90deg,#e8a93c,#c94f38)',
+                    }}
+                  />
+                </div>
+                <span style={{ fontSize: 13, fontWeight: 800, width: 132, textAlign: 'right', color: C.muted }}>
+                  {sec.enough ? `${sec.points}/100 · ${sec.n} lượt` : `${sec.n} lượt — chưa đủ`}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <p style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 700, color: C.body, lineHeight: 1.6 }}>
+            👉 {advice(pred, examBest)}
+          </p>
+          <p style={{ ...sub, margin: 0 }}>
+            Con số này tính từ tỉ lệ đúng của bạn ở những dạng câu giống đề, và nó{' '}
+            <b>lạc quan hơn điểm thi thật</b>: lúc ôn thì không bấm giờ, sai được nghe lại, câu nào cũng có
+            lời giải ngay. Đã làm đề thi thử thì điểm đề thử mới là con số đáng tin — cái ở đây để nhìn xu
+            hướng và để biết phần nào đang kéo điểm xuống.
+          </p>
+        </section>
+      )}
 
       {total === 0 && (
         <div style={panel}>

@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { OFFLINE_MB, cachedCount, preloadAll, swSupported, type PreloadProgress } from '../engine/offline';
 import { exportProgress, importProgress } from '../engine/storage';
 import { useEngine, useGameState } from '../engine/useEngine';
 import { C, F, shadow } from '../theme';
@@ -75,6 +76,23 @@ function Slider({
  * user and months of review history.
  */
 export function SettingsPanel() {
+  /** Tiến độ tải trước; `null` là chưa bấm lần nào. */
+  const [pre, setPre] = useState<PreloadProgress | null>(null);
+  const [have, setHave] = useState({ have: 0, total: 0 });
+
+  useEffect(() => {
+    void cachedCount().then(setHave);
+  }, [pre]);
+
+  const startPreload = () => {
+    setPre({ done: 0, total: have.total || 1, finished: false });
+    const ok = preloadAll((p) => setPre(p));
+    if (!ok) {
+      setPre({ done: 0, total: 0, finished: true, failed: 0 });
+      setHave((h) => h);
+    }
+  };
+
   const engine = useEngine();
   useGameState();
   const s = engine.settings;
@@ -260,6 +278,33 @@ export function SettingsPanel() {
           onChange={(v) => engine.setSettings({ flashMs: v })}
         />
       </div>
+
+      <div style={{ borderTop: `2px dashed ${C.edge}`, margin: '12px 0 8px' }} />
+      <p style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 700, color: C.body }}>
+        📥 Học khi mất mạng. Bình thường app giữ lại những câu bạn ĐÃ nghe qua, còn câu chưa nghe bao giờ
+        thì vẫn cần mạng. Tải trước một lần là học được cả trên xe buýt hay chỗ sóng yếu.
+      </p>
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 4 }}>
+        <button
+          onClick={startPreload}
+          disabled={!swSupported() || pre?.finished === false}
+          style={smallBtn(swSupported() ? C.blue : C.edge, '#fff')}
+        >
+          {pre && !pre.finished ? '⏳ Đang tải…' : `📥 Tải trước giọng đọc (~${OFFLINE_MB}MB)`}
+        </button>
+        <span style={{ fontSize: 13, fontWeight: 700, color: C.muted }}>
+          {!swSupported()
+            ? 'Trình duyệt này không hỗ trợ chạy ngoại tuyến'
+            : pre
+              ? pre.finished
+                ? `✓ Xong ${pre.done}/${pre.total} tệp${pre.failed ? ` · ${pre.failed} tệp lỗi, bấm lại để tải nốt` : ''}`
+                : `${Math.round((pre.done / pre.total) * 100)}% · ${pre.done}/${pre.total} tệp`
+              : `Đã có sẵn ${have.have}/${have.total} tệp trong máy`}
+        </span>
+      </div>
+      <p style={{ margin: '0 0 10px', fontSize: 12, fontWeight: 600, color: C.muted2 }}>
+        Chỉ chạy được ở bản trên web (leoxi2005.github.io), không chạy khi mở bằng npm run dev.
+      </p>
 
       <div style={{ borderTop: `2px dashed ${C.edge}`, margin: '12px 0 8px' }} />
       <p style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 700, color: C.body }}>

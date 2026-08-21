@@ -59,15 +59,31 @@ describe('topics', () => {
   });
 
   /**
-   * Known gap, carried over from the prototype: chips come from vocab topics, so
-   * grammar tagged with a topic no vocab uses ("Bài 3") can never be selected.
-   * Fix by giving those items a reachable topic, or by deriving chips from all
-   * content topics. Asserted here so the gap can't widen unnoticed.
+   * Lỗi cũ từ bản prototype, nay đã sửa: chip chỉ sinh ra từ chủ đề của TỪ VỰNG, nên
+   * mười điểm ngữ pháp gắn "Bài 3" không ai bật được và nằm chết trong dữ liệu.
+   * Luật mới: chủ đề nào không có chip thì mặc định là bật — không bật được thì cũng
+   * không được phép tắt.
    */
-  it('cannot reach grammar whose topic has no vocab', () => {
-    const unreachable = DECK.grammar.filter((g) => !matchTopic(ALL_TOPICS, g.t));
-    expect(unreachable.map((g) => g.t)).toEqual(Array(10).fill('Bài 3'));
-    expect(pools(ALL_TOPICS).grammar).toHaveLength(DECK.grammar.length - 10);
+  it('reaches grammar whose topic has no chip of its own', () => {
+    expect(matchTopic(ALL_TOPICS, 'Bài 3')).toBe(true);
+    expect(DECK.grammar.filter((g) => !matchTopic(ALL_TOPICS, g.t))).toEqual([]);
+    expect(pools(ALL_TOPICS).grammar).toHaveLength(DECK.grammar.length);
+  });
+
+  it('mọi mục ngữ pháp đều có bốn lựa chọn khác nhau và đáp án nằm trong đó', () => {
+    // Mười mục "Bài 3" chỉ có ba lựa chọn — lỗi nằm im suốt vì chúng chưa bao giờ
+    // được ra. Sửa chủ đề xong là nó lộ ngay, nên ghim luôn ở đây.
+    DECK.grammar.forEach((g) => {
+      expect(g.opts, g.id).toHaveLength(4);
+      expect(new Set(g.opts).size, g.id).toBe(4);
+      expect(g.opts, g.id).toContain(g.a);
+    });
+  });
+
+  it('chủ đề CÓ chip mà tắt thì vẫn phải tắt', () => {
+    // Luật "không có chip thì mặc định bật" không được phép nới lỏng những chip thật.
+    const off = { ...ALL_TOPICS, 'Bài 1': false };
+    expect(matchTopic(off, 'Bài 1')).toBe(false);
   });
 
   it('matches span topics against their member topics', () => {
@@ -80,6 +96,19 @@ describe('topics', () => {
     expect(buildSession('mix', {}, {}, DEFAULT_SETTINGS)).toHaveLength(0);
   });
 });
+
+describe('không nội dung nào nằm chết trong dữ liệu', () => {
+  it('bật hết chip thì mọi mục ngữ pháp, câu, đoạn đọc và câu sắp xếp đều ra được', () => {
+    const P = pools(ALL_TOPICS);
+    // Chip chỉ sinh ra từ chủ đề của TỪ VỰNG. Mục nào gắn một chủ đề không có chip thì
+    // không ai bật được nó — trước đây mười điểm ngữ pháp "Bài 3" nằm chết vì lẽ đó.
+    expect(P.grammar).toHaveLength(DECK.grammar.length);
+    expect(P.sentences).toHaveLength(DECK.sentences.length);
+    expect(P.passages).toHaveLength(DECK.passages.length);
+    expect(P.orders).toHaveLength(DECK.orders.length);
+  });
+});
+
 
 const MODES: GameId[] = [
   'mix',

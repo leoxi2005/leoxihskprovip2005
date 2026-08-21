@@ -64,6 +64,9 @@ export interface Pools {
   fixes: FixItem[];
 }
 
+/** Những chủ đề CÓ chip trên màn hình chính — chip chỉ sinh ra từ chủ đề của từ vựng. */
+const CHIP_TOPICS = new Set(DECK.vocab.map((v) => v.t));
+
 /**
  * Non-vocab content is tagged with span topics ("Chủ đề 22–23") that have no chip
  * of their own, so they match if any covered topic is on.
@@ -73,6 +76,10 @@ export function matchTopic(sel: TopicSel, t: string): boolean {
   if (t === 'Tổng hợp') return true;
   if (t === 'Chủ đề 22–23') return !!(sel['Chủ đề 22'] || sel['Chủ đề 23']);
   if (t === 'Chủ đề 21–23') return !!(sel['Chủ đề 21'] || sel['Chủ đề 22'] || sel['Chủ đề 23']);
+  // Chủ đề không có chip nào thì KHÔNG AI BẬT ĐƯỢC — nên nó phải mặc định là bật.
+  // Mười điểm ngữ pháp gắn "Bài 3" nằm chết trong dữ liệu từ bản đầu vì lẽ đó: chip
+  // chỉ sinh từ chủ đề của từ vựng, mà không từ nào thuộc Bài 3.
+  if (!CHIP_TOPICS.has(t)) return true;
   return false;
 }
 
