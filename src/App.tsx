@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Confetti } from './components/Confetti';
 import { GameEngine } from './engine/GameEngine';
 import { EngineContext, useGameState } from './engine/useEngine';
+import { Arcade } from './screens/Arcade';
 import { Exam } from './screens/Exam';
 import { Home } from './screens/Home';
 import { Notebook } from './screens/Notebook';
@@ -44,6 +45,8 @@ function Screens() {
       return <Exam />;
     case 'stats':
       return <Stats />;
+    case 'arcade':
+      return <Arcade />;
     default:
       return <Home />;
   }

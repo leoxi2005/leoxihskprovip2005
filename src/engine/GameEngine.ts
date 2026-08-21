@@ -3,6 +3,7 @@ import { OOPS, PRAISE } from '../theme';
 import { Audio } from './audio';
 import { DICT_PASS, diffChars } from './diff';
 import { hanOnly } from './segment';
+import { arcadeForKey, arcadeXp, saveBest, type ArcadeId } from './arcade';
 import { gameForKey } from './games';
 import { AWARDS, awardStates, kindRightOf, studyDays, type AwardCtx, type AwardState } from './awards';
 import {
@@ -92,6 +93,7 @@ const INITIAL: GameState = {
   coinsWon: 0,
   reward: null,
   metaVer: 0,
+  arcade: null,
   ...FRESH,
 };
 
@@ -504,6 +506,54 @@ export class GameEngine {
     });
     setTimeout(() => this.burst(120), 200);
   }
+
+  // -- trò chơi -------------------------------------------------------------
+
+  openArcade = (id: ArcadeId): void => {
+    this.hushAll();
+    this.setState({ mode: 'arcade', arcade: id });
+  };
+
+  /**
+   * Một lượt trả lời trong trò chơi.
+   *
+   * Chấm SRS như mọi chế độ khác — bốn lựa chọn và vài giây suy nghĩ là một bằng
+   * chứng thật. Riêng lượt hết giờ (`timeout`) chỉ ghi nhật ký chứ không tụt hộp:
+   * chữ rơi mất vì bạn còn đang nhìn chỗ khác thì đó là lỗi phản xạ, không phải
+   * bằng chứng rằng bạn quên từ.
+   */
+  arcadeAnswer = (word: Vocab, ok: boolean, ms: number, kind: Kind, timeout = false): void => {
+    const id = 'w:' + word.h;
+    if (timeout) {
+      appendLog([[Date.now(), gradeId(id, kind), kind, 0, ms]]);
+    } else {
+      this.grade(id, ok, kind, ms);
+    }
+    if (ok) this.audio.right(1);
+    else this.audio.wrong();
+  };
+
+  /** Hết ván: cộng XP, cộng vàng, ghi kỷ lục. */
+  arcadeFinish = (id: ArcadeId, score: number): { xp: number; coins: number; record: boolean } => {
+    const xp = arcadeXp(score);
+    const record = saveBest(id, score);
+    const s = this.stats;
+    const today = new Date().toDateString();
+    if (s.dayDate !== today) {
+      s.dayDate = today;
+      s.dayXp = 0;
+    }
+    s.dayXp += xp;
+    s.xp = (s.xp || 0) + xp;
+    save(KEYS.stats, s);
+
+    const coins = coinsForXp(xp);
+    this.meta = addCoins({ ...this.meta, day: today }, coins);
+    saveMeta(this.meta);
+    if (record) this.burst(120);
+    this.setState({ metaVer: this.state.metaVer + 1 });
+    return { xp, coins, record };
+  };
 
   // -- vàng, rương, nhiệm vụ ------------------------------------------------
 
@@ -997,12 +1047,18 @@ export class GameEngine {
     }
 
     if (mode === 'home') {
+      const arc = arcadeForKey(e.key);
+      if (arc) return this.openArcade(arc);
       // Shortcuts live on the cards themselves, so this can never disagree with the
       // key printed on the button. Endless keeps its own — it sits above the grid.
       const g = e.key.toLowerCase() === 's' ? 'endless' : gameForKey(e.key);
       // A shortcut must not be a way around the day's plan — the grid greys these out.
       if (g && !this.isLocked(g)) return this.startGame(g);
     }
+
+    // Bàn phím trong trò chơi là của chính trò đó (mũi tên lái rắn, số bắt chữ),
+    // nên ở đây chỉ giữ đúng một phím: thoát.
+    if (mode === 'arcade') return;
 
     if (mode !== 'quiz') return;
 

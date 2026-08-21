@@ -11,6 +11,7 @@ import type {
   Song,
   Vocab,
 } from '../data';
+import type { ArcadeId } from './arcade';
 import type { Reward } from './meta';
 import type { NumDrill } from './numbers';
 
@@ -278,7 +279,7 @@ export const isTypeQ = (q: Question): q is TypeQ | SDictQ =>
 /** The word a question is about, when it has one. */
 export const wordOf = (q: Question): Vocab | undefined => ('word' in q ? q.word : undefined);
 
-export type Mode = 'home' | 'quiz' | 'result' | 'book' | 'exam' | 'stats';
+export type Mode = 'home' | 'quiz' | 'result' | 'book' | 'exam' | 'stats' | 'arcade';
 
 export interface GameState {
   ready: boolean;
@@ -334,6 +335,8 @@ export interface GameState {
   reward: Reward | null;
   /** Tăng lên mỗi khi vàng/rương/nhiệm vụ đổi, để React vẽ lại. */
   metaVer: number;
+  /** Trò chơi đang mở, khi `mode === 'arcade'`. */
+  arcade: ArcadeId | null;
 }
 
 export interface Settings {

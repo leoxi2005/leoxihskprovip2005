@@ -26,6 +26,8 @@ export const KEYS = {
   drill: 'hskq_drill',
   /** Vàng, rương, linh thú, nhiệm vụ đã nhận — xem `meta.ts`. */
   meta: 'hskq_meta',
+  /** Kỷ lục từng trò chơi. */
+  arcade: 'hskq_arcade',
 } as const;
 
 /** localStorage can throw (private mode, quota) — progress is best-effort. */

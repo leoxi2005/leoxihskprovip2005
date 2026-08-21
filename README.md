@@ -3,8 +3,8 @@
 **Chơi thử: https://leoxi2005.github.io/leoxihskprovip2005/**
 
 Ứng dụng luyện thi **HSK 4** cho người Việt, theo kiểu game: lặp lại ngắt quãng (SRS) hai làn,
-XP, lên cấp, chuỗi ngày, đấu trùm, **18 chế độ chơi**, nhiệm vụ hằng ngày đổi mỗi ngày, vàng ·
-rương · linh thú · huy hiệu, một đề thi thử đúng cấu trúc thật, và một lộ trình đếm ngược tới
+XP, lên cấp, chuỗi ngày, đấu trùm, **18 chế độ ôn + 3 trò chơi thật**, nhiệm vụ hằng ngày đổi
+mỗi ngày, vàng · rương · linh thú · huy hiệu, một đề thi thử đúng cấu trúc thật, và một lộ trình đếm ngược tới
 ngày thi. Toàn bộ tiến độ lưu ngay trong trình duyệt — không cần tài khoản, không cần server.
 
 Tác giả: **leoxi**
@@ -60,7 +60,37 @@ Trong lúc chơi: `1–9` chọn đáp án · `Enter` kiểm tra & chuyển câu
 `Esc` thoát ô tìm kiếm. Phím tắt của mỗi chế độ được in ngay trên thẻ game
 (`src/engine/games.ts` là nguồn duy nhất cho cả lưới thẻ lẫn bàn phím).
 
-## Năm chế độ của đợt này
+## Ba trò chơi
+
+Mười tám chế độ ở bảng trên đều chung một nhịp: ra câu → chọn → bấm Kiểm tra → đọc lời giải.
+Nhịp đó tốt cho việc học nhưng nó **không phải nhịp của một trò chơi**: không có gì chạy khi bạn
+ngồi im, và không bao giờ thua. Ba trò dưới đây bỏ hẳn nút Kiểm tra — có mạng, có đồng hồ, có kỷ
+lục riêng, và thua thật.
+
+| | Trò | Phím | Cách chơi |
+| --- | --- | --- | --- |
+| 🌧️ | **Mưa Chữ** | `R` | Nghĩa tiếng Việt hiện trên băng, mấy chữ Hán rơi xuống — bắt đúng chữ trước khi nó chạm đất. Bắt nhầm mất một mạng. Cứ 4 chữ lên một cấp: rơi nhanh hơn và đông hơn |
+| 🐍 | **Rắn Săn Chữ** | `X` | Lái rắn tới ăn chữ khớp nghĩa. Ăn nhầm hoặc đâm tường thì mất một mạng, rắn về giữa bàn |
+| ⚡ | **Nối Chữ Cấp Tốc** | `V` | 12 ô, 6 cặp. Nối đúng được **cộng giờ** (combo càng cao cộng càng nhiều), nối sai mất 2,5 giây. Dọn được cặp nào thì có cặp mới điền vào chỗ đó — bàn không bao giờ hết, chỉ có đồng hồ hết |
+
+Ba trò này chỉ hỏi được thứ trả lời được trong hai giây — nhận mặt chữ — nên chúng **bổ sung** cho
+các chế độ ôn chứ không thay thế. Vài quyết định đi kèm:
+
+- Vẫn **chấm SRS thật**: bốn lựa chọn và vài giây suy nghĩ là bằng chứng thật, và nhiệm vụ hằng
+  ngày cũng đếm luôn những lượt này.
+- Nhưng lượt **hết giờ** (chữ rơi mất, bấm nhầm ô trong ván bấm giờ) chỉ ghi nhật ký chứ không tụt
+  hộp: nhìn sót một chữ đang rơi là lỗi phản xạ, không phải bằng chứng rằng bạn quên từ.
+- XP mỗi ván có **trần 400**. Không có trần thì cách tối ưu để lên cấp là chơi game và không bao
+  giờ mở thẻ ra nữa.
+- Từ nhiễu luôn khác nghĩa hẳn từ đích. Trong một trò chơi hai giây, hai nghĩa na ná nhau không
+  phải câu hỏi khó — đó là một cái bẫy đọc.
+
+Về mặt kỹ thuật, cả ba giữ toàn bộ trạng thái trong một `ref` và gọi `force()` mỗi khung hình chứ
+không dùng `setState` trong vòng lặp. Lý do: `StrictMode` gọi hàm cập nhật state hai lần, mà ở đây
+mỗi lần cập nhật kèm hiệu ứng thật (trừ mạng, ghi SRS, cộng vàng) — chạy hai lần là mất hai mạng
+cho một chữ và cộng đôi phần thưởng.
+
+## Năm chế độ ôn của đợt này
 
 Bốn chế độ đầu sinh nội dung từ chính deck, chế độ thứ năm và bắt-lỗi-sai thì viết tay vì không
 sinh máy được.
@@ -269,12 +299,14 @@ src/
     segment.ts     cắt câu tiếng Trung thành quân bài (chế độ Dựng Câu)
     diff.ts        chấm bài chép chính tả bằng chuỗi con chung dài nhất
     numbers.ts     sinh bộ đề bẫy số & giờ, cố định để thu sẵn được
+    arcade.ts      danh sách trò chơi, bốc lượt và kỷ lục
     quests.ts      ba nhiệm vụ mỗi ngày, bốc theo ngày tháng
     meta.ts        vàng · rương · linh thú · băng giữ chuỗi
     awards.ts      26 huy hiệu, tính lại từ nhật ký
     storage.ts     localStorage, hộp SRS, migrate dữ liệu v1
     audio.ts       TTS tiếng Trung + hiệu ứng âm thanh WebAudio
-  screens/       Home · Quiz · Result · Notebook · Stats
+  screens/       Home · Quiz · Result · Notebook · Stats · Arcade
+    arcade/        RainGame · SnakeGame · BlitzGame + khung chung
   components/    Bar · Confetti · StrokeAnimation · SongPlayer · Quests · Awards · RewardModal
   theme.ts       design token
 ```
@@ -291,7 +323,8 @@ Thứ tự ra câu: đến hạn trước (hạn gần nhất trước), rồi t
 nhóm cuối được xoay vòng bằng con trỏ lưu sẵn để hai phiên liên tiếp không ra trùng câu.
 
 Dữ liệu trong localStorage: `hskq_srs`, `hskq_stats`, `hskq_topics_v2`, `hskq_settings`,
-`hskq_best_endless`, `hskq_muted`, `hskq_finale`, `hskq_rot_*`, `hskq_meta` (vàng · rương · linh thú).
+`hskq_best_endless`, `hskq_muted`, `hskq_finale`, `hskq_rot_*`, `hskq_meta` (vàng · rương · linh
+thú), `hskq_arcade` (kỷ lục ba trò chơi).
 
 ## Cấu hình
 

@@ -1,4 +1,5 @@
 import { DECK, IMAGES, NEW_TOPICS } from '../data';
+import { ARCADES, loadBest } from '../engine/arcade';
 import { GAME_CARDS } from '../engine/games';
 import { LOCKED_UNTIL_CLEAR } from '../engine/plan';
 import type { GameId } from '../engine/types';
@@ -53,6 +54,8 @@ export function Home() {
   // controls would silently do nothing. Say so instead.
   const canPlay = engine.pools().vocab.length > 0;
   const best = engine.bestEndless();
+  // Kỷ lục các trò chơi, đọc một lần cho cả ba thẻ.
+  const arcadeBest = loadBest();
   // Read once: every card asks the same question, and the plan walks the whole deck.
   const planClear = engine.plan().clear;
   const lockedGame = (g: GameId) => !planClear && LOCKED_UNTIL_CLEAR.includes(g);
@@ -399,7 +402,7 @@ export function Home() {
           </button>
         </div>
 
-        <section style={{ textAlign: 'left', margin: '20px 0 0' }}>
+        <section style={{ textAlign: 'left', margin: '22px 0 0' }}>
           <div
             style={{
               fontSize: 13,
@@ -411,7 +414,60 @@ export function Home() {
               textAlign: 'center',
             }}
           >
-            Hoặc chọn game 🎮
+            🎮 Trò chơi — có mạng, có đồng hồ, có kỷ lục
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(210px,1fr))', gap: 12 }}>
+            {ARCADES.map((a) => {
+              const record = arcadeBest[a.id] ?? 0;
+              return (
+                <button
+                  key={a.id}
+                  onClick={() => engine.openArcade(a.id)}
+                  disabled={!canPlay}
+                  title={`Phím ${a.key.toUpperCase()}`}
+                  className={canPlay ? 'lift lift-5' : undefined}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 12,
+                    textAlign: 'left',
+                    background: canPlay ? a.bg : C.edge,
+                    color: '#fff',
+                    border: `3px solid ${C.ink}`,
+                    borderRadius: 20,
+                    padding: '14px 16px',
+                    cursor: canPlay ? 'pointer' : 'not-allowed',
+                    boxShadow: canPlay ? shadow(5) : 'none',
+                    fontFamily: F.ui,
+                  }}
+                >
+                  <span style={{ fontSize: 34, lineHeight: 1 }}>{a.icon}</span>
+                  <span style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+                    <span style={{ fontSize: 17, fontWeight: 800 }}>{a.name}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, opacity: 0.9, lineHeight: 1.35 }}>{a.desc}</span>
+                    <span style={{ fontSize: 11, fontWeight: 800, opacity: 0.85 }}>
+                      {record > 0 ? `🏆 Kỷ lục ${record}` : 'Chưa có kỷ lục — chơi thử đi'}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <section style={{ textAlign: 'left', margin: '22px 0 0' }}>
+          <div
+            style={{
+              fontSize: 13,
+              fontWeight: 800,
+              textTransform: 'uppercase',
+              letterSpacing: '.06em',
+              color: C.muted,
+              marginBottom: 10,
+              textAlign: 'center',
+            }}
+          >
+            Hoặc chọn chế độ ôn 📚
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(140px,1fr))', gap: 12 }}>
             {GAME_CARDS.filter((c) => !c.needsLeech || p.leeches > 0).map((c) => {
