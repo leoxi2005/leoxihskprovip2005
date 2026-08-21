@@ -185,9 +185,11 @@ export function QuestionView({
         <>
           <Note>Dùng TẤT CẢ các từ dưới đây viết thành một câu hoàn chỉnh.</Note>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, margin: '16px 0' }}>
-            {q.item.words.map((w) => (
+            {/* Khoá theo VỊ TRÍ chứ không theo chữ: câu 一边…一边 có hai mảnh giống hệt
+                nhau, khoá trùng thì React giữ lại ô cũ và nó trôi sang câu kế tiếp. */}
+            {q.item.words.map((w, i) => (
               <span
-                key={w}
+                key={i}
                 style={{
                   fontFamily: F.han,
                   fontSize: 21,

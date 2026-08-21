@@ -1,4 +1,5 @@
 import type { ExamPaper } from '../engine/exam';
+import { WRITE1_BANK } from './write1';
 
 /**
  * Mock paper 1 — HSK（四级）模拟试卷.
@@ -641,59 +642,8 @@ export const EXAM_1: ExamPaper = {
     },
   ],
 
-  // 书写第一部分：完成句子 (10)
-  write1: [
-    {
-      words: ['把', '窗户', '请', '打开'],
-      accept: ['请把窗户打开。', '请把窗户打开'],
-      vi: 'Hãy mở cửa sổ ra. (câu chữ 把)',
-    },
-    {
-      words: ['他', '得', '汉语', '说', '很流利'],
-      accept: ['他汉语说得很流利。', '他说汉语说得很流利。'],
-      vi: 'Anh ấy nói tiếng Trung rất trôi chảy. (bổ ngữ trình độ 得)',
-    },
-    {
-      words: ['被', '自行车', '我的', '骑走了'],
-      accept: ['我的自行车被骑走了。'],
-      vi: 'Xe đạp của tôi bị người ta lấy đi mất. (câu bị động 被)',
-    },
-    {
-      words: ['比', '今天', '昨天', '冷', '得多'],
-      accept: ['今天比昨天冷得多。', '昨天比今天冷得多。'],
-      vi: 'Hôm nay lạnh hơn hôm qua nhiều. (so sánh 比 + 得多)',
-    },
-    {
-      words: ['越来越', '他的', '好', '身体'],
-      accept: ['他的身体越来越好。'],
-      vi: 'Sức khoẻ của anh ấy ngày càng tốt. (越来越)',
-    },
-    {
-      words: ['一边', '一边', '听音乐', '他', '跑步'],
-      accept: ['他一边跑步一边听音乐。', '他一边听音乐一边跑步。'],
-      vi: 'Anh ấy vừa chạy bộ vừa nghe nhạc. (一边…一边…)',
-    },
-    {
-      words: ['虽然', '但是', '很累', '他', '没有休息'],
-      accept: ['虽然他很累，但是没有休息。', '他虽然很累，但是没有休息。'],
-      vi: 'Tuy anh ấy rất mệt nhưng không nghỉ. (虽然…但是…)',
-    },
-    {
-      words: ['把', '放在', '钥匙', '桌子上', '他'],
-      accept: ['他把钥匙放在桌子上。'],
-      vi: 'Anh ấy đặt chìa khoá lên bàn. (把 + 放在)',
-    },
-    {
-      words: ['对', '很', '感兴趣', '他', '京剧'],
-      accept: ['他对京剧很感兴趣。'],
-      vi: 'Anh ấy rất hứng thú với kinh kịch. (对…感兴趣)',
-    },
-    {
-      words: ['这个问题', '解决', '必须', '马上'],
-      accept: ['这个问题必须马上解决。', '必须马上解决这个问题。'],
-      vi: 'Vấn đề này phải giải quyết ngay. (必须 + động từ)',
-    },
-  ],
+  // 书写第一部分：完成句子 — kho 51 câu, mỗi đề rút 10 (xem write1.ts)
+  write1: WRITE1_BANK,
 
   // 书写第二部分：看图写句子 (5)
   write2: [

@@ -369,6 +369,47 @@ export interface ExamPaper {
   write2: PicItem[];
 }
 
+/** Số câu chính thức của một phần, theo đúng cấu trúc đề thật. */
+export const countOf = (id: PartId): number => PART_GUIDES.find((g) => g.id === id)!.count;
+
+/** Trộn một bản sao — không đụng vào mảng gốc, vì kho đề là hằng số dùng chung. */
+function shuffled<T>(a: readonly T[]): T[] {
+  const out = a.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+/**
+ * Rút một đề 100 câu từ kho.
+ *
+ * Kho chứa nhiều hơn số câu của một đề — làm lại lần hai mà gặp đúng 100 câu cũ thì
+ * lần đó chỉ đo được trí nhớ về đề, không đo được trình độ. Rút ngẫu nhiên giữ đúng
+ * cấu trúc (`PART_GUIDES.count`) nhưng đổi nội dung mỗi lần ngồi.
+ *
+ * Phần nào trong kho vừa đủ hoặc thiếu thì giữ nguyên thứ tự gốc — không xáo một phần
+ * đã đúng số, vì thứ tự trong đề thật cũng là thứ tự khó dần.
+ */
+export function drawPaper(bank: ExamPaper): ExamPaper {
+  const take = <T,>(all: readonly T[], n: number): T[] =>
+    all.length <= n ? all.slice() : shuffled(all).slice(0, n);
+  // 阅读第一部分 tính theo NHÓM: mỗi nhóm một bảng sáu từ và năm chỗ trống.
+  const perGroup = bank.read1[0]?.items.length || 5;
+  return {
+    ...bank,
+    listen1: take(bank.listen1, countOf('听力第一部分')),
+    listen2: take(bank.listen2, countOf('听力第二部分')),
+    listen3: take(bank.listen3, countOf('听力第三部分')),
+    read1: take(bank.read1, Math.ceil(countOf('阅读第一部分') / perGroup)),
+    read2: take(bank.read2, countOf('阅读第二部分')),
+    read3: take(bank.read3, countOf('阅读第三部分')),
+    write1: take(bank.write1, countOf('书写第一部分')),
+    write2: take(bank.write2, countOf('书写第二部分')),
+  };
+}
+
 // -- flattening -------------------------------------------------------------
 
 export type ExamQ =

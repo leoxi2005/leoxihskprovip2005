@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { EXAM_1 } from '../data/exam1';
 import {
+  drawPaper,
   EXAM_SPEC,
   PART_GUIDES,
   PASS_MARK,
@@ -25,10 +26,16 @@ import { C, F, shadow } from '../theme';
 
 type Phase = 'intro' | 'sitting' | 'review';
 
-const PAPER = EXAM_1;
-const QS = flatten(PAPER);
-const RANGES = sectionRanges(QS);
-const SEC_OF = (i: number): SectionId => QS[i].section;
+/**
+ * `EXAM_1` là KHO đề, không phải một đề.
+ *
+ * Mỗi lần ngồi thi, `drawPaper` rút ra đúng cấu trúc 100 câu từ kho đó. Làm lại lần
+ * hai mà gặp nguyên 100 câu cũ thì lần đó chỉ đo được trí nhớ về đề chứ không đo được
+ * trình độ — mà đề thật thì lần nào cũng là câu chưa gặp.
+ */
+
+/** Cả kho, đã dàn phẳng — dùng để đếm xem mỗi phần có bao nhiêu câu để luyện. */
+const BANK_QS = flatten(EXAM_1);
 
 /** `mm:ss`, and never negative — a stopped clock reads 00:00, not −00:03. */
 const clock = (ms: number): string => {
@@ -67,6 +74,15 @@ const card = {
 export function Exam() {
   const engine = useEngine();
   const [phase, setPhase] = useState<Phase>('intro');
+  /** Tăng lên mỗi lần bấm "Bắt đầu thi" — đó là lúc rút một đề mới khỏi kho. */
+  const [attempt, setAttempt] = useState(0);
+  // `attempt` là phụ thuộc thật chứ không thừa: `drawPaper` ngẫu nhiên, và mỗi lần
+  // bấm "Bắt đầu thi" phải ra một đề khác.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const PAPER = useMemo(() => drawPaper(EXAM_1), [attempt]);
+  const QS = useMemo(() => flatten(PAPER), [PAPER]);
+  const RANGES = useMemo(() => sectionRanges(QS), [QS]);
+  const SEC_OF = useCallback((k: number): SectionId => QS[k].section, [QS]);
   const [i, setI] = useState(0);
   const [answers, setAnswers] = useState<ExamAnswer[]>(() => Array(QS.length).fill(null));
   const [marks, setMarks] = useState<SelfMark[]>(() => Array(QS.length).fill(undefined));
@@ -107,7 +123,7 @@ export function Exam() {
     if (!next) return finish();
     setI(RANGES[next][0]);
     enterSection(next);
-  }, [i, finish, enterSection]);
+  }, [i, finish, enterSection, RANGES, SEC_OF]);
 
   useEffect(() => {
     if (phase !== 'sitting') return;
@@ -164,13 +180,13 @@ export function Exam() {
 
   const result = useMemo(
     () => (phase === 'review' ? score(QS, answers, marks) : null),
-    [phase, answers, marks],
+    [phase, answers, marks, QS],
   );
 
   // The paper is only worth logging once it has been marked all the way through.
   const pendingMarks = useMemo(
     () => QS.filter((x, k) => !isAutoGraded(x.q) && marks[k] === undefined).length,
-    [marks],
+    [marks, QS],
   );
 
   const logged = useRef(false);
@@ -182,7 +198,7 @@ export function Exam() {
       ...rows,
       { at: Date.now(), paper: PAPER.id, total: result.total, sections: result.sections.map((s) => s.points) },
     ]);
-  }, [phase, result, pendingMarks]);
+  }, [phase, result, pendingMarks, PAPER.id]);
 
   // -- screens --------------------------------------------------------------
 
@@ -275,6 +291,7 @@ export function Exam() {
               onClick={() => {
                 played.current.clear();
                 logged.current = false;
+                setAttempt((n) => n + 1);
                 setAnswers(Array(QS.length).fill(null));
                 setMarks(Array(QS.length).fill(undefined));
                 setI(0);
@@ -517,7 +534,7 @@ function PartMenu({ onPick }: { onPick: (id: PartId) => void }) {
               <span style={{ fontFamily: F.han, fontSize: 15, fontWeight: 800 }}>{g.id}</span>
               <span style={{ fontSize: 12.5, fontWeight: 700, color: C.body }}>{g.vi}</span>
               <span style={{ fontSize: 11.5, fontWeight: 700, color: pct === null ? C.muted2 : pct >= 60 ? C.okInk : C.badInk }}>
-                {partQuestions(QS, g.id).length} câu
+                {partQuestions(BANK_QS, g.id).length} câu
                 {pct === null ? ' · chưa luyện' : ` · tốt nhất ${b!.right}/${b!.count} (${pct}%)`}
               </span>
             </button>

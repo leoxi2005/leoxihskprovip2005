@@ -5,6 +5,8 @@ import {
   PART_GUIDES,
   PASS_MARK,
   TOTAL_QUESTIONS,
+  countOf,
+  drawPaper,
   flatten,
   isRight,
   partOfDay,
@@ -17,20 +19,43 @@ import {
   type SelfMark,
 } from './exam';
 
-const QS = flatten(EXAM_1);
+/**
+ * `EXAM_1` là KHO, một đề là thứ `drawPaper` rút ra từ kho đó — nên mọi bài kiểm tra
+ * về HÌNH DẠNG của đề phải chạy trên bản đã rút, không phải trên kho.
+ */
+const QS = flatten(drawPaper(EXAM_1));
 
 describe('paper shape', () => {
   it('matches the official blueprint exactly', () => {
     expect(TOTAL_QUESTIONS).toBe(100);
     expect(QS).toHaveLength(100);
-    expect(EXAM_1.listen1).toHaveLength(10);
-    expect(EXAM_1.listen2).toHaveLength(15);
-    expect(EXAM_1.listen3).toHaveLength(20);
-    expect(EXAM_1.read1.flatMap((g) => g.items)).toHaveLength(10);
-    expect(EXAM_1.read2).toHaveLength(10);
-    expect(EXAM_1.read3).toHaveLength(20);
-    expect(EXAM_1.write1).toHaveLength(10);
-    expect(EXAM_1.write2).toHaveLength(5);
+    const p = drawPaper(EXAM_1);
+    expect(p.listen1).toHaveLength(10);
+    expect(p.listen2).toHaveLength(15);
+    expect(p.listen3).toHaveLength(20);
+    expect(p.read1.flatMap((g) => g.items)).toHaveLength(10);
+    expect(p.read2).toHaveLength(10);
+    expect(p.read3).toHaveLength(20);
+    expect(p.write1).toHaveLength(10);
+    expect(p.write2).toHaveLength(5);
+  });
+
+  it('rút đề nào cũng đủ 100 câu, dù rút bao nhiêu lần', () => {
+    for (let k = 0; k < 30; k++) expect(flatten(drawPaper(EXAM_1))).toHaveLength(100);
+  });
+
+  it('kho không được nhỏ hơn một đề', () => {
+    expect(EXAM_1.write1.length).toBeGreaterThanOrEqual(countOf('书写第一部分'));
+    expect(EXAM_1.write2.length).toBeGreaterThanOrEqual(countOf('书写第二部分'));
+    expect(EXAM_1.read2.length).toBeGreaterThanOrEqual(countOf('阅读第二部分'));
+    expect(EXAM_1.read3.length).toBeGreaterThanOrEqual(countOf('阅读第三部分'));
+  });
+
+  it('kho đủ lớn thì hai lần rút không ra y hệt nhau', () => {
+    const a = drawPaper(EXAM_1).write1.map((x) => x.accept[0]);
+    const b = drawPaper(EXAM_1).write1.map((x) => x.accept[0]);
+    // Với kho 51 câu, xác suất trùng cả mười câu là gần như bằng không.
+    expect(a.join('|') === b.join('|')).toBe(false);
   });
 
   it('runs the sections in the order they are sat, without interleaving', () => {
@@ -162,16 +187,22 @@ describe('marking', () => {
   });
 
   it('accepts a written answer that ignores punctuation', () => {
+    // Câu nào cũng được: đề giờ rút ngẫu nhiên, nên bài kiểm tra dựng chuỗi từ chính
+    // đáp án mẫu của câu bốc trúng thay vì ghim một câu cụ thể.
     const q = QS.find((x) => x.q.kind === 'sent')!.q;
-    expect(writtenMatches(q, '请把窗户打开')).toBe(true);
-    expect(writtenMatches(q, '请 把 窗户 打开。')).toBe(true);
-    expect(writtenMatches(q, '窗户请打开')).toBe(false);
+    if (q.kind !== 'sent') throw new Error('không tìm thấy câu 完成句子');
+    const model = q.item.accept[0];
+    const bare = model.replace(/[\s，。！？、]/g, '');
+    expect(writtenMatches(q, bare)).toBe(true);
+    expect(writtenMatches(q, [...bare].join(' ') + '。')).toBe(true);
+    // Đảo hai chữ đầu ra sau cùng thì không còn khớp đáp án mẫu nữa.
+    expect(writtenMatches(q, bare.slice(2) + bare.slice(0, 2))).toBe(false);
   });
 
   it('lets the candidate override a written answer the matcher rejected', () => {
     const q = QS.find((x) => x.q.kind === 'sent')!.q;
-    expect(isRight(q, '窗户被他打开了', undefined)).toBe(false);
-    expect(isRight(q, '窗户被他打开了', true)).toBe(true);
+    expect(isRight(q, '这不是答案', undefined)).toBe(false);
+    expect(isRight(q, '这不是答案', true)).toBe(true);
   });
 
   it('scales each section onto its own hundred points', () => {

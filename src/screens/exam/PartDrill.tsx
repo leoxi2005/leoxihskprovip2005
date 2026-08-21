@@ -5,6 +5,7 @@ import {
   guideFor,
   isAutoGraded,
   isRight,
+  countOf,
   partQuestions,
   passageFor,
   writtenMatches,
@@ -20,8 +21,8 @@ import { QuestionView, ReviewBody } from './Question';
 
 type Phase = 'guide' | 'practice' | 'done';
 
-/** One flattening of the paper, shared by every part. */
-const PAPER = flatten(EXAM_1);
+/** Cả kho đề, đã dàn phẳng — dùng chung cho mọi phần. */
+const BANK = flatten(EXAM_1);
 
 const btn = (bg: string, color = '#fff') => ({
   background: bg,
@@ -66,7 +67,24 @@ const heading = {
 export function PartDrill({ part, onExit }: { part: PartId; onExit: () => void }) {
   const engine = useEngine();
   const guide = guideFor(part);
-  const qs = useMemo(() => partQuestions(PAPER, part), [part]);
+  /**
+   * Một buổi luyện lấy đúng số câu của phần đó trong đề thật, rút ngẫu nhiên từ kho.
+   *
+   * Kho có nhiều hơn số câu một đề cần. Bắt làm hết kho trong một lượt thì buổi luyện
+   * dài gấp mấy lần phần thi thật, còn lấy luôn mười câu đầu thì lần nào cũng đúng
+   * mười câu ấy.
+   */
+  const qs = useMemo(() => {
+    const all = partQuestions(BANK, part);
+    const n = countOf(part);
+    if (all.length <= n) return all;
+    const pool = all.slice();
+    for (let k = pool.length - 1; k > 0; k--) {
+      const j = Math.floor(Math.random() * (k + 1));
+      [pool[k], pool[j]] = [pool[j], pool[k]];
+    }
+    return pool.slice(0, n);
+  }, [part]);
 
   const [phase, setPhase] = useState<Phase>('guide');
   const [i, setI] = useState(0);
