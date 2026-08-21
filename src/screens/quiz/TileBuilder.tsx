@@ -8,7 +8,8 @@ import { useEngine } from '../../engine/useEngine';
  */
 export function TileBuilder({ q, st }: { q: AnyTileQ; st: GameState }) {
   const engine = useEngine();
-  const wide = q.kind === 'order';
+  // Quân bài của `order`/`build` là cả một TỪ, nên ô phải rộng ra và chữ nhỏ lại.
+  const wide = q.kind === 'order' || q.kind === 'build';
 
   return (
     <>

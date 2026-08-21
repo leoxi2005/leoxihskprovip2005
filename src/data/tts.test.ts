@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { CONFUSABLES, DECK, SONGS } from './index';
+import { COLLOCATIONS, CONFUSABLES, DECK, FIXES, SONGS } from './index';
+import { NUM_DRILLS } from '../engine/numbers';
 import { EXAM_1 } from './exam1';
 import clipKeys from './tts.json';
 import { ttsKey } from '../engine/tts';
@@ -37,6 +38,9 @@ function everythingSpoken(): [string, string][] {
       if (l.blank) out.push([`bài hát ${song.id} (chỗ trống)`, l.cn.split(l.blank).join('……')]);
     }
   }
+  for (const d of NUM_DRILLS) out.push([`bẫy số ${d.id}`, d.say]);
+  for (const c of COLLOCATIONS) out.push([`kết hợp từ ${c.id}`, c.frame.replace('____', c.a)]);
+  for (const f of FIXES) out.push([`bắt lỗi sai ${f.id}`, f.right]);
   for (const [name, part] of [
     ['listen1', EXAM_1.listen1],
     ['listen2', EXAM_1.listen2],

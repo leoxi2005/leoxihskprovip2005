@@ -1,7 +1,22 @@
 import { DECK, DEFAULT_OFF_TOPICS, type Vocab } from '../data';
 import { OOPS, PRAISE } from '../theme';
 import { Audio } from './audio';
+import { DICT_PASS, diffChars } from './diff';
+import { hanOnly } from './segment';
 import { gameForKey } from './games';
+import { AWARDS, awardStates, kindRightOf, studyDays, type AwardCtx, type AwardState } from './awards';
+import {
+  CHEST_COST,
+  DEFAULT_META,
+  PETS,
+  addCoins,
+  coinsForXp,
+  loadMeta,
+  openChest,
+  saveMeta,
+  type Meta,
+} from './meta';
+import { ALL_DONE_BONUS, questCtx, questStates, type QuestState } from './quests';
 import { LOCKED_UNTIL_CLEAR, dayPlan, newPerDayFor, type DayPlan } from './plan';
 import { ttsFor } from './questions';
 import { buildSession, endlessBatch, nextFinale, pools, topicsOf, type TopicSel } from './session';
@@ -29,6 +44,7 @@ import {
   DEFAULT_SETTINGS,
   isChoiceQ,
   isTileQ,
+  isTypeQ,
   type GameId,
   type GameState,
   type Kind,
@@ -72,6 +88,10 @@ const INITIAL: GameState = {
   bossHp: 100,
   hearts: 3,
   bookWord: null,
+  boost: false,
+  coinsWon: 0,
+  reward: null,
+  metaVer: 0,
   ...FRESH,
 };
 
@@ -97,6 +117,7 @@ export class GameEngine {
   audio = new Audio();
   srs: SrsMap = {};
   stats: Stats = DEFAULT_STATS;
+  meta: Meta = DEFAULT_META;
   topics: string[] = [];
   sel: TopicSel = {};
 
@@ -138,6 +159,7 @@ export class GameEngine {
     this.settings = migrateVoiceRate({ ...DEFAULT_SETTINGS, ...load(KEYS.settings, {}) });
     this.audio.rate = this.settings.voiceRate;
     this.stats = { ...DEFAULT_STATS, ...load(KEYS.stats, {}) };
+    this.meta = loadMeta();
     this.srs = seedRecallLanes(migrateSrs(load<SrsMap>(KEYS.srs, {})));
     this.topics = topicsOf();
 
@@ -281,6 +303,13 @@ export class GameEngine {
     const perDay = newPerDayFor(plan.phase.id, plan.pace.base);
     const session = buildSession(g, this.sel, this.srs, { ...this.settings, newPerDay: perDay });
     if (!session.length) return;
+    // Bùa XP tiêu ngay lúc mở phiên, không đợi tới lúc chấm: người chơi phải thấy nó
+    // đang bật trong suốt phiên thì mới có cảm giác đang tiêu một thứ đáng giá.
+    const boost = this.meta.boost > 0;
+    if (boost) {
+      this.meta = { ...this.meta, boost: this.meta.boost - 1 };
+      saveMeta(this.meta);
+    }
     this.clearTimers();
     this.setState(
       {
@@ -303,6 +332,9 @@ export class GameEngine {
         score: 0,
         best: this.bestEndless(),
         dead: false,
+        boost,
+        coinsWon: 0,
+        reward: null,
       },
       () => this.onShow(),
     );
@@ -329,15 +361,20 @@ export class GameEngine {
       }
       return;
     }
+    // Bài nghe thì luôn phát, bất kể cài đặt tự phát: không nghe thì không có đề.
     if (q.kind === 'a2h' || q.kind === 'dict' || q.kind === 'tf') {
       this.audio.speak(q.kind === 'tf' ? q.w.h : q.word.h);
+    } else if (q.kind === 'sdict' || q.kind === 'num') {
+      this.audio.speak(ttsFor(q));
     } else if (auto && (q.kind === 'h2m' || q.kind === 'write' || q.kind === 'type')) {
       this.audio.speak(q.word.h);
     } else {
       this.audio.hush();
     }
 
-    if (q.kind === 'type' || q.kind === 'dict') setTimeout(() => this.focusInput?.(), 80);
+    if (q.kind === 'type' || q.kind === 'dict' || q.kind === 'sdict') {
+      setTimeout(() => this.focusInput?.(), 80);
+    }
 
     if (q.kind === 'flash') {
       clearTimeout(this.flashT);
@@ -426,9 +463,21 @@ export class GameEngine {
     }
     const s = this.stats;
     const today = new Date().toDateString();
+    let thawed = false;
     if (s.last !== today) {
       const yesterday = new Date(Date.now() - 864e5).toDateString();
-      s.streak = s.last === yesterday ? (s.streak || 0) + 1 : 1;
+      const twoDaysAgo = new Date(Date.now() - 2 * 864e5).toDateString();
+      if (s.last === yesterday) {
+        s.streak = (s.streak || 0) + 1;
+      } else if (s.last === twoDaysAgo && this.meta.freezes > 0) {
+        // Nghỉ đúng một ngày và còn băng: chuỗi được cứu. Chỉ cứu một ngày — nghỉ
+        // hai ngày liền thì đó không còn là lỡ nữa.
+        this.meta = { ...this.meta, freezes: this.meta.freezes - 1 };
+        s.streak = (s.streak || 0) + 1;
+        thawed = true;
+      } else {
+        s.streak = 1;
+      }
       s.last = today;
     }
     if (s.dayDate !== today) {
@@ -438,10 +487,104 @@ export class GameEngine {
     s.dayXp += this.state.sessionXp;
     s.xp = (s.xp || 0) + this.state.sessionXp;
     save(KEYS.stats, s);
+
+    const coins = coinsForXp(this.state.sessionXp);
+    const games = this.meta.games.includes(this.state.game)
+      ? this.meta.games
+      : [...this.meta.games, this.state.game];
+    this.meta = addCoins({ ...this.meta, day: today, games }, coins);
+    saveMeta(this.meta);
+
     this.hushAll();
-    this.setState({ mode: 'result' });
+    this.setState({
+      mode: 'result',
+      coinsWon: coins,
+      metaVer: this.state.metaVer + 1,
+      fbMsg: thawed ? '🧊 Một viên băng vừa tan ra để giữ chuỗi ngày của bạn!' : this.state.fbMsg,
+    });
     setTimeout(() => this.burst(120), 200);
   }
+
+  // -- vàng, rương, nhiệm vụ ------------------------------------------------
+
+  /** Ba nhiệm vụ của hôm nay, kèm tiến độ đọc thẳng từ nhật ký. */
+  quests = (): QuestState[] => {
+    const today = new Date().toDateString();
+    const dayXp = this.stats.dayDate === today ? this.stats.dayXp || 0 : 0;
+    const ctx = questCtx(loadLog(), this.meta, dayXp);
+    return questStates(today, ctx, this.meta.claimed);
+  };
+
+  /** Nhận thưởng một nhiệm vụ đã xong. Xong cả ba thì được thêm một rương. */
+  claimQuest = (id: string): void => {
+    const states = this.quests();
+    const hit = states.find((q) => q.quest.id === id);
+    if (!hit || !hit.done || hit.claimed) return;
+    let m = addCoins({ ...this.meta, claimed: [...this.meta.claimed, id] }, hit.quest.coins);
+    const allDone = states.every((q) => q.done) && !m.bonusTaken;
+    if (allDone) {
+      m = addCoins({ ...m, bonusTaken: true, chests: m.chests + 1 }, ALL_DONE_BONUS);
+    }
+    this.meta = m;
+    saveMeta(m);
+    this.audio.tone(880, 0, 0.14, 'triangle', 0.14);
+    this.audio.tone(1320, 0.1, 0.18, 'triangle', 0.12);
+    this.burst(allDone ? 90 : 30);
+    this.setState({ metaVer: this.state.metaVer + 1 });
+  };
+
+  /** Đổi vàng lấy một rương. */
+  buyChest = (): void => {
+    if (this.meta.coins < CHEST_COST) return;
+    this.meta = { ...this.meta, coins: this.meta.coins - CHEST_COST, chests: this.meta.chests + 1 };
+    saveMeta(this.meta);
+    this.audio.pick();
+    this.setState({ metaVer: this.state.metaVer + 1 });
+  };
+
+  /** Mở một rương và mở hộp thoại khoe phần thưởng. */
+  openChest = (): void => {
+    if (this.meta.chests <= 0) return;
+    const { meta, reward } = openChest(this.meta);
+    this.meta = meta;
+    saveMeta(meta);
+    this.audio.finale();
+    this.burst(reward.kind === 'pet' ? 120 : 60);
+    this.setState({ reward, metaVer: this.state.metaVer + 1 });
+  };
+
+  closeReward = (): void => this.setState({ reward: null });
+
+  /** Huy hiệu, tính lại từ nhật ký mỗi lần đọc nên không bao giờ cũ. */
+  awards = (): AwardState[] => {
+    const log = loadLog();
+    const p = this.progress();
+    const exam = load<{ best?: Record<string, number> }>(KEYS.exam, {});
+    const examBest = Math.max(0, ...Object.values(exam.best ?? {}), 0);
+    const ctx: AwardCtx = {
+      xp: p.xp,
+      level: p.level,
+      streak: p.streak,
+      learned: p.learned,
+      answers: log.length,
+      right: log.filter((r) => r[3] === 1).length,
+      bestEndless: this.bestEndless(),
+      bestCombo: this.meta.bestCombo,
+      pets: this.meta.pets.length,
+      chestsOpened: this.meta.opened,
+      coinsEarned: this.meta.earned,
+      kindRight: kindRightOf(log),
+      examBest,
+      days: studyDays(log),
+    };
+    return awardStates(ctx);
+  };
+
+  /** Bao nhiêu huy hiệu đã đạt trên tổng số. */
+  awardCount = (): [number, number] => [this.awards().filter((a) => a.done).length, AWARDS.length];
+
+  /** Linh thú đang sở hữu, theo thứ tự trong bộ sưu tập. */
+  petsOwned = () => PETS.filter((p) => this.meta.pets.includes(p.id));
 
   // -- answering ------------------------------------------------------------
 
@@ -569,7 +712,7 @@ export class GameEngine {
     const st = this.state;
     if (!q) return false;
     if (isTileQ(q)) return st.typed.length > 0;
-    if (q.kind === 'type' || q.kind === 'dict') return st.typedText.trim().length > 0;
+    if (isTypeQ(q)) return st.typedText.trim().length > 0;
     return st.sel >= 0;
   }
 
@@ -580,9 +723,17 @@ export class GameEngine {
     if (!q || q.kind === 'match' || q.kind === 'tf' || st.checked) return;
 
     let ok: boolean;
+    /** Điểm chép chính tả, 0–1 — chỉ câu `sdict` mới có. */
+    let part: number | undefined;
     if (isTileQ(q)) {
       if (!st.typed.length) return;
       ok = st.typed.join('') === q.ansStr;
+    } else if (q.kind === 'sdict') {
+      if (!st.typedText.trim()) return;
+      // Chép chính tả chấm theo tỉ lệ chữ đúng: sai một chữ trong câu chín chữ không
+      // phải là "không nghe được gì", và chấm nó thành 0 thì lần sau chẳng ai dám gõ dài.
+      part = diffChars(hanOnly(st.typedText), q.sent).score;
+      ok = part >= DICT_PASS;
     } else if (q.kind === 'type' || q.kind === 'dict') {
       if (!st.typedText.trim()) return;
       ok = st.typedText.trim() === q.word.h;
@@ -599,6 +750,11 @@ export class GameEngine {
     const combo = ok ? st.combo + 1 : 0;
     let gain = ok ? (q.re ? 5 : 10) + Math.min(combo, 6) : 0;
     let bonusMsg = '';
+    // Gần đúng vẫn được công: chép trúng 7/9 chữ thì mất điểm SRS nhưng vẫn có XP.
+    if (part !== undefined) {
+      if (!ok && part >= 0.5) gain = Math.round(6 * part);
+      bonusMsg = `✍️ ${Math.round(part * 100)}% số chữ · `;
+    }
     if (ok && combo > 0 && combo % 5 === 0) {
       gain += 15;
       bonusMsg = 'COMBO ×' + combo + '! +15 XP · ';
@@ -647,6 +803,10 @@ export class GameEngine {
         bonusMsg = '💀 Chuỗi dừng ở ' + st.score + ' · ';
       }
     }
+
+    if (st.boost) gain *= 2;
+    if (combo > this.meta.maxCombo) this.meta = { ...this.meta, maxCombo: combo };
+    if (combo > this.meta.bestCombo) this.meta = { ...this.meta, bestCombo: combo };
 
     if (ok) {
       this.audio.right(combo);

@@ -53,6 +53,11 @@ export const CHIP_COLORS: Record<string, string> = {
   conf: '#7a5cc4',
   tone: '#1f7a6d',
   cloze: '#a4571f',
+  build: '#c96f2e',
+  sdict: '#6b4fa8',
+  num: '#1f6b8f',
+  fix: '#b03a4a',
+  collo: '#2f7a5a',
 };
 
 export const CHIP_LABELS: Record<string, string> = {
@@ -73,6 +78,11 @@ export const CHIP_LABELS: Record<string, string> = {
   conf: 'CẶP DỄ NHẦM ⚔️',
   tone: 'THANH ĐIỆU & PHÁT ÂM 🎚️',
   cloze: 'ĐIỀN TỪ VÀO CÂU 🧩',
+  build: 'DỰNG CÂU 🧱',
+  sdict: 'CHÉP CHÍNH TẢ 📝',
+  num: 'BẪY SỐ & GIỜ 🔢',
+  fix: 'BẮT LỖI SAI 🩹',
+  collo: 'KẾT HỢP TỪ 🧲',
 };
 
 export const PRAISE = [

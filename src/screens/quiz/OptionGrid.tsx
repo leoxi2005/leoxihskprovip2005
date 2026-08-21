@@ -30,10 +30,13 @@ export function OptionGrid({ q, st }: { q: AnyChoiceQ; st: GameState }) {
     q.kind === 'pass' ||
     q.kind === 'song' ||
     q.kind === 'conf' ||
-    q.kind === 'cloze';
+    q.kind === 'cloze' ||
+    q.kind === 'collo' ||
+    q.kind === 'fix';
   const meaningQ = q.kind === 'h2m' || q.kind === 'flash';
-  // Sentence meanings are long — one per row, left-aligned.
-  const left = q.kind === 'sent';
+  // Sentence meanings are long — one per row, left-aligned. Bốn mảnh của câu bắt lỗi
+  // cũng vậy: chúng phải đọc được theo đúng thứ tự trong câu, nên xếp một hàng một mảnh.
+  const left = q.kind === 'sent' || q.kind === 'fix';
 
   return (
     <div
@@ -75,7 +78,16 @@ export function OptionGrid({ q, st }: { q: AnyChoiceQ; st: GameState }) {
 
         let main: string;
         if (meaningQ || q.kind === 'sent') main = typeof o === 'string' ? o : o.m;
-        else if (q.kind === 'gram' || q.kind === 'pass' || q.kind === 'conf' || q.kind === 'tone') main = o as string;
+        else if (
+          q.kind === 'gram' ||
+          q.kind === 'pass' ||
+          q.kind === 'conf' ||
+          q.kind === 'tone' ||
+          q.kind === 'collo' ||
+          q.kind === 'fix' ||
+          q.kind === 'num'
+        )
+          main = o as string;
         else main = (o as { h: string }).h;
 
         // Revealing pinyin only after the check keeps it from giving the answer away.
@@ -116,7 +128,10 @@ export function OptionGrid({ q, st }: { q: AnyChoiceQ; st: GameState }) {
                 hanziOpt
                   ? {
                       fontFamily: F.han,
-                      fontSize: q.kind === 'm2h' || q.kind === 'a2h' || q.kind === 'conf' ? 30 : 23,
+                      fontSize:
+                        q.kind === 'm2h' || q.kind === 'a2h' || q.kind === 'conf' || q.kind === 'collo'
+                          ? 30
+                          : 23,
                       fontWeight: 700,
                       color: C.ink,
                       lineHeight: 1.4,
@@ -124,7 +139,8 @@ export function OptionGrid({ q, st }: { q: AnyChoiceQ; st: GameState }) {
                   : {
                       fontFamily: F.ui,
                       // Tone marks are the whole question — they need room to be told apart.
-                      fontSize: q.kind === 'tone' ? 30 : left ? 15 : 17,
+                      // Con số là toàn bộ câu trả lời của bẫy số — cho nó to hẳn ra.
+                      fontSize: q.kind === 'tone' ? 30 : q.kind === 'num' ? 26 : left ? 15 : 17,
                       letterSpacing: q.kind === 'tone' ? '.03em' : undefined,
                       fontWeight: 700,
                       color: C.ink,

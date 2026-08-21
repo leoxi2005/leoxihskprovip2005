@@ -209,7 +209,12 @@ export function dayPlan(input: PlanInput): DayPlan {
           : 'Không còn gì tới hạn. Hàng đợi của bạn đang sạch 🎉',
       game: 'mix',
       target: due,
-      done: Math.min(due, sum(k, ['m2h', 'h2m', 'a2h', 'flash', 'type', 'dict', 'write', 'match'])),
+      // Dựng câu và chép chính tả cũng chấm đúng từ đó ở làn tái tạo, nên chúng
+      // gỡ được hàng đợi y như gõ chữ — bỏ ra ngoài là bắt học lại lần nữa.
+      done: Math.min(
+        due,
+        sum(k, ['m2h', 'h2m', 'a2h', 'flash', 'type', 'dict', 'write', 'match', 'build', 'sdict']),
+      ),
       required: true,
     },
     {
@@ -231,7 +236,7 @@ export function dayPlan(input: PlanInput): DayPlan {
         'Nghe là phần đầu tiên của đề và chỉ được nghe một lần — nó cần luyện mỗi ngày, không phải luyện dồn.',
       game: 'listen',
       target: 15,
-      done: sum(k, ['a2h', 'dict']),
+      done: sum(k, ['a2h', 'dict', 'sdict', 'num']),
       required: true,
     },
   ];
@@ -255,7 +260,7 @@ export function dayPlan(input: PlanInput): DayPlan {
       detail: 'Đọc hiểu chiếm 40/100 câu và là phần dễ kéo điểm lên nhất khi từ vựng đã vững.',
       game: 'read',
       target: 12,
-      done: sum(k, ['gram', 'sent', 'pass', 'order', 'conf', 'cloze']),
+      done: sum(k, ['gram', 'sent', 'pass', 'order', 'conf', 'cloze', 'fix', 'build', 'collo']),
       required: true,
     });
     tasks.push({

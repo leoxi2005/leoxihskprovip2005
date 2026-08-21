@@ -5,6 +5,8 @@ import type { GameId } from '../engine/types';
 import { useEngine, useGameState } from '../engine/useEngine';
 import { Bar } from '../components/Bar';
 import { DailyPlan } from '../components/DailyPlan';
+import { Quests } from '../components/Quests';
+import { RewardModal } from '../components/RewardModal';
 import { SettingsPanel } from '../components/SettingsPanel';
 import { SoundCheck } from '../components/SoundCheck';
 import { C, F, shadow } from '../theme';
@@ -186,6 +188,8 @@ export function Home() {
 
         <DailyPlan />
 
+        <Quests />
+
         <section
           style={{
             textAlign: 'left',
@@ -292,6 +296,8 @@ export function Home() {
             })}
           </div>
         </section>
+
+        <RewardModal />
 
         {!canPlay && (
           <p style={{ margin: '0 0 12px', fontSize: 14, fontWeight: 700, color: C.red }}>

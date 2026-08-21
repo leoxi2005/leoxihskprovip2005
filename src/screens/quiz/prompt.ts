@@ -140,6 +140,47 @@ export function promptView(q: Question, st: GameState): PromptView {
         sub: q.vi || undefined,
         speaker: 'none',
       };
+    case 'build':
+      return {
+        title: 'Dựng lại câu tiếng Trung từ nghĩa tiếng Việt',
+        main: q.vi,
+        mainStyle: { fontSize: 25, fontWeight: 800, lineHeight: 1.45 },
+        sub: `${q.tlen} từ · bấm số hoặc chạm để xếp`,
+        // Nghe trước là được đọc luôn đáp án, nên loa chỉ hiện sau khi chấm.
+        speaker: st.checked ? 'small' : 'none',
+      };
+    case 'sdict':
+      return {
+        title: 'Nghe cả câu rồi gõ lại bằng chữ Hán',
+        main: st.checked ? q.sent : '',
+        mainStyle: { ...serif, fontSize: 26, lineHeight: 1.7 },
+        sub: st.checked ? q.vi || undefined : `Câu có ${q.sent.length} chữ · nghe lại thoải mái`,
+        speaker: 'big',
+      };
+    case 'num':
+      return {
+        title: 'Nghe rồi chọn đúng con số',
+        main: st.checked ? q.d.say : '',
+        mainStyle: { ...serif, fontSize: 28, lineHeight: 1.6 },
+        sub: st.checked ? q.d.vi : undefined,
+        speaker: 'big',
+      };
+    case 'fix':
+      return {
+        title: 'Câu này sai một chỗ — chỗ nào?',
+        main: q.f.parts.join(''),
+        mainStyle: { ...serif, fontSize: 27, lineHeight: 1.8 },
+        sub: q.f.vi,
+        speaker: st.checked ? 'small' : 'none',
+      };
+    case 'collo':
+      return {
+        title: `Từ nào đi được với chỗ trống? — "${q.c.vi}"`,
+        main: q.c.frame,
+        mainStyle: { ...serif, fontSize: 34, lineHeight: 1.6 },
+        sub: 'Bốn từ đều dịch ra tiếng Việt gần giống nhau — chỉ một từ ghép được',
+        speaker: st.checked ? 'small' : 'none',
+      };
     case 'order':
       return {
         title: 'Sắp xếp thành câu đúng',
@@ -177,6 +218,11 @@ export const BIG_SPEAKER: CSSProperties = {
 
 /** The hint shown next to the check button, per question kind. */
 export function hintFor(q: Question): string {
+  if (q.kind === 'build') return `Phím 1–${q.tiles.length} xếp từ · Backspace xoá · Enter kiểm tra`;
+  if (q.kind === 'sdict') return 'Nghe 🔊 bao nhiêu lần cũng được · gõ đúng ≥90% số chữ là qua';
+  if (q.kind === 'num') return 'Nghe 🔊 rồi chọn con số · Enter kiểm tra';
+  if (q.kind === 'fix') return 'Phím 1–4 chọn mảnh sai · Enter kiểm tra';
+  if (q.kind === 'collo') return 'Phím 1–4 chọn từ · Enter kiểm tra';
   if (q.kind === 'write' || q.kind === 'order') {
     return `Phím 1–${q.tiles.length} chọn · Backspace xoá · Enter kiểm tra`;
   }

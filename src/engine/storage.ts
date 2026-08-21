@@ -24,6 +24,8 @@ export const KEYS = {
   plan: 'hskq_plan',
   /** Best result per exam part, from the part-by-part practice mode. */
   drill: 'hskq_drill',
+  /** Vàng, rương, linh thú, nhiệm vụ đã nhận — xem `meta.ts`. */
+  meta: 'hskq_meta',
 } as const;
 
 /** localStorage can throw (private mode, quota) — progress is best-effort. */
@@ -76,7 +78,7 @@ export type SrsMap = Record<string, SrsEntry>;
 export type Lane = 'recog' | 'recall';
 
 /** Kinds that make you produce the word rather than pick it out of a line-up. */
-const RECALL_KINDS = new Set<Kind>(['type', 'dict', 'write']);
+const RECALL_KINDS = new Set<Kind>(['type', 'dict', 'write', 'build', 'sdict']);
 
 export const laneOf = (k: Kind): Lane => (RECALL_KINDS.has(k) ? 'recall' : 'recog');
 
@@ -112,6 +114,11 @@ export const SLOW_MS: Partial<Record<Kind, number>> = {
   dict: 16000,
   write: 14000,
   cloze: 12000,
+  collo: 10000,
+  num: 9000,
+  fix: 16000,
+  build: 30000,
+  sdict: 35000,
 };
 
 const DEFAULT_SLOW_MS = 12000;

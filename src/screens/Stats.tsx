@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Awards } from '../components/Awards';
 import { DECK } from '../data';
 import { KEYS, load, loadLog } from '../engine/storage';
 import { byKind, forecast, recentDays, streakFrom, topMissed } from '../engine/stats';
@@ -257,6 +258,8 @@ export function Stats() {
             ))
         )}
       </section>
+
+      <Awards />
     </div>
   );
 }

@@ -23,6 +23,8 @@ import { splitHsk123 } from '../../src/data/hsk123.ts';
 import { EXAM_1 } from '../../src/data/exam1.ts';
 import deck from '../../src/data/deck.json' with { type: 'json' };
 import songs from '../../src/data/songs.json' with { type: 'json' };
+import { COLLOCATIONS, FIXES } from '../../src/data/drills.ts';
+import { NUM_DRILLS } from '../../src/engine/numbers.ts';
 import { ttsKey } from '../../src/engine/tts.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -70,6 +72,11 @@ for (const song of songs) {
     if (l.blank) add(l.cn.split(l.blank).join('……'), 'bài hát · chỗ trống');
   }
 }
+for (const d of NUM_DRILLS) add(d.say, 'bẫy số');
+for (const c of COLLOCATIONS) add(c.frame.replace('____', c.a), 'kết hợp từ');
+// Chỉ thu câu ĐÃ SỬA. Câu sai không bao giờ được đọc lên — nghe một câu sai bằng
+// giọng chuẩn là cách nhanh nhất để nhớ nhầm.
+for (const f of FIXES) add(f.right, 'bắt lỗi sai');
 for (const part of [EXAM_1.listen1, EXAM_1.listen2, EXAM_1.listen3]) {
   for (const q of part ?? []) if (q.say) add(q.say, 'đề mô phỏng · nghe');
 }

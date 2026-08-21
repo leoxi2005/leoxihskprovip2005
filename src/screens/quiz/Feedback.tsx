@@ -1,12 +1,15 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { IMAGES, STORIES } from '../../data';
+import { diffChars } from '../../engine/diff';
+import { NUM_CAT_LABEL } from '../../engine/numbers';
 import { toneName, tonePattern, toneSpots } from '../../engine/pinyin';
+import { hanOnly } from '../../engine/segment';
 import { C, F } from '../../theme';
 import type { GameState, Question } from '../../engine/types';
 import { useEngine } from '../../engine/useEngine';
 
 interface FeedbackView {
-  hanzi: string;
+  hanzi: ReactNode;
   hanziStyle: CSSProperties;
   pinyin?: string;
   meaning: string;
@@ -21,8 +24,35 @@ interface FeedbackView {
 const BIG_HANZI: CSSProperties = { fontFamily: F.han, fontSize: 36, fontWeight: 700 };
 const SENT_HANZI: CSSProperties = { fontFamily: F.han, fontSize: 21, fontWeight: 700, lineHeight: 1.5 };
 
+/**
+ * Bài chép chính tả hiện lại câu gốc, tô đúng chỗ lệch: chữ gõ đúng để đen, chữ bỏ
+ * sót gạch đỏ, chữ gõ thừa gạch ngang. Chỉ nói "sai rồi" thì người học không biết
+ * mình nghe hụt chỗ nào.
+ */
+function dictMarks(typed: string, target: string): ReactNode {
+  const { marks } = diffChars(hanOnly(typed), target);
+  return (
+    <span>
+      {marks.map((m, i) => (
+        <span
+          key={i}
+          style={{
+            color: m.kind === 'ok' ? C.ink : m.kind === 'miss' ? C.red : C.muted2,
+            background: m.kind === 'miss' ? '#f7d9d2' : 'transparent',
+            textDecoration: m.kind === 'extra' ? 'line-through' : 'none',
+            borderRadius: 4,
+            padding: m.kind === 'miss' ? '0 2px' : 0,
+          }}
+        >
+          {m.ch}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 /** What the panel reveals — pinyin included, which the question itself never shows. */
-function feedbackView(q: Question): FeedbackView {
+function feedbackView(q: Question, st: GameState): FeedbackView {
   switch (q.kind) {
     case 'song':
       return {
@@ -104,6 +134,47 @@ function feedbackView(q: Question): FeedbackView {
         meaning: q.o.vi,
         note: q.o.tip || undefined,
       };
+    case 'build':
+      return {
+        hanzi: q.ansStr,
+        hanziStyle: SENT_HANZI,
+        meaning: q.vi,
+        note: `${q.word.h} (${q.word.p}) — ${q.word.m}`,
+        story: STORIES[q.word.h],
+        imgKey: q.word.h,
+      };
+    case 'sdict':
+      return {
+        hanzi: dictMarks(st.typedText, q.sent),
+        hanziStyle: SENT_HANZI,
+        pinyin: q.word.p,
+        meaning: q.vi || q.word.m,
+        note: `Chữ tô đỏ là chữ bạn nghe hụt · chữ gạch ngang là chữ gõ thừa. Từ khoá: ${q.word.h} (${q.word.p}) — ${q.word.m}`,
+        imgKey: q.word.h,
+      };
+    case 'num':
+      return {
+        hanzi: q.d.say,
+        hanziStyle: SENT_HANZI,
+        meaning: `${NUM_CAT_LABEL[q.d.cat]} · ${q.d.label} — ${q.d.vi}`,
+        note: q.d.why,
+      };
+    case 'fix':
+      return {
+        hanzi: q.f.right,
+        hanziStyle: SENT_HANZI,
+        pinyin: q.f.pin,
+        meaning: q.f.vi,
+        note: `Chỗ sai là mảnh ${q.f.bad + 1} "${q.f.parts[q.f.bad]}" — ${q.f.why}`,
+      };
+    case 'collo':
+      return {
+        hanzi: q.c.full,
+        hanziStyle: SENT_HANZI,
+        pinyin: q.c.pin,
+        meaning: q.c.vi,
+        note: q.c.why,
+      };
     case 'pass':
       return {
         hanzi: q.qq.opts[q.qq.correct],
@@ -127,7 +198,7 @@ function feedbackView(q: Question): FeedbackView {
 /** The colored panel that slides up after a check. */
 export function Feedback({ q, st }: { q: Question; st: GameState }) {
   const engine = useEngine();
-  const v = feedbackView(q);
+  const v = feedbackView(q, st);
   const ok = st.correct;
   const img = v.imgKey ? IMAGES[v.imgKey] : undefined;
   const last = st.qi + 1 >= st.session.length;

@@ -1,10 +1,28 @@
-import type { Confusable, Grammar, MySong, Order, Passage, Sentence, Song, Vocab } from '../data';
+import type {
+  Collocation,
+  Confusable,
+  FixItem,
+  Grammar,
+  MySong,
+  Order,
+  Passage,
+  Sentence,
+  Song,
+  Vocab,
+} from '../data';
+import type { NumDrill } from './numbers';
 import { soundDistractors, toneDistractors } from './pinyin';
+import { hanOnly, segmentStrict } from './segment';
 import type { Lane } from './storage';
 import type {
+  BuildQ,
   ChoiceQ,
   ClozeQ,
+  ColloQ,
   ConfQ,
+  FixQ,
+  NumQ,
+  SDictQ,
   GramQ,
   Kind,
   MatchQ,
@@ -191,6 +209,61 @@ export const makeConfQ = (c: Confusable): ConfQ => ({
   ans: c.pair.indexOf(c.a),
 });
 
+/**
+ * Dựng lại câu ví dụ của từ, bằng các quân bài là TỪ.
+ *
+ * Trả `null` khi câu không cắt sạch được thành từ trong deck, hoặc khi cắt ra quá
+ * ít / quá nhiều quân: dưới 3 quân thì không còn gì để xếp, trên 7 quân thì thành
+ * trò xếp hình chứ không phải bài ngữ pháp.
+ */
+export function makeBuildQ(w: Vocab, dict: ReadonlySet<string>): BuildQ | null {
+  if (!w.ex || !w.exVi) return null;
+  const toks = segmentStrict(w.ex, dict);
+  if (!toks || toks.length < 3 || toks.length > 7) return null;
+  let tiles = shuffle(toks);
+  // Xếp sẵn đúng thứ tự thì chẳng còn gì để làm — đảo lại một lần.
+  if (tiles.join('') === toks.join('')) tiles = shuffle(toks);
+  return {
+    kind: 'build',
+    // Xếp lại câu là một lượt TÁI TẠO, nên nó tính vào làn recall của từ đó.
+    id: 'w:' + w.h,
+    word: w,
+    tiles,
+    ansStr: toks.join(''),
+    tlen: toks.length,
+    answer: toks,
+    vi: w.exVi,
+  };
+}
+
+/** Nghe cả câu rồi gõ lại. Câu ví dụ đã có bản thu sẵn nên không cần thu thêm. */
+export function makeSDictQ(w: Vocab): SDictQ | null {
+  if (!w.ex) return null;
+  const sent = hanOnly(w.ex);
+  // Dưới 4 chữ thì đây chỉ là câu nghe-viết từ đơn lẻ đã có sẵn ở chế độ khác.
+  if (sent.length < 4 || sent.length > 16) return null;
+  return { kind: 'sdict', id: 'w:' + w.h, word: w, sent, vi: w.exVi || '' };
+}
+
+export function makeNumQ(d: NumDrill): NumQ {
+  const opts = shuffle([d.label, ...d.bad]);
+  return { kind: 'num', id: d.id, d, opts, ans: opts.indexOf(d.label) };
+}
+
+/** Bốn mảnh của câu là bốn lựa chọn, giữ nguyên thứ tự — đảo đi là câu không đọc được. */
+export const makeFixQ = (f: FixItem): FixQ => ({
+  kind: 'fix',
+  id: f.id,
+  f,
+  opts: [...f.parts],
+  ans: f.bad,
+});
+
+export const makeColloQ = (c: Collocation): ColloQ => {
+  const opts = shuffle(c.opts);
+  return { kind: 'collo', id: c.id, c, opts, ans: opts.indexOf(c.a) };
+};
+
 export const makeMatchQ = (ws: Vocab[]): MatchQ => ({
   kind: 'match',
   id: null,
@@ -267,6 +340,20 @@ export function ttsFor(q: Question): string {
     // The replay button is only offered once the answer is on screen.
     case 'cloze':
       return q.word.ex || q.word.h;
+    // Đọc CÂU GỐC còn nguyên dấu câu, không đọc chuỗi chữ Hán trần đã cắt ra: bản
+    // thu sẵn được đánh khoá theo câu gốc, và dấu câu chính là chỗ ngắt hơi.
+    case 'build':
+      return q.word.ex || q.ansStr;
+    case 'sdict':
+      return q.word.ex || q.sent;
+    case 'num':
+      return q.d.say;
+    // Đọc câu sai lên là dạy chính cái sai đó — chỉ đọc câu ĐÃ SỬA, và chỉ sau khi
+    // người học đã chọn. `GameEngine` giữ im lặng cho tới lúc chấm.
+    case 'fix':
+      return q.f.right;
+    case 'collo':
+      return q.c.frame.replace('____', q.c.a);
     default:
       return 'word' in q ? q.word.h : '';
   }

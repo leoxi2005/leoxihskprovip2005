@@ -110,6 +110,23 @@ export function Quiz() {
             </span>
           </>
         )}
+        {st.boost && (
+          <span
+            style={{
+              background: C.purple,
+              color: '#fff',
+              border: `2px solid ${C.ink}`,
+              borderRadius: 99,
+              padding: '4px 12px',
+              fontSize: 13,
+              fontWeight: 800,
+              whiteSpace: 'nowrap',
+            }}
+            title="Bùa XP đang chạy — mọi điểm của phiên này được nhân đôi"
+          >
+            ⚡ ×2
+          </span>
+        )}
         {st.combo >= 2 && (
           <span
             style={{
@@ -339,7 +356,7 @@ export function Quiz() {
       ) : q.kind === 'tf' ? (
         <TfRound q={q} st={st} />
       ) : isTypeQ(q) ? (
-        <TypeInput st={st} />
+        <TypeInput st={st} long={q.kind === 'sdict'} />
       ) : isChoiceQ(q) ? (
         <OptionGrid q={q} st={st} />
       ) : null}

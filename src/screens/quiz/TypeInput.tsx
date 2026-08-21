@@ -3,8 +3,13 @@ import { C, F } from '../../theme';
 import type { GameState } from '../../engine/types';
 import { useEngine } from '../../engine/useEngine';
 
-/** Free-text hanzi answer, typed with the OS Chinese IME. */
-export function TypeInput({ st }: { st: GameState }) {
+/**
+ * Free-text hanzi answer, typed with the OS Chinese IME.
+ *
+ * `long` là ô của bài chép chính tả: cả một câu chứ không phải một từ, nên chữ nhỏ
+ * lại và ô rộng ra — giữ nguyên cỡ 44px thì câu chín chữ tràn ra ngoài màn hình.
+ */
+export function TypeInput({ st, long = false }: { st: GameState; long?: boolean }) {
   const engine = useEngine();
   const ref = useRef<HTMLInputElement>(null);
 
@@ -25,18 +30,18 @@ export function TypeInput({ st }: { st: GameState }) {
         ref={ref}
         value={st.typedText}
         onChange={(e) => engine.setTyped(e.target.value)}
-        placeholder="输入汉字…"
+        placeholder={long ? '听写整句…' : '输入汉字…'}
         aria-label="Gõ chữ Hán"
         autoComplete="off"
         spellCheck={false}
         readOnly={st.checked}
         style={{
           fontFamily: F.han,
-          fontSize: 44,
+          fontSize: long ? 28 : 44,
           fontWeight: 700,
           textAlign: 'center',
           width: '100%',
-          maxWidth: 420,
+          maxWidth: long ? 700 : 420,
           padding: '14px 20px',
           border: `3px solid ${bd}`,
           borderRadius: 18,

@@ -77,6 +77,7 @@ export function Result() {
         </h2>
         <p style={{ margin: 0, fontSize: 15, fontWeight: 600, color: C.muted }}>
           {endless ? endlessSub(st.score, st.best) : 'Bạn đã hoàn thành phiên ôn tập'}
+          {st.boost && ' · ⚡ bùa XP ×2 đã dùng cho phiên này'}
         </p>
 
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', margin: '20px 0', flexWrap: 'wrap' }}>
@@ -85,6 +86,7 @@ export function Result() {
               <Stat value={String(st.score)} label="Chuỗi" bg={C.okBg} color={C.green} />
               <Stat value={String(Math.max(st.best, st.score))} label="Kỷ lục" bg={C.soft} color={C.ochre} />
               <Stat value={'+' + st.sessionXp} label="XP" bg="#e7f0f6" color={C.blue} />
+              <Stat value={'+' + st.coinsWon} label="Vàng 🪙" bg="#f7e6b8" color={C.gold} />
             </>
           ) : (
             <>
@@ -92,6 +94,7 @@ export function Result() {
               <Stat value={String(st.wrong)} label="Sai" bg={C.badBg} color={C.red} />
               <Stat value={acc + '%'} label="Chính xác" bg={C.soft} color={C.ochre} />
               <Stat value={'+' + st.sessionXp} label="XP" bg="#e7f0f6" color={C.blue} />
+              <Stat value={'+' + st.coinsWon} label="Vàng 🪙" bg="#f7e6b8" color={C.gold} />
             </>
           )}
         </div>

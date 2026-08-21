@@ -1,4 +1,18 @@
-import type { Confusable, Grammar, MySong, Order, Passage, PassageQuestion, Sentence, Song, Vocab } from '../data';
+import type {
+  Collocation,
+  Confusable,
+  FixItem,
+  Grammar,
+  MySong,
+  Order,
+  Passage,
+  PassageQuestion,
+  Sentence,
+  Song,
+  Vocab,
+} from '../data';
+import type { Reward } from './meta';
+import type { NumDrill } from './numbers';
 
 export type Kind =
   | 'm2h'
@@ -17,7 +31,12 @@ export type Kind =
   | 'song'
   | 'conf'
   | 'tone'
-  | 'cloze';
+  | 'cloze'
+  | 'build'
+  | 'sdict'
+  | 'num'
+  | 'fix'
+  | 'collo';
 
 export type GameId =
   | 'mix'
@@ -34,7 +53,12 @@ export type GameId =
   | 'endless'
   | 'tone'
   | 'cloze'
-  | 'leech';
+  | 'leech'
+  | 'build'
+  | 'sdict'
+  | 'num'
+  | 'fix'
+  | 'collo';
 
 interface Base {
   kind: Kind;
@@ -131,6 +155,56 @@ export interface OrderQ extends Base {
   tlen: number;
 }
 
+/**
+ * Dựng lại câu tiếng Trung từ nghĩa tiếng Việt, bằng các quân bài là TỪ.
+ *
+ * Khác `order` ở chỗ nội dung được sinh ra từ chính câu ví dụ của từ đang tới hạn
+ * ôn, nên nó vừa là bài ngữ pháp vừa là một lượt tái tạo từ vựng.
+ */
+export interface BuildQ extends Base {
+  kind: 'build';
+  word: Vocab;
+  tiles: string[];
+  ansStr: string;
+  tlen: number;
+  /** Thứ tự đúng, để bảng chấm chỉ ra chỗ lệch. */
+  answer: string[];
+  vi: string;
+}
+
+/** Nghe cả câu rồi gõ lại — chấm theo tỉ lệ chữ đúng, không phải đúng/sai tuyệt đối. */
+export interface SDictQ extends Base {
+  kind: 'sdict';
+  word: Vocab;
+  /** Câu đích, chỉ còn chữ Hán. */
+  sent: string;
+  vi: string;
+}
+
+/** Nghe con số / giờ / giá tiền rồi chọn đúng con số. */
+export interface NumQ extends Base {
+  kind: 'num';
+  d: NumDrill;
+  opts: string[];
+  ans: number;
+}
+
+/** Câu sai một chỗ — chọn đúng mảnh mang lỗi. */
+export interface FixQ extends Base {
+  kind: 'fix';
+  f: FixItem;
+  opts: string[];
+  ans: number;
+}
+
+/** Từ nào đi được với từ này? */
+export interface ColloQ extends Base {
+  kind: 'collo';
+  c: Collocation;
+  opts: string[];
+  ans: number;
+}
+
 /** 4 hanzi ↔ 4 meanings. `rightOrder[j]` is the pair index shown in right slot j. */
 export interface MatchQ extends Base {
   kind: 'match';
@@ -172,17 +246,35 @@ export type Question =
   | SongQ
   | ConfQ
   | ToneQ
-  | ClozeQ;
+  | ClozeQ
+  | BuildQ
+  | SDictQ
+  | NumQ
+  | FixQ
+  | ColloQ;
 
 /** Questions whose answer is picked from an options grid. */
-export type AnyChoiceQ = ChoiceQ | GramQ | SentQ | PassQ | SongQ | ConfQ | ToneQ | ClozeQ;
+export type AnyChoiceQ =
+  | ChoiceQ
+  | GramQ
+  | SentQ
+  | PassQ
+  | SongQ
+  | ConfQ
+  | ToneQ
+  | ClozeQ
+  | NumQ
+  | FixQ
+  | ColloQ;
 
-/** Questions built from tiles (`write` and `order`). */
-export type AnyTileQ = WriteQ | OrderQ;
+/** Questions built from tiles (`write`, `order` and `build`). */
+export type AnyTileQ = WriteQ | OrderQ | BuildQ;
 
 export const isChoiceQ = (q: Question): q is AnyChoiceQ => 'opts' in q && 'ans' in q;
-export const isTileQ = (q: Question): q is AnyTileQ => q.kind === 'write' || q.kind === 'order';
-export const isTypeQ = (q: Question): q is TypeQ => q.kind === 'type' || q.kind === 'dict';
+export const isTileQ = (q: Question): q is AnyTileQ =>
+  q.kind === 'write' || q.kind === 'order' || q.kind === 'build';
+export const isTypeQ = (q: Question): q is TypeQ | SDictQ =>
+  q.kind === 'type' || q.kind === 'dict' || q.kind === 'sdict';
 /** The word a question is about, when it has one. */
 export const wordOf = (q: Question): Vocab | undefined => ('word' in q ? q.word : undefined);
 
@@ -234,6 +326,14 @@ export interface GameState {
   bossHp: number;
   hearts: number;
   bookWord: Vocab | null;
+  /** Phiên này đang chạy bùa XP ×2. */
+  boost: boolean;
+  /** Vàng kiếm được ở phiên vừa xong — màn Kết quả đọc con số này. */
+  coinsWon: number;
+  /** Phần thưởng vừa mở ra từ rương; `null` là không có hộp thoại nào đang mở. */
+  reward: Reward | null;
+  /** Tăng lên mỗi khi vàng/rương/nhiệm vụ đổi, để React vẽ lại. */
+  metaVer: number;
 }
 
 export interface Settings {

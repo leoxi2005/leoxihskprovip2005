@@ -96,6 +96,11 @@ const MODES: GameId[] = [
   'endless',
   'tone',
   'cloze',
+  'build',
+  'sdict',
+  'num',
+  'fix',
+  'collo',
 ];
 
 describe.each(MODES)('%s session', (g) => {
@@ -115,7 +120,8 @@ describe.each(MODES)('%s session', (g) => {
       if (isTileQ(q)) {
         // The answer must be constructible from the tiles offered.
         const pool = q.tiles.slice();
-        const needed = q.kind === 'write' ? q.ansStr.split('') : q.o.tokens;
+        const needed =
+          q.kind === 'write' ? q.ansStr.split('') : q.kind === 'order' ? q.o.tokens : q.answer;
         for (const ch of needed) {
           const at = pool.indexOf(ch);
           expect(at, `tile "${ch}" missing`).toBeGreaterThanOrEqual(0);

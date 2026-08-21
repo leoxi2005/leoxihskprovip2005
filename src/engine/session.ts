@@ -1,26 +1,36 @@
 import {
+  COLLOCATIONS,
   CONFUSABLES,
   DECK,
+  FIXES,
   MYSONG,
   SONGS,
+  type Collocation,
   type Confusable,
+  type FixItem,
   type Grammar,
   type Order,
   type Passage,
   type Sentence,
   type Vocab,
 } from '../data';
+import { NUM_DRILLS } from './numbers';
 import {
   buildBoss,
   buildLightning,
+  makeBuildQ,
   makeClozeQ,
+  makeColloQ,
   makeConfQ,
+  makeFixQ,
+  makeNumQ,
   makeGramQ,
   makeMatchQ,
   makeMySongQ,
   makeOrderQ,
   makePassQ,
   makeSentQ,
+  makeSDictQ,
   makeSongQ,
   makeToneQ,
   makeWordQ,
@@ -50,6 +60,8 @@ export interface Pools {
   passages: Passage[];
   orders: Order[];
   confusables: Confusable[];
+  collocations: Collocation[];
+  fixes: FixItem[];
 }
 
 /**
@@ -72,8 +84,34 @@ export function pools(sel: TopicSel): Pools {
     passages: DECK.passages.filter((p) => matchTopic(sel, p.t)),
     orders: DECK.orders.filter((o) => matchTopic(sel, o.t)),
     confusables: CONFUSABLES.filter((c) => matchTopic(sel, c.t)),
+    collocations: COLLOCATIONS.filter((c) => matchTopic(sel, c.t)),
+    fixes: FIXES.filter((f) => matchTopic(sel, f.t)),
   };
 }
+
+/**
+ * Từ điển dùng để cắt câu thành quân bài — chính là deck, không phải một danh sách
+ * ngoài. Xem `segment.ts` để biết vì sao.
+ */
+export const DICT: ReadonlySet<string> = new Set(DECK.vocab.map((v) => v.h));
+
+/** Những từ có câu ví dụ cắt sạch được thành quân bài. Tính một lần rồi nhớ luôn. */
+let buildableCache: Set<string> | null = null;
+export function buildableSet(): Set<string> {
+  if (!buildableCache) {
+    buildableCache = new Set(DECK.vocab.filter((w) => makeBuildQ(w, DICT)).map((w) => w.h));
+  }
+  return buildableCache;
+}
+
+/** Từ dựng được câu xếp chữ, trong phạm vi chủ đề đang bật. */
+export const buildable = (list: Vocab[]): Vocab[] => {
+  const ok = buildableSet();
+  return list.filter((w) => ok.has(w.h));
+};
+
+/** Từ có câu ví dụ đủ dài để chép chính tả. */
+export const dictatable = (list: Vocab[]): Vocab[] => list.filter((w) => makeSDictQ(w) !== null);
 
 export const topicsOf = (): string[] => [...new Set(DECK.vocab.map((v) => v.t))];
 
@@ -313,6 +351,9 @@ export function buildSession(g: GameId, sel: TopicSel, srs: SrsMap, settings: Se
           .slice(0, 2)
           .map((w) => makeClozeQ(w, P.vocab, DECK.vocab))
           .filter((q) => q !== null),
+        ...pickDue(srs, P.collocations, (x) => x.id, 1, 'collo').map((o) => makeColloQ(o.x)),
+        ...pickDue(srs, P.fixes, (x) => x.id, 1, 'fix').map((o) => makeFixQ(o.x)),
+        ...pickDue(srs, NUM_DRILLS, (x) => x.id, 1, 'num').map((o) => makeNumQ(o.x)),
       ]);
       let si = 0;
       ws.forEach((q, i) => {
@@ -368,6 +409,61 @@ export function buildSession(g: GameId, sel: TopicSel, srs: SrsMap, settings: Se
       session.push(...qs.slice(0, size));
       break;
     }
+    case 'build': {
+      const pool = buildable(P.vocab);
+      if (!pool.length) break;
+      const { picks, newUsed } = pickWords(srs, pool, size, budget, 'build');
+      spendNewBudget(newUsed);
+      const qs = picks.map((p) => makeBuildQ(p.w, DICT)).filter((q) => q !== null);
+      // Bù thêm khi lát đến hạn quá mỏng, để phiên nào cũng đủ dài.
+      const have = new Set(qs.map((q) => q.word.h));
+      for (const w of shuffle(pool)) {
+        if (qs.length >= size) break;
+        if (have.has(w.h)) continue;
+        const q = makeBuildQ(w, DICT);
+        if (q) qs.push(q);
+      }
+      session.push(...qs.slice(0, size));
+      break;
+    }
+    case 'sdict': {
+      const pool = dictatable(P.vocab);
+      if (!pool.length) break;
+      const { picks, newUsed } = pickWords(srs, pool, size, budget, 'sdict');
+      spendNewBudget(newUsed);
+      const qs = picks.map((p) => makeSDictQ(p.w)).filter((q) => q !== null);
+      const have = new Set(qs.map((q) => q.word.h));
+      for (const w of shuffle(pool)) {
+        if (qs.length >= size) break;
+        if (have.has(w.h)) continue;
+        const q = makeSDictQ(w);
+        if (q) qs.push(q);
+      }
+      session.push(...qs.slice(0, size));
+      break;
+    }
+    case 'num':
+      // Bẫy số không gắn với chủ đề từ vựng nào, nên quét thẳng cả bộ theo hạn ôn.
+      session.push(
+        ...pickDue(srs, NUM_DRILLS, (x) => x.id, Math.min(size, NUM_DRILLS.length), 'num').map((o) =>
+          makeNumQ(o.x),
+        ),
+      );
+      break;
+    case 'fix':
+      session.push(
+        ...pickDue(srs, P.fixes, (x) => x.id, Math.min(size, P.fixes.length), 'fix').map((o) =>
+          makeFixQ(o.x),
+        ),
+      );
+      break;
+    case 'collo':
+      session.push(
+        ...pickDue(srs, P.collocations, (x) => x.id, Math.min(size, P.collocations.length), 'collo').map(
+          (o) => makeColloQ(o.x),
+        ),
+      );
+      break;
     case 'leech': {
       // Nothing here is on schedule — these are the words that keep being forgotten,
       // drilled recognition-first because recall clearly isn't landing yet.

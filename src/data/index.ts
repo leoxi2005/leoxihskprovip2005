@@ -13,6 +13,7 @@ import { splitHsk4 } from './hsk4';
 import type { Deck, MySong, Song, Vocab } from './types';
 
 export * from './types';
+export { COLLOCATIONS, FIXES, type Collocation, type FixItem } from './drills';
 export { CONFUSABLES, EXTRA_TOPIC, type Confusable } from './extra';
 export { EXTRA2_TOPICS, TOPIC_ART, TOPIC_JOB, TOPIC_LANG, TOPIC_STUDY } from './extra2';
 export { EXTRA3_TOPICS, TOPIC_ATT, TOPIC_BODY, TOPIC_LIFE } from './extra3';

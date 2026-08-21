@@ -3,9 +3,9 @@
 **Chơi thử: https://leoxi2005.github.io/leoxihskprovip2005/**
 
 Ứng dụng luyện thi **HSK 4** cho người Việt, theo kiểu game: lặp lại ngắt quãng (SRS) hai làn,
-XP, lên cấp, chuỗi ngày, đấu trùm, 13 chế độ chơi, một đề thi thử đúng cấu trúc thật, và một lộ
-trình đếm ngược tới ngày thi. Toàn bộ tiến độ lưu ngay trong trình duyệt — không cần tài khoản,
-không cần server.
+XP, lên cấp, chuỗi ngày, đấu trùm, **18 chế độ chơi**, nhiệm vụ hằng ngày đổi mỗi ngày, vàng ·
+rương · linh thú · huy hiệu, một đề thi thử đúng cấu trúc thật, và một lộ trình đếm ngược tới
+ngày thi. Toàn bộ tiến độ lưu ngay trong trình duyệt — không cần tài khoản, không cần server.
 
 Tác giả: **leoxi**
 
@@ -14,6 +14,8 @@ Tác giả: **leoxi**
 - **1232 từ vựng — phủ trọn đại cương 1200 từ của HSK 4** · 67 điểm ngữ pháp · 35 bài đọc ·
   8 câu sắp xếp · 8 cặp từ dễ nhầm
 - **1 đề thi thử HSK 4 đầy đủ 100 câu** đúng cấu trúc đề thật (45 nghe · 40 đọc · 15 viết)
+- 44 cụm **kết hợp từ** (搭配) · 36 câu **bắt lỗi sai** (改错) · 48 đề **bẫy số & giờ**
+- 818 câu **dựng lại được từ nghĩa tiếng Việt**, cắt bằng chính từ điển của deck
 - 1223/1232 từ có câu ví dụ song ngữ, dùng cho chế độ điền từ
 - 59 ảnh minh hoạ AI + 111 mẹo nhớ Hán Việt
 - Hoạt hình viết từng nét (bộ thủ tô đỏ) cho mọi chữ Hán
@@ -44,6 +46,11 @@ npm run build
 | 🎚️ | **Thanh Điệu** | `8` | mǎi hay mài? Bốn pinyin chỉ khác dấu — kèm bẫy zh/z · sh/s · -n/-ng |
 | 🧩 | Điền Từ | `9` | Khoét từ khỏi chính câu ví dụ của nó |
 | ⚔️ | **Cặp Dễ Nhầm** | `0` | 经过 hay 通过? Chọn 1 trong 2, có lời giải thích tại sao |
+| 🧱 | **Dựng Câu** | `B` | Nhìn nghĩa tiếng Việt, xếp lại câu tiếng Trung từ các quân bài là TỪ |
+| 📝 | **Chép Chính Tả** | `D` | Nghe cả câu rồi gõ lại — chấm từng chữ, đúng ≥90% là qua |
+| 🔢 | **Bẫy Số & Giờ** | `N` | 三点三刻 là mấy giờ? 一百五 là 105 hay 150? |
+| 🩹 | **Bắt Lỗi Sai** | `F` | Câu chia làm bốn mảnh, một mảnh mang lỗi — chỉ ra mảnh nào |
+| 🧲 | **Kết Hợp Từ** | `C` | 提高 hay 增加 水平? Bốn từ dịch gần giống nhau, một từ ghép được |
 | 🔥 | Từ Khắc Tinh | `K` | Chỉ hiện khi có từ sai ≥ 6 lần — dạy lại thay vì cày tiếp |
 | 🎵 | Học qua nhạc | `J` | Điền từ vào lời chant |
 | 🎤 | 若把你 | `L` | Bài hát thật — video hát đúng câu đang hỏi rồi tự dừng |
@@ -52,6 +59,59 @@ npm run build
 Trong lúc chơi: `1–9` chọn đáp án · `Enter` kiểm tra & chuyển câu · `Backspace` xoá ·
 `Esc` thoát ô tìm kiếm. Phím tắt của mỗi chế độ được in ngay trên thẻ game
 (`src/engine/games.ts` là nguồn duy nhất cho cả lưới thẻ lẫn bàn phím).
+
+## Năm chế độ của đợt này
+
+Bốn chế độ đầu sinh nội dung từ chính deck, chế độ thứ năm và bắt-lỗi-sai thì viết tay vì không
+sinh máy được.
+
+**🧱 Dựng Câu** cắt câu ví dụ của từ thành các quân bài rồi bắt xếp lại theo nghĩa tiếng Việt.
+Không dùng thư viện phân từ nào: **từ điển cắt câu chính là deck**. Cắt bằng thư viện ngoài sẽ ra
+những mảnh không nằm trong deck, tức bắt người học xếp một từ họ chưa học. Câu nào chứa chữ ngoài
+deck thì bỏ hẳn — 热烈 mà vỡ thành 热 và 烈 là hai quân vô nghĩa. Còn lại 818 câu, mỗi câu 3–7 quân.
+Bước cắt tham lam ra quá vụn (我给他发了一条短信 thành 8 mảnh) nên có một lượt dán theo luật ngữ
+pháp: trợ từ dính vào từ trước (买了 · 我的 · 说得), số dính với lượng từ (一本 · 这条), chữ số dính
+liền nhau (二十一 là MỘT quân). Dựng câu tính vào **làn tái tạo** của từ đó, không phải một bài riêng.
+
+**📝 Chép Chính Tả** đọc cả câu rồi bắt gõ lại. Chấm bằng chuỗi con chung dài nhất chứ không so
+từng vị trí: gõ thiếu một chữ ở đầu câu mà chấm theo vị trí thì cả câu sau đó đều sai, và con số 0
+đó chẳng nói được gì. Sai một chữ trong chín chữ vẫn được XP, chỉ không lên hộp SRS. Bảng chấm tô
+đỏ chữ nghe hụt và gạch ngang chữ gõ thừa.
+
+**🔢 Bẫy Số & Giờ** dựng thẳng ba cái bẫy mất điểm nhiều nhất ở phần nghe: 两 hay 二 (2 giờ là
+两点, 200 là 两百), 一百五 nói miệng là **150** còn 105 bắt buộc phải có 零, và 差五分四点 = **3:55**
+chứ không phải 4:05 — con số nghe được không phải con số cần chọn. Danh sách sinh cố định, không có
+`Math.random`, vì mỗi câu ứng với đúng một file thu sẵn.
+
+**🩹 Bắt Lỗi Sai** — 36 câu, mỗi câu một lỗi người Việt thật sự hay mắc: 否定 chen vào giữa 把 và
+động từ, 了 đi với 每天, 的/得/地, trạng ngữ thời gian đứng sau động từ, 离合词 mang tân ngữ trực
+tiếp (见面了他), 快要……了 thiếu 了. **Câu sai không bao giờ được đọc lên** — chỉ câu đã sửa mới có
+bản thu; nghe một câu sai bằng giọng chuẩn là cách nhanh nhất để nhớ nhầm.
+
+**🧲 Kết Hợp Từ** — 44 cụm. Nghĩa tiếng Việt in sẵn trong đề nên câu hỏi luôn chỉ có một đáp án:
+không phải đoán người ra đề định nói gì, mà là chọn đúng động từ đi với danh từ đó. 提高水平 chứ
+không phải 增加水平; 参观博物馆 (nơi chốn) nhưng 拜访老师 (người); 踢足球 nhưng 打篮球.
+
+## Nhiệm vụ, vàng và linh thú
+
+SRS trả công bằng một con số ngày càng xa — hộp 7 là 75 ngày — nghĩa là học càng giỏi thì phần
+thưởng càng thưa. Lớp này trả công ngay sau mỗi phiên, và trả bằng thứ để dành được.
+
+- **Ba nhiệm vụ mỗi ngày**, bốc từ kho 12 cái bằng chính chuỗi ngày tháng. Bốc lại mỗi lần load
+  thì người chơi chỉ cần F5 tới khi ra nhiệm vụ dễ. Xong cả ba được thêm 60 vàng và một rương.
+- **Vàng** đổi từ XP của phiên (XP ÷ 8), tiêu để mua rương (60 vàng).
+- **Rương** ra một trong bốn thứ: linh thú, băng giữ chuỗi, bùa XP ×2, hoặc vàng (1% ra 250 vàng).
+  Rương **không bao giờ ra một linh thú đã có** — một rương ra thứ mình có rồi là một rương mở hụt,
+  và cảm giác đó phá đúng cái vòng lặp mà rương sinh ra để nuôi.
+- **12 linh thú**, con 🐲 Rồng chỉ ra khi mười một con kia đã đủ: bộ sưu tập cần một cái đích nhìn
+  thấy được, không phải một xác suất chạy mãi.
+- **🧊 Băng** tự tan ra khi bạn nghỉ đúng một ngày, giữ nguyên chuỗi. Nghỉ hai ngày liền thì không
+  cứu — đó không còn là lỡ nữa.
+- **26 huy hiệu** ở màn Thống kê, cái chưa đạt vẫn hiện đủ tên và con số đang chạy.
+
+Nhiệm vụ hằng ngày **không thay** Kế hoạch hằng ngày: kế hoạch là việc bắt buộc để kịp ngày thi và
+được tính ngược từ lượng từ còn lại; nhiệm vụ là thứ để chơi, và cố tình đẩy người học sang những
+chế độ họ ít mở. Vì vậy kế hoạch luôn nằm trên nhiệm vụ trên màn hình chính.
 
 ## Luyện thi HSK 4
 
@@ -201,15 +261,21 @@ mục lặng lẽ biến mất. Test `engine.test.ts` giờ chặn luôn việc 
 ```
 src/
   data/          nội dung (JSON) + extra.ts (bài 通过 & 经过) + extra2.ts (Bài 13–16)
-                 + extra3.ts (Bài 17–19)
+                 + extra3.ts (Bài 17–19) + drills.ts (kết hợp từ & bắt lỗi sai)
   engine/        toàn bộ luật chơi, không dính React
     GameEngine.ts  máy trạng thái + side effect (timer, giọng đọc, ghi SRS)
     session.ts     mỗi chế độ ra câu gì, theo thứ tự SRS
     questions.ts   dựng từng loại câu hỏi
+    segment.ts     cắt câu tiếng Trung thành quân bài (chế độ Dựng Câu)
+    diff.ts        chấm bài chép chính tả bằng chuỗi con chung dài nhất
+    numbers.ts     sinh bộ đề bẫy số & giờ, cố định để thu sẵn được
+    quests.ts      ba nhiệm vụ mỗi ngày, bốc theo ngày tháng
+    meta.ts        vàng · rương · linh thú · băng giữ chuỗi
+    awards.ts      26 huy hiệu, tính lại từ nhật ký
     storage.ts     localStorage, hộp SRS, migrate dữ liệu v1
     audio.ts       TTS tiếng Trung + hiệu ứng âm thanh WebAudio
-  screens/       Home · Quiz · Result · Notebook
-  components/    Bar · Confetti · StrokeAnimation · SongPlayer
+  screens/       Home · Quiz · Result · Notebook · Stats
+  components/    Bar · Confetti · StrokeAnimation · SongPlayer · Quests · Awards · RewardModal
   theme.ts       design token
 ```
 
@@ -225,7 +291,7 @@ Thứ tự ra câu: đến hạn trước (hạn gần nhất trước), rồi t
 nhóm cuối được xoay vòng bằng con trỏ lưu sẵn để hai phiên liên tiếp không ra trùng câu.
 
 Dữ liệu trong localStorage: `hskq_srs`, `hskq_stats`, `hskq_topics_v2`, `hskq_settings`,
-`hskq_best_endless`, `hskq_muted`, `hskq_finale`, `hskq_rot_*`.
+`hskq_best_endless`, `hskq_muted`, `hskq_finale`, `hskq_rot_*`, `hskq_meta` (vàng · rương · linh thú).
 
 ## Cấu hình
 
