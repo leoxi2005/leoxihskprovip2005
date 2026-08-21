@@ -1,5 +1,8 @@
 import type { ExamPaper } from '../engine/exam';
-import { WRITE1_BANK } from './write1';
+// Đuôi `.ts` viết rõ ra là có lý do: `tools/tts/collect.mjs` nạp thẳng tệp này bằng
+// Node, mà Node không tự đoán đuôi như Vite. Thiếu đuôi là gãy đường thu giọng đọc.
+import { WRITE1_BANK } from './write1.ts';
+import { READ1_EXTRA, READ2_EXTRA, WRITE2_EXTRA } from './reading.ts';
 
 /**
  * Mock paper 1 — HSK（四级）模拟试卷.
@@ -432,6 +435,7 @@ export const EXAM_1: ExamPaper = {
         { sent: '他是一名很（　）的翻译。', ans: 1, vi: 'Anh ấy là một phiên dịch rất chuyên nghiệp.' },
       ],
     },
+    ...READ1_EXTRA,
   ],
 
   // 阅读第二部分：排列顺序 (10)
@@ -486,6 +490,7 @@ export const EXAM_1: ExamPaper = {
       ans: [1, 2, 0],
       vi: 'B → C → A: Ngày càng nhiều người trẻ tự nấu ăn, tuy tốn thêm chút thời gian, nhưng vừa tiết kiệm vừa khoẻ hơn.',
     },
+    ...READ2_EXTRA,
   ],
 
   // 阅读第三部分：短文 + 一到两个问题 (20)
@@ -677,5 +682,6 @@ export const EXAM_1: ExamPaper = {
       sample: '我们一家人一起照了一张照片。',
       vi: 'Cả nhà chúng tôi cùng chụp một tấm ảnh.',
     },
+    ...WRITE2_EXTRA,
   ],
 };

@@ -44,6 +44,22 @@ describe('paper shape', () => {
     for (let k = 0; k < 30; k++) expect(flatten(drawPaper(EXAM_1))).toHaveLength(100);
   });
 
+  it('câu hỏi thứ hai không bao giờ bị tách khỏi đoạn của nó', () => {
+    // Mỗi đoạn của 听力第三部分 / 阅读第三部分 mang hai câu hỏi; câu thứ hai chỉ có đề
+    // khi nó còn nằm ngay sau câu thứ nhất. Rút ngẫu nhiên mà xáo lẻ là mất đề.
+    for (let k = 0; k < 40; k++) {
+      const p = drawPaper(EXAM_1);
+      for (const part of [p.listen3, p.read3]) {
+        part.forEach((item, at) => {
+          if (!item.sameAudio) return;
+          expect(at, 'câu nối tiếp không được đứng đầu phần').toBeGreaterThan(0);
+          const head = part[at - 1];
+          expect(Boolean(head.text || head.say), 'câu đứng trước phải mang đoạn').toBe(true);
+        });
+      }
+    }
+  });
+
   it('kho không được nhỏ hơn một đề', () => {
     expect(EXAM_1.write1.length).toBeGreaterThanOrEqual(countOf('书写第一部分'));
     expect(EXAM_1.write2.length).toBeGreaterThanOrEqual(countOf('书写第二部分'));
@@ -95,7 +111,39 @@ describe('paper content', () => {
       ...EXAM_1.write1.flatMap((x) => [...x.words, ...x.accept]),
       ...EXAM_1.write2.flatMap((x) => [x.word, x.sample]),
     ];
-    chinese.forEach((s) => expect(s, s).not.toMatch(/[A-Za-zА-Яа-я]/));
+    // Nhóm hội thoại của 阅读第一部分 in nhãn người nói là A：/B： — đề thật in đúng
+    // như vậy, nên bỏ riêng hai nhãn đó ra rồi mới soi phần chữ Hán.
+    const speakers = /^[AB]：/gm;
+    chinese.forEach((s) => expect(s.replace(speakers, ''), s).not.toMatch(/[A-Za-zА-Яа-я]/));
+  });
+
+  it('阅读第一部分: bảng luôn sáu từ cho năm chỗ trống, thừa đúng một từ', () => {
+    EXAM_1.read1.forEach((g, gi) => {
+      expect(g.bank, `nhóm ${gi}`).toHaveLength(6);
+      expect(g.items, `nhóm ${gi}`).toHaveLength(5);
+      const used = new Set(g.items.map((it) => it.ans));
+      // Dùng lại một từ cho hai chỗ trống là đề sai: đề thật mỗi từ dùng đúng một lần.
+      expect(used.size, `nhóm ${gi} dùng lại từ`).toBe(5);
+      g.items.forEach((it, ii) => {
+        expect(it.ans, `nhóm ${gi} câu ${ii}`).toBeGreaterThanOrEqual(0);
+        expect(it.ans, `nhóm ${gi} câu ${ii}`).toBeLessThan(6);
+        expect((it.sent.match(/（　）/g) ?? []).length, `nhóm ${gi} câu ${ii}`).toBe(1);
+      });
+    });
+  });
+
+  it('阅读第一部分: nhóm hội thoại phải có đủ hai lượt nói', () => {
+    const talk = EXAM_1.read1.filter((g) => g.dialogue);
+    expect(talk.length, 'kho phải có ít nhất một nhóm hội thoại').toBeGreaterThan(0);
+    talk.forEach((g) =>
+      g.items.forEach((it) => {
+        expect(it.sent, it.sent).toMatch(/^A：.*\nB：/s);
+      }),
+    );
+  });
+
+  it('书写第二部分: câu mẫu luôn chứa đúng từ bắt buộc', () => {
+    EXAM_1.write2.forEach((it) => expect(it.sample, it.word).toContain(it.word));
   });
 
   it('offers four options with a valid answer on every choice question', () => {

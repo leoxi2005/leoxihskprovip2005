@@ -325,6 +325,11 @@ export interface QaItem {
  * One word is always left over, which is what stops the last blank being free.
  */
 export interface FillGroup {
+  /**
+   * Nhóm hội thoại — dạng câu 51–55 của đề thật: mỗi mục là hai lượt nói, chỗ trống
+   * nằm trong một lượt. Nhóm không có cờ này là dạng câu đơn 46–50.
+   */
+  dialogue?: boolean;
   bank: [string, string, string, string, string, string];
   items: { sent: string; ans: number; vi: string }[];
 }
@@ -395,16 +400,47 @@ function shuffled<T>(a: readonly T[]): T[] {
 export function drawPaper(bank: ExamPaper): ExamPaper {
   const take = <T,>(all: readonly T[], n: number): T[] =>
     all.length <= n ? all.slice() : shuffled(all).slice(0, n);
-  // 阅读第一部分 tính theo NHÓM: mỗi nhóm một bảng sáu từ và năm chỗ trống.
-  const perGroup = bank.read1[0]?.items.length || 5;
+
+  /**
+   * Rút cho phần có câu đi theo cụm.
+   *
+   * 听力第三部分 và 阅读第三部分 hỏi HAI câu trên cùng một đoạn: câu thứ hai mang cờ
+   * `sameAudio` và mượn đoạn của câu đứng ngay trước. Xáo từng câu một là tách câu
+   * thứ hai khỏi đoạn của nó — người làm bài nhận được một câu hỏi không có đề.
+   * Nên xáo theo CỤM, và chỉ nhận trọn cụm.
+   */
+  const takeQa = (all: readonly QaItem[], n: number): QaItem[] => {
+    const groups: QaItem[][] = [];
+    for (const item of all) {
+      if (item.sameAudio && groups.length) groups[groups.length - 1].push(item);
+      else groups.push([item]);
+    }
+    const out: QaItem[] = [];
+    for (const g of shuffled(groups)) {
+      if (out.length + g.length > n) continue;
+      out.push(...g);
+      if (out.length === n) break;
+    }
+    return out.length === n ? out : all.slice(0, n);
+  };
+  /**
+   * 阅读第一部分 luôn gồm MỘT nhóm câu đơn rồi tới MỘT nhóm hội thoại, đúng thứ tự
+   * đó. Rút bừa hai nhóm thì có lần ra hai nhóm câu đơn — mất hẳn phần khó.
+   */
+  const plain = bank.read1.filter((g) => !g.dialogue);
+  const talk = bank.read1.filter((g) => g.dialogue);
+  const read1 =
+    plain.length && talk.length
+      ? [...take(plain, 1), ...take(talk, 1)]
+      : take(bank.read1, Math.ceil(countOf('阅读第一部分') / (bank.read1[0]?.items.length || 5)));
   return {
     ...bank,
     listen1: take(bank.listen1, countOf('听力第一部分')),
     listen2: take(bank.listen2, countOf('听力第二部分')),
-    listen3: take(bank.listen3, countOf('听力第三部分')),
-    read1: take(bank.read1, Math.ceil(countOf('阅读第一部分') / perGroup)),
+    listen3: takeQa(bank.listen3, countOf('听力第三部分')),
+    read1,
     read2: take(bank.read2, countOf('阅读第二部分')),
-    read3: take(bank.read3, countOf('阅读第三部分')),
+    read3: takeQa(bank.read3, countOf('阅读第三部分')),
     write1: take(bank.write1, countOf('书写第一部分')),
     write2: take(bank.write2, countOf('书写第二部分')),
   };

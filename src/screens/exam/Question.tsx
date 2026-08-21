@@ -138,7 +138,8 @@ export function QuestionView({
               </button>
             ))}
           </div>
-          <div style={{ ...han, fontSize: 22 }}>{q.group.items[q.at].sent}</div>
+          {/* `pre-line` để nhóm hội thoại xuống dòng đúng chỗ: A một dòng, B một dòng. */}
+          <div style={{ ...han, fontSize: 22, whiteSpace: 'pre-line' }}>{q.group.items[q.at].sent}</div>
         </>
       );
 
@@ -457,7 +458,7 @@ export function ReviewBody({ q, answer }: { q: ExamQ; answer: ExamAnswer }) {
       const it = q.group.items[q.at];
       return (
         <>
-          <div style={han}>
+          <div style={{ ...han, whiteSpace: 'pre-line' }}>
             {it.sent.replace('（　）', `（${q.group.bank[it.ans]}）`)}
           </div>
           <div style={vi}>{it.vi}</div>
