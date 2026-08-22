@@ -212,6 +212,70 @@ describe('paper content', () => {
     });
   });
 
+  /**
+   * Đề 完成句子 không được bày sẵn mảnh theo đúng thứ tự câu.
+   *
+   * Kho soạn theo thứ tự đọc được và bản đầu đưa thẳng lên màn hình, nên cả 51/51 câu
+   * đều giải được bằng cách đọc từ trái sang phải rồi gõ lại — phần này chưa bao giờ
+   * hỏi được điều nó định hỏi. Đây là thứ đáng lẽ phải chặn ngay từ lượt soạn kho.
+   */
+  it('never lays out a 完成句子 with its pieces already in the answer order', () => {
+    // Đi qua `flatten` chứ không qua `drawPaper`: xáo là việc của lúc TRÌNH BÀY, và
+    // `flatten(EXAM_1)` — đường mà chế độ Luyện từng phần dùng — phải sạch y như đường
+    // rút đề. Bản vá đầu đặt nhầm vào `drawPaper` nên bỏ sót đúng đường này.
+    for (let attempt = 0; attempt < 20; attempt++) {
+      for (const src of [flatten(EXAM_1), flatten(drawPaper(EXAM_1))]) {
+        src.forEach(({ q }) => {
+          if (q.kind !== 'sent') return;
+          const model = q.item.accept[0].replace(/[。？！，、：；]/g, '');
+          expect(q.item.words.join(''), `bày sẵn đáp án: ${q.item.words.join(' / ')}`).not.toBe(
+            model,
+          );
+        });
+      }
+    }
+  });
+
+  it('keeps every 完成句子 piece through the scramble, exactly once', () => {
+    // Xáo mà làm rơi hoặc nhân đôi một mảnh thì câu thành không giải được, và lỗi đó
+    // im lặng — người làm chỉ thấy một đề vô lý.
+    const bank = new Map(EXAM_1.write1.map((s) => [s.accept[0], [...s.words].sort().join('|')]));
+    for (let attempt = 0; attempt < 20; attempt++) {
+      flatten(EXAM_1).forEach(({ q }) => {
+        if (q.kind !== 'sent') return;
+        expect([...q.item.words].sort().join('|')).toBe(bank.get(q.item.accept[0]));
+      });
+    }
+  });
+
+  /**
+   * 排列顺序 cũng phải xáo lúc rút đề, nhưng KHÔNG loại trường hợp A→B→C.
+   *
+   * Ở đây người làm phải tự chọn thứ tự chứ không đọc xuôi là xong, nên A→B→C là một
+   * đáp án thật và phải rơi vào khoảng một phần sáu số câu. Loại nó đi là dựng lại
+   * đúng cái mẹo "A không bao giờ đứng đầu" mà lượt này vừa gỡ.
+   */
+  it('reshuffles 排列顺序 on every draw, across all six orders', () => {
+    const seen = new Set<string>();
+    const bank = new Map(EXAM_1.read2.map((o) => [o.vi, o.ans.map((n) => o.parts[n]).join('')]));
+    for (let attempt = 0; attempt < 20; attempt++) {
+      flatten(EXAM_1).forEach(({ q }) => {
+        if (q.kind !== 'order') return;
+        seen.add(q.item.ans.join(''));
+        // Xáo xong giải ra vẫn phải là đúng đoạn văn ấy, không sót mảnh nào.
+        expect(q.item.ans.map((n) => q.item.parts[n]).join('')).toBe(bank.get(q.item.vi));
+        expect([...q.item.ans].sort()).toEqual([0, 1, 2]);
+      });
+    }
+    expect([...seen].sort()).toEqual(['012', '021', '102', '120', '201', '210']);
+  });
+
+  it('leaves the 排列顺序 order label out of the stored translation', () => {
+    // Nhãn "B → A → C" từng được ghi sẵn vào câu dịch. Từ khi các mảnh bị xáo lúc rút
+    // đề, một nhãn ghi sẵn là một nhãn trỏ vào lần bày khác — nó phải tính từ `ans`.
+    EXAM_1.read2.forEach((o) => expect(o.vi).not.toMatch(/^[ABC] → [ABC] → [ABC]:/));
+  });
+
   it('models a 完成句子 answer that uses every word given', () => {
     EXAM_1.write1.forEach((s) => {
       const model = s.accept[0];

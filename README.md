@@ -195,12 +195,13 @@ Trang chủ mở lên là thấy đếm ngược và **danh sách nhiệm vụ b
 cho vui (Học qua nhạc · 若把你 · Sinh Tồn · Đấu Trùm) bị khoá cho tới khi xong; mọi chế độ ôn
 tập thật thì luôn mở — cái khoá không bao giờ được phép cản việc học.
 
-## Hai phần bị bỏ quên khi hiệu chỉnh độ khó
+## Ba phần bị bỏ quên khi hiệu chỉnh độ khó
 
-书写第一部分 và 阅读第一部分 đã được kéo lên đúng độ khó đề thật ở những đợt trước. Hai phần
-dưới đây thì chỉ được **phình kho** cho việc rút đề có nghĩa (阅读第二部分 10 → 20,
-书写第二部分 5 → 20) — độ khó chưa bao giờ đo. Đo mới ra vấn đề, và cả hai đều cùng một kiểu:
-**app dễ hơn đề thật, mà tệ hơn là app dạy một phản xạ sai.**
+阅读第一部分 và 阅读第三部分 đã được kéo lên đúng độ khó đề thật ở những đợt trước. Ba phần
+dưới đây thì chưa bao giờ được **đo** — 阅读第二部分 và 书写第二部分 chỉ được phình kho cho việc rút
+đề có nghĩa (10 → 20 và 5 → 20), còn 书写第一部分 thì kho được soạn lại nhưng cách BÀY ra màn hình
+thì không ai nhìn tới. Đo mới ra vấn đề, và cả ba cùng một kiểu: **app dễ hơn đề thật, mà tệ hơn
+là app dạy một phản xạ sai.**
 
 **阅读第二部分 — khoá đáp án đoán được.** Kho 20 câu chỉ dùng **4 trong 6** hoán vị; riêng
 `B-A-C` chiếm **11/20**, và chỉ **2/20** câu có mảnh A đứng đầu. Nhắm mắt chọn B-A-C là trúng
@@ -218,6 +219,26 @@ sau:    012:4  021:4  102:3   120:3  201:3  210:3     A/B/C đứng đầu 8/6/6
 
 Một test khoá phân bố này lại: đủ sáu thứ tự, không thứ tự nào quá 1/4 kho, và mỗi mảnh phải có
 lượt đứng đầu tương đương. Đợt nội dung sau sẽ lặp lại đúng thói quen cũ nếu không có nó.
+
+**书写第一部分 — bày sẵn mảnh theo đúng thứ tự câu.** Nặng nhất trong ba lỗi và lộ ra muộn nhất:
+**51/51** câu hiển thị các mảnh đúng thứ tự của đáp án, tức đề giải được bằng cách đọc từ trái sang
+phải rồi gõ lại. Phần này chưa bao giờ hỏi được điều nó định hỏi. Cùng một thói quen soạn bài với
+阅读第二部分 — viết câu xong mới cắt ra — chỉ khác là ở đây không có `ans` nào để lộ ra chuyện đó.
+
+Sửa bằng cách **xáo lúc trình bày**, không sửa cứng vào dữ liệu. Dữ liệu giữ thứ tự đọc được thì
+còn soát bằng mắt được, và mỗi lần ngồi lại ra một cách bày khác — sửa cứng thì chỉ đổi một đáp án
+cố định này lấy một đáp án cố định khác. Loại theo **chuỗi kết quả** chứ không theo hoán vị: câu
+一边…一边 có hai mảnh giống hệt nhau, hai hoán vị khác nhau vẫn cho ra đúng một câu.
+
+Chỗ đặt bản vá mới là bài học thật. Lần đầu tôi đặt vào `drawPaper`, và nó **không chạm tới đúng
+màn hình đã phát hiện ra lỗi**: `drawPaper` trả lời "câu nào vào đề", còn chế độ Luyện từng phần
+gọi thẳng `flatten(EXAM_1)` để lấy cả kho chứ không rút một đề mười câu. Chỗ đúng là **`flatten`** —
+ranh giới trình bày, và là chỗ duy nhất mọi màn hình đều đi qua. 阅读第二部分 giờ cũng xáo ở đây, nên
+gặp lại câu cũ cũng không nhớ nổi vị trí ô; khác 完成句子 ở một điểm: **không loại trường hợp A→B→C**,
+vì ở đó người làm phải tự chọn thứ tự chứ không đọc xuôi là xong, nên A→B→C là một đáp án thật.
+
+Kéo theo: nhãn "B → A → C" từng được ghi sẵn trong chính câu dịch, mà một nhãn ghi sẵn thì trỏ vào
+một lần bày khác. Giờ nhãn được **tính từ `ans`** lúc hiện lời giải.
 
 **书写第二部分 — không có tranh nào.** Đề thật là 看图写句子: nhìn **ảnh** cộng một từ cho sẵn rồi
 tự viết câu. Cả 20 mục trước đây chỉ có một dòng mô tả cảnh **bằng tiếng Việt**, mà mô tả tiếng

@@ -473,6 +473,12 @@ export function ReviewBody({ q, answer }: { q: ExamQ; answer: ExamAnswer }) {
     case 'order':
       return (
         <>
+          {/* Nhãn tính từ `ans` chứ không lấy từ dữ liệu. Bản cũ ghi sẵn "B → A → C"
+              vào chính câu dịch, mà từ khi các mảnh được xáo lúc rút đề thì cái nhãn
+              ghi sẵn ấy trỏ vào ô của một lần bày khác. */}
+          <div style={{ ...vi, fontWeight: 800 }}>
+            Thứ tự đúng: {q.item.ans.map((n) => 'ABC'[n]).join(' → ')}
+          </div>
           <div style={han}>
             {q.item.ans.map((n) => q.item.parts[n]).join(' ')}
           </div>

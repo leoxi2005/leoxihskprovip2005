@@ -22,7 +22,6 @@ import { QuestionView, ReviewBody } from './Question';
 type Phase = 'guide' | 'practice' | 'done';
 
 /** Cả kho đề, đã dàn phẳng — dùng chung cho mọi phần. */
-const BANK = flatten(EXAM_1);
 
 const btn = (bg: string, color = '#fff') => ({
   background: bg,
@@ -75,7 +74,10 @@ export function PartDrill({ part, onExit }: { part: PartId; onExit: () => void }
    * mười câu ấy.
    */
   const qs = useMemo(() => {
-    const all = partQuestions(BANK, part);
+    // `flatten` lại từ đầu mỗi phiên chứ không dùng một bản dựng sẵn lúc nạp trang:
+    // nó là chỗ xáo mảnh, nên gọi lại mới ra một cách bày mới. Giữ bản dựng sẵn thì
+    // luyện lại lần hai gặp đúng thế cũ.
+    const all = partQuestions(flatten(EXAM_1), part);
     const n = countOf(part);
     if (all.length <= n) return all;
     const pool = all.slice();

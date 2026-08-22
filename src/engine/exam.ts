@@ -388,6 +388,52 @@ function shuffled<T>(a: readonly T[]): T[] {
 }
 
 /**
+ * Xáo các mảnh của một câu 完成句子 trước khi đưa lên màn hình.
+ *
+ * Kho được soạn theo thứ tự đọc được — người soạn viết câu rồi mới cắt ra — nên đưa
+ * thẳng `words` lên đề là đề tự giải: đọc từ trái sang phải rồi gõ lại. Cả 51/51 câu
+ * đều dính, tức phần này chưa bao giờ hỏi được điều nó định hỏi.
+ *
+ * Xáo ở lúc RÚT ĐỀ chứ không sửa cứng vào dữ liệu, vì hai lý do. Dữ liệu giữ thứ tự
+ * đọc được thì còn soát lại bằng mắt được. Và mỗi lần ngồi thi lại ra một cách bày
+ * khác, nên gặp lại câu cũ cũng không nhớ nổi vị trí ô — sửa cứng thì chỉ đổi một
+ * đáp án cố định này lấy một đáp án cố định khác.
+ *
+ * Loại theo CHUỖI KẾT QUẢ chứ không theo hoán vị: câu 一边…一边 có hai mảnh giống hệt
+ * nhau, hai hoán vị khác nhau vẫn cho ra đúng một câu.
+ */
+const scrambleSent = (s: SentItem): SentItem => {
+  const model = s.accept[0].replace(/[。？！，、：；]/g, '');
+  const asWritten = s.words.join('');
+  for (let t = 0; t < 20; t++) {
+    const words = shuffled(s.words);
+    const joined = words.join('');
+    if (joined !== model && joined !== asWritten) return { ...s, words };
+  }
+  // Hai mươi lần đều trúng câu mẫu là chuyện không xảy ra với 4–6 mảnh; có thì đảo ngược.
+  return { ...s, words: s.words.slice().reverse() };
+};
+
+/**
+ * Xáo ba mảnh của một câu 排列顺序 và ánh xạ lại đáp án.
+ *
+ * Khác 完成句子 ở một chỗ: ở đây KHÔNG loại trường hợp A→B→C. Người làm phải tự chọn
+ * thứ tự chứ không đọc xuôi là xong, nên A→B→C là một đáp án thật và phải rơi vào
+ * khoảng một phần sáu số câu — loại nó đi là tạo ra đúng cái mẹo vừa gỡ bỏ.
+ */
+const scrambleOrder = (o: OrderItem): OrderItem => {
+  const pick = shuffled([0, 1, 2]);
+  // pick[k] = mảnh cũ nằm ở ô mới k; pos[i] = ô mới của mảnh cũ i.
+  const pos = [0, 0, 0];
+  pick.forEach((old, k) => (pos[old] = k));
+  return {
+    ...o,
+    parts: pick.map((i) => o.parts[i]) as [string, string, string],
+    ans: o.ans.map((i) => pos[i]) as [number, number, number],
+  };
+};
+
+/**
  * Rút một đề 100 câu từ kho.
  *
  * Kho chứa nhiều hơn số câu của một đề — làm lại lần hai mà gặp đúng 100 câu cũ thì
@@ -456,7 +502,16 @@ export type ExamQ =
   | { kind: 'sent'; part: string; i: number; item: SentItem }
   | { kind: 'pic'; part: string; i: number; item: PicItem };
 
-/** The paper as one numbered list, in the order it is sat. */
+/**
+ * The paper as one numbered list, in the order it is sat.
+ *
+ * Đây là ranh giới TRÌNH BÀY, nên việc xáo mảnh nằm ở đây chứ không ở `drawPaper`.
+ * `drawPaper` trả lời "câu nào vào đề"; `flatten` trả lời "đề hiện ra thế nào" — và
+ * chỉ có một trong hai chỗ đó là chỗ mọi màn hình đều đi qua. Bản vá đầu tiên đặt
+ * nhầm vào `drawPaper`, thành ra chế độ Luyện từng phần — nơi lỗi được phát hiện —
+ * vẫn bày sẵn đáp án, vì nó gọi thẳng `flatten(EXAM_1)` để lấy cả kho chứ không rút
+ * một đề mười câu.
+ */
 export function flatten(p: ExamPaper): { section: SectionId; q: ExamQ }[] {
   const out: { section: SectionId; q: ExamQ }[] = [];
   let n = 0;
@@ -473,11 +528,15 @@ export function flatten(p: ExamPaper): { section: SectionId; q: ExamQ }[] {
   p.read1.forEach((group) =>
     group.items.forEach((_, at) => push('read', { kind: 'fill', part: '阅读第一部分', group, at } as never)),
   );
-  p.read2.forEach((item) => push('read', { kind: 'order', part: '阅读第二部分', item } as never));
+  p.read2.forEach((item) =>
+    push('read', { kind: 'order', part: '阅读第二部分', item: scrambleOrder(item) } as never),
+  );
   p.read3.forEach((item) =>
     push('read', { kind: 'qa', part: '阅读第三部分', item, heard: true } as never),
   );
-  p.write1.forEach((item) => push('write', { kind: 'sent', part: '书写第一部分', item } as never));
+  p.write1.forEach((item) =>
+    push('write', { kind: 'sent', part: '书写第一部分', item: scrambleSent(item) } as never),
+  );
   p.write2.forEach((item) => push('write', { kind: 'pic', part: '书写第二部分', item } as never));
   return out;
 }
