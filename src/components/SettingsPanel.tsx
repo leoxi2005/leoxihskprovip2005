@@ -23,6 +23,17 @@ const row = {
 
 const label = { fontSize: 13, fontWeight: 800, color: C.body, minWidth: 168, textAlign: 'left' as const };
 
+const dateBox = {
+  fontFamily: F.ui,
+  fontSize: 14,
+  fontWeight: 700,
+  padding: '6px 12px',
+  borderRadius: 10,
+  border: `2px solid ${C.ink}`,
+  background: C.card,
+  color: C.ink,
+};
+
 const smallBtn = (bg: string, color: string = C.ink) => ({
   background: bg,
   color,
@@ -157,19 +168,31 @@ export function SettingsPanel() {
           type="date"
           value={s.examDate}
           onChange={(e) => engine.setSettings({ examDate: e.target.value })}
-          style={{
-            fontFamily: F.ui,
-            fontSize: 14,
-            fontWeight: 700,
-            padding: '6px 12px',
-            borderRadius: 10,
-            border: `2px solid ${C.ink}`,
-            background: C.card,
-            color: C.ink,
-          }}
+          style={dateBox}
         />
         <span style={{ fontSize: 12, color: C.muted2, fontWeight: 600 }}>
           Đợt HSK gần nhất: 07/11/2026 (hạn đăng ký 11/10)
+        </span>
+      </div>
+
+      <div style={row}>
+        <span style={label}>Hạn đăng ký</span>
+        <input
+          type="date"
+          value={s.regDate}
+          onChange={(e) => engine.setSettings({ regDate: e.target.value })}
+          style={dateBox}
+        />
+        <button
+          onClick={() => engine.setSettings({ registered: !s.registered })}
+          aria-pressed={s.registered}
+          style={smallBtn(s.registered ? C.okBg : C.card, s.registered ? C.okInk : C.ink)}
+        >
+          {s.registered ? '✅ Đã đăng ký' : 'Chưa đăng ký'}
+        </button>
+        <span style={{ fontSize: 12, color: C.muted2, fontWeight: 600 }}>
+          Ngày này đi trước ngày thi và chỉ có một lần — lỡ nó là mất cả kỳ, nên nó có lời
+          nhắc riêng trên trang chủ. Đổi ngày thi thì nhớ đổi luôn ngày này.
         </span>
       </div>
 

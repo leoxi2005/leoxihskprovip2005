@@ -378,10 +378,23 @@ export interface Settings {
   autoPace: boolean;
   /** Target exam day, `YYYY-MM-DD`. Drives the countdown and the daily plan. */
   examDate: string;
+  /**
+   * Hạn cuối nộp hồ sơ dự thi, `YYYY-MM-DD`. Luôn nằm trước `examDate`.
+   *
+   * Là một ngày riêng chứ không suy ra từ `examDate`: mỗi điểm thi chốt danh sách một
+   * kiểu, và cái ngày đóng cổng mới là ngày lỡ được — lỡ nó thì cả lộ trình đếm ngược
+   * bên dưới không còn kỳ thi nào để hướng tới.
+   */
+  regDate: string;
+  /** Đã nộp hồ sơ xong. Tắt hẳn lời nhắc — nhắc tiếp một việc đã làm là dạy người dùng bỏ qua nó. */
+  registered: boolean;
 }
 
 /** HSK 4 at Ho Chi Minh City University of Education, the last paper before HSK 3.0. */
 export const DEFAULT_EXAM_DATE = '2026-11-07';
+
+/** Registration for that paper closes 27 days before it. */
+export const DEFAULT_REG_DATE = '2026-10-11';
 
 export const DEFAULT_SETTINGS: Settings = {
   autoPlayAudio: true,
@@ -392,6 +405,8 @@ export const DEFAULT_SETTINGS: Settings = {
   newPerDay: 12,
   autoPace: true,
   examDate: DEFAULT_EXAM_DATE,
+  regDate: DEFAULT_REG_DATE,
+  registered: false,
 };
 
 export interface SrsEntry {

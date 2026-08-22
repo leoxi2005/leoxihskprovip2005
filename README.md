@@ -195,6 +195,49 @@ Trang chủ mở lên là thấy đếm ngược và **danh sách nhiệm vụ b
 cho vui (Học qua nhạc · 若把你 · Sinh Tồn · Đấu Trùm) bị khoá cho tới khi xong; mọi chế độ ôn
 tập thật thì luôn mở — cái khoá không bao giờ được phép cản việc học.
 
+## Hạn đăng ký: cái ngày lỡ được
+
+Đếm ngược trên trang chủ trả lời "còn bao lâu nữa tới ngày thi". Suốt mấy tuần tới thì đó là câu
+hỏi sai. Ngày thi **không lỡ được** — nó tự đến. Cái lỡ được là **hạn nộp hồ sơ 11/10/2026**, đi
+trước ngày thi 27 ngày, và một app chỉ đếm ngược ngày thi sẽ im lặng đúng suốt cái cửa sổ duy nhất
+có thể đóng sập lại. Học chăm cả tháng mà quên ngày đó thì toàn bộ lộ trình bên dưới không còn kỳ
+thi nào để hướng tới.
+
+Nên có một lượt đếm ngược **thứ hai**, chạy trước lượt kia, nằm **trên** thẻ kế hoạch: thứ tự trên
+màn hình là thứ tự của cái mất được nhiều nhất. Nó **to dần** thay vì giữ nguyên một cỡ:
+
+| Còn | Kiểu hiện | Vì sao |
+| --- | --- | --- |
+| > 30 ngày | dòng mảnh, màu nền | Chưa gấp. Đỏ từ bây giờ thì tới lúc gấp thật, màu đỏ hết nghĩa |
+| 8–30 ngày | thẻ vàng | Đăng ký sớm còn chọn được ca thi |
+| 1–7 ngày | thẻ đỏ, viền đổ bóng | Tuần cuối |
+| Đúng hôm nay | thẻ đỏ, "HÔM NAY là hạn chót" | Vẫn còn kịp — ngày hết hạn vẫn là ngày mở |
+| Đã qua | thẻ đỏ, bỏ số đếm ngược | Đếm ngược một hạn đã trôi là vô nghĩa; đổi thành lối ra: đặt đợt kế tiếp |
+
+Bấm **✅ Tôi đã đăng ký rồi** là tắt hẳn, còn lại một dòng xanh xác nhận kèm nút hoàn tác. Nhắc tiếp
+một việc đã xong là cách nhanh nhất dạy người dùng bỏ qua mọi lời nhắc sau đó.
+
+**Nhưng app chỉ nhắc được vào ngày bạn mở app** — mà đó đúng là giả định hỏng với một cái hẹn mỗi
+năm một lần. Nên nút chính không phải là một lời nhắc trong app: **📅 Hẹn vào lịch điện thoại** tải
+về một tệp `.ics` gồm hai sự kiện (hạn đăng ký và ngày thi) với **bốn mốc báo trước** — 14 ngày, 7
+ngày, 2 ngày và 1 tiếng. Một lời nhắc duy nhất đúng hôm hết hạn là lời nhắc đến sau khi bạn đã kín
+lịch cả ngày. Giao cho lịch của điện thoại là phiên bản duy nhất của tính năng này còn chạy khi app
+không được mở nữa, hoặc khi bộ nhớ trình duyệt giữ mấy cài đặt kia bị xoá.
+
+Ba chi tiết trong tệp lịch dễ làm sai:
+
+- **Giờ trôi (floating local time)** — `DTSTART:20261011T090000`, không `Z`, không `TZID`. Hạn nộp
+  hồ sơ là một sự kiện của lịch địa phương; ghim múi giờ vào thì cái điện thoại mang đi nước khác
+  sẽ kêu lúc hai giờ sáng.
+- **Gập dòng theo octet, không theo ký tự.** iCalendar bắt gập ở 75 octet. Tiếng Việt có dấu và
+  emoji đều nhiều byte, gập theo chỉ số chuỗi là cắt đôi một ký tự và làm hỏng cả tệp.
+- **Escape backslash trước tiên**, rồi mới tới `,` và `;` — làm ngược thì chính dấu vừa thêm bị
+  escape lần nữa. Dấu phẩy đứng trần kết thúc giá trị sớm và biến phần còn lại thành tham số rác.
+
+Hạn đăng ký là **một cài đặt riêng**, không suy ra từ ngày thi: mỗi điểm thi chốt danh sách một
+kiểu. Đổi ngày thi sang đợt sau thì phải đổi luôn ngày này — app tự phát hiện khi hạn đăng ký rơi
+vào sau ngày thi và nói thẳng ra, vì đó là dấu hiệu của việc mới đổi một trong hai.
+
 ## Lõi SRS: hai làn cho mỗi từ
 
 Nhận diện và tái tạo là hai kỹ năng quên với tốc độ khác nhau, nên mỗi từ mang **hai ô nhớ độc
@@ -356,6 +399,8 @@ Không có màn hình cài đặt — chỉnh qua `engine.setSettings({...})` ho
 | `sessionSize` | `18` | 8–40 |
 | `dailyGoal` | `150` | 50–500 |
 | `flashMs` | `1800` | 800–4000 |
+| `regDate` | `2026-10-11` | ngày, luôn trước `examDate` |
+| `registered` | `false` | — |
 
 ## Ghi chú kỹ thuật
 
@@ -369,8 +414,9 @@ Không có màn hình cài đặt — chỉnh qua `engine.setSettings({...})` ho
 
 ## Còn tồn đọng
 
-- **10 trong 55 điểm ngữ pháp không vào được phiên nào.** Chúng gắn chủ đề `Bài 3`, mà chip chủ
-  đề chỉ sinh ra từ chủ đề của *từ vựng*, không từ nào thuộc `Bài 3`. Lỗi này có từ bản prototype
-  gốc; đã ghim bằng test trong `engine.test.ts`. Sửa bằng cách gắn lại chủ đề cho 10 mục đó,
-  hoặc sinh chip từ toàn bộ nội dung.
+- **Chưa có phần luyện NÓI.** HSK 4 không thi nói (HSKK là kỳ riêng), nên đây không phải lỗ hổng
+  của việc luyện đề — nhưng người học vẫn hỏi, và app đang không trả lời được.
+- **Lời nhắc hạn đăng ký chỉ hiện khi app được mở.** Đã bù bằng tệp lịch `.ics`, nhưng nó cần
+  người dùng bấm tải một lần. Không có cách nào trong trình duyệt bắn thông báo vào một ngày
+  cách đây hai tháng mà không cần server.
 - **Lời bài hát 绝弦的美** do người dùng cung cấp, chưa xin phép bản quyền.

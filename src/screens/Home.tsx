@@ -7,6 +7,7 @@ import { useEngine, useGameState } from '../engine/useEngine';
 import { Bar } from '../components/Bar';
 import { DailyPlan } from '../components/DailyPlan';
 import { Quests } from '../components/Quests';
+import { RegisterAlert } from '../components/RegisterAlert';
 import { RewardModal } from '../components/RewardModal';
 import { SettingsPanel } from '../components/SettingsPanel';
 import { SoundCheck } from '../components/SoundCheck';
@@ -189,6 +190,7 @@ export function Home() {
           ))}
         </div>
 
+        <RegisterAlert />
         <DailyPlan />
 
         <Quests />
