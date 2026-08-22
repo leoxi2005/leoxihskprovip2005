@@ -1,5 +1,6 @@
 import deckJson from './deck.json';
 import imagesJson from './images.json';
+import picsJson from './pics.json';
 import storiesJson from './stories.json';
 import songsJson from './songs.json';
 import mysongJson from './mysong.json';
@@ -105,6 +106,22 @@ export const DECK: Deck = {
  */
 export const IMAGES: Record<string, string> = Object.fromEntries(
   Object.entries(imagesJson as Record<string, string>).map(([h, src]) => [
+    h,
+    import.meta.env.BASE_URL + src.replace(/^\//, ''),
+  ]),
+);
+
+/**
+ * Từ của 书写第二部分 → ảnh CẢNH của riêng phần đó.
+ *
+ * Tách hẳn khỏi `IMAGES`, và đó là chủ ý. `IMAGES` là ảnh THẺ TỪ VỰNG: nó vẽ khái
+ * niệm rồi rắc thêm biểu tượng của chính khái niệm ấy quanh khung — ảnh 讨论 có mấy
+ * bóng nói chứa bóng đèn và mũi tên. Với thẻ từ thì đó là điểm mạnh; với 看图写句子
+ * thì nó nói hộ đáp án, mà cái khó thật của phần này là tự đọc ra một cảnh không có
+ * chú thích. Nên bộ này là ảnh cảnh thuần: không chữ, không biểu tượng bay quanh.
+ */
+export const PICS: Record<string, string> = Object.fromEntries(
+  Object.entries(picsJson as Record<string, string>).map(([h, src]) => [
     h,
     import.meta.env.BASE_URL + src.replace(/^\//, ''),
   ]),

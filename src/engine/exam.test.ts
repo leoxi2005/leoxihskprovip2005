@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import imagesRaw from '../data/images.json';
+import picsRaw from '../data/pics.json';
 import { EXAM_1 } from '../data/exam1';
 import {
   EXAM_SPEC,
@@ -175,6 +177,41 @@ describe('paper content', () => {
     });
   });
 
+  /**
+   * Khoá đáp án của 排列顺序 phải rải đều sáu hoán vị.
+   *
+   * Bộ đầu tiên lệch nặng mà không ai nhận ra: 11/20 câu có đáp án B-A-C và chỉ 2/20
+   * câu bắt đầu bằng A — đoán bừa B-A-C là trúng quá nửa. Đó không chỉ là dễ hơn đề
+   * thật, nó DẠY một phản xạ sai: người học rút ra mẹo "A hầu như không đứng đầu",
+   * mẹo ấy đúng trong app và sai trong phòng thi.
+   *
+   * Nguyên nhân là thói quen của người soạn chứ không phải cố ý — viết câu đúng thứ tự
+   * trong đầu rồi "xáo" bằng cách đẩy câu đầu xuống ô B. Nên phải chặn bằng test, vì
+   * đợt nội dung sau sẽ lặp lại đúng thói quen đó.
+   */
+  it('spreads 排列顺序 answers across all six orders, so guessing buys nothing', () => {
+    const seen = new Map<string, number>();
+    EXAM_1.read2.forEach((o) => {
+      const key = o.ans.join('');
+      seen.set(key, (seen.get(key) ?? 0) + 1);
+    });
+    const orders = ['012', '021', '102', '120', '201', '210'];
+    orders.forEach((k) => expect(seen.get(k) ?? 0, `thiếu thứ tự ${k}`).toBeGreaterThan(0));
+    expect([...seen.keys()].sort()).toEqual(orders);
+
+    // Không hoán vị nào được chiếm quá 1/4 kho: trên mức đó là đoán bừa có lãi.
+    const cap = Math.ceil(EXAM_1.read2.length / 4);
+    seen.forEach((n, k) => expect(n, `${k} chiếm ${n}/${EXAM_1.read2.length}`).toBeLessThanOrEqual(cap));
+
+    // Và mỗi mảnh A/B/C đều phải có lượt đứng đầu tương đương nhau.
+    [0, 1, 2].forEach((slot) => {
+      const first = EXAM_1.read2.filter((o) => o.ans[0] === slot).length;
+      expect(first, `mảnh ${'ABC'[slot]} đứng đầu ${first} lần`).toBeGreaterThanOrEqual(
+        Math.floor(EXAM_1.read2.length / 3) - 1,
+      );
+    });
+  });
+
   it('models a 完成句子 answer that uses every word given', () => {
     EXAM_1.write1.forEach((s) => {
       const model = s.accept[0];
@@ -187,6 +224,37 @@ describe('paper content', () => {
       expect(p.sample).toContain(p.word);
       expect(p.scene).toBeTruthy();
     });
+  });
+
+  /**
+   * 看图写句子 phải có TRANH, và tranh phải là ảnh cảnh chứ không phải thẻ từ vựng.
+   *
+   * Bản đầu không có ảnh nào: cả 20 mục chỉ có một dòng mô tả cảnh bằng TIẾNG VIỆT,
+   * mà mô tả tiếng Việt gần như đọc luôn câu trả lời ra. Đề thật đưa một bức tranh
+   * không chú thích, và cái khó nằm đúng ở chỗ tự chọn góc kể.
+   *
+   * Ảnh cũng không được lấy từ kho thẻ từ vựng: thẻ vẽ khái niệm rồi rắc biểu tượng
+   * của chính khái niệm ấy quanh khung, tức in đáp án lên đề.
+   */
+  it('gives every 看图写句子 item a scene picture, never a vocabulary card', () => {
+    const PICS_RAW = picsRaw as Record<string, string>;
+    const IMAGES_RAW = imagesRaw as Record<string, string>;
+    EXAM_1.write2.forEach((p) => {
+      const key = p.img ?? p.word;
+      expect(PICS_RAW[key], `${p.word} chưa có ảnh cảnh`).toBeTruthy();
+    });
+    // Thẻ từ vựng và ảnh cảnh phải là hai kho tách rời — trùng đường dẫn là đã lẫn.
+    const cards = new Set(Object.values(IMAGES_RAW));
+    Object.values(PICS_RAW).forEach((src) => expect(cards.has(src)).toBe(false));
+  });
+
+  it('never asks the same 看图写句子 word twice', () => {
+    // Kho 20 mục mà có hai mục cùng một từ thì rút một đề 5 câu có lần ra trùng, và
+    // người làm gặp đúng câu vừa viết xong.
+    const words = EXAM_1.write2.map((p) => p.word);
+    expect(new Set(words).size, `trùng: ${words.filter((w, i) => words.indexOf(w) !== i)}`).toBe(
+      words.length,
+    );
   });
 
   it('carries a follow-up reading question back to its own passage', () => {

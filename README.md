@@ -195,6 +195,51 @@ Trang chủ mở lên là thấy đếm ngược và **danh sách nhiệm vụ b
 cho vui (Học qua nhạc · 若把你 · Sinh Tồn · Đấu Trùm) bị khoá cho tới khi xong; mọi chế độ ôn
 tập thật thì luôn mở — cái khoá không bao giờ được phép cản việc học.
 
+## Hai phần bị bỏ quên khi hiệu chỉnh độ khó
+
+书写第一部分 và 阅读第一部分 đã được kéo lên đúng độ khó đề thật ở những đợt trước. Hai phần
+dưới đây thì chỉ được **phình kho** cho việc rút đề có nghĩa (阅读第二部分 10 → 20,
+书写第二部分 5 → 20) — độ khó chưa bao giờ đo. Đo mới ra vấn đề, và cả hai đều cùng một kiểu:
+**app dễ hơn đề thật, mà tệ hơn là app dạy một phản xạ sai.**
+
+**阅读第二部分 — khoá đáp án đoán được.** Kho 20 câu chỉ dùng **4 trong 6** hoán vị; riêng
+`B-A-C` chiếm **11/20**, và chỉ **2/20** câu có mảnh A đứng đầu. Nhắm mắt chọn B-A-C là trúng
+quá nửa. Nguyên nhân không phải cố ý mà là thói quen của người soạn: viết câu đúng thứ tự trong
+đầu rồi "xáo" bằng cách đẩy câu đầu xuống ô B — làm hai mươi lần thì thành một quy luật.
+
+Sửa bằng cách **hoán vị lại nhãn A/B/C**, không viết một câu tiếng Trung nào mới: mảnh nào được
+gọi là A/B/C thì đổi, `ans` remap theo, nội dung và thứ tự đúng giữ nguyên từng chữ (có script
+đối chiếu với bản trước khi sửa). Kết quả:
+
+```
+trước:  012:2  021:0  102:11  120:6  201:0  210:1     mảnh A đứng đầu 2/20
+sau:    012:4  021:4  102:3   120:3  201:3  210:3     A/B/C đứng đầu 8/6/6
+```
+
+Một test khoá phân bố này lại: đủ sáu thứ tự, không thứ tự nào quá 1/4 kho, và mỗi mảnh phải có
+lượt đứng đầu tương đương. Đợt nội dung sau sẽ lặp lại đúng thói quen cũ nếu không có nó.
+
+**书写第二部分 — không có tranh nào.** Đề thật là 看图写句子: nhìn **ảnh** cộng một từ cho sẵn rồi
+tự viết câu. Cả 20 mục trước đây chỉ có một dòng mô tả cảnh **bằng tiếng Việt**, mà mô tả tiếng
+Việt thì gần như đọc luôn đáp án ra. Đây là khác biệt cấu trúc chứ không phải sắc thái: cái khó
+thật của phần này là tự đọc ra một cảnh không có chú thích và tự chọn góc kể.
+
+Giờ mỗi từ có một **ảnh cảnh riêng** (`public/img2/`, 20 ảnh JPEG 384px, 548KB). Ba quyết định
+đi kèm:
+
+- **Không dùng lại kho 59 ảnh thẻ từ vựng.** Thẻ từ vựng vẽ khái niệm rồi rắc biểu tượng của
+  chính khái niệm ấy quanh khung — ảnh 讨论 có mấy bóng nói chứa bóng đèn và mũi tên. Với thẻ từ
+  đó là điểm mạnh; với 看图写句子 thì nó in đáp án lên đề. Bản cũ có một đường lùi âm thầm
+  (`IMAGES[word]` khi không tìm thấy ảnh riêng) khiến đúng hai từ 修理 và 讨论 lọt vào; đã bỏ hẳn.
+- **Ảnh phải là cảnh thuần**: không chữ, không biển hiệu, không biểu tượng bay quanh. Hai ảnh
+  đầu tiên bị loại vì đọc sai nghĩa — 道歉 ra thành "hai người đang buồn", 尝 ra thành 喝; vẽ lại
+  với tư thế làm tín hiệu (cúi gập người; đưa thìa tới miệng người kia đang há).
+- **Tranh phải to.** Nó không còn là ảnh minh hoạ cho một dòng mô tả — nó **là** đề bài. Ở 150px
+  người làm phải nheo mắt đoán cảnh thay vì đọc nó; giờ là `min(280px, 60vw)`.
+
+Nhân tiện: từ 打扫 bị lặp hai lần trong kho 20 mục — rút một đề 5 câu có lần ra hai câu giống
+nhau. Một mục đổi sang 擦, và có test chặn từ trùng.
+
 ## Hạn đăng ký: cái ngày lỡ được
 
 Đếm ngược trên trang chủ trả lời "còn bao lâu nữa tới ngày thi". Suốt mấy tuần tới thì đó là câu
@@ -404,7 +449,9 @@ Không có màn hình cài đặt — chỉnh qua `engine.setSettings({...})` ho
 
 ## Ghi chú kỹ thuật
 
-- **Ảnh**: 59 ảnh đã tải về và nén còn 2.3MB (JPEG 384px), phục vụ từ `public/img/`. Đường dẫn
+- **Ảnh**: hai kho tách rời. `public/img/` là 59 **thẻ từ vựng** (2.3MB, JPEG 384px);
+  `public/img2/` là 20 **ảnh cảnh** cho 书写第二部分 (548KB, JPEG 384px) — xem lý do tách ở mục
+  hiệu chỉnh độ khó bên trên. Đường dẫn
   neo theo `BASE_URL` để chạy được dưới subpath của GitHub Pages. Có test chặn việc hotlink ra ngoài.
 - **Nét chữ**: Hanzi Writer tải dữ liệu nét từ CDN khi cần. Muốn chạy offline thì bundle
   `hanzi-writer-data` và truyền `charDataLoader`.

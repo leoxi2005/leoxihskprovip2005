@@ -103,54 +103,54 @@ export const READ1_EXTRA: FillGroup[] = [
 /** 阅读第二部分 — thêm mười đoạn ba vế, cùng độ dài với đề thật. */
 export const READ2_EXTRA: OrderItem[] = [
   {
-    parts: ['没想到刚出门就下起了大雨', '我昨天本来打算去公园跑步', '只好回家在客厅里锻炼'],
-    ans: [1, 0, 2],
-    vi: 'B → A → C: Hôm qua tôi vốn định ra công viên chạy bộ, không ngờ vừa ra khỏi cửa thì mưa to, đành về nhà tập trong phòng khách.',
+    parts: ['没想到刚出门就下起了大雨', '只好回家在客厅里锻炼', '我昨天本来打算去公园跑步'],
+    ans: [2, 0, 1],
+    vi: 'C → A → B: Hôm qua tôi vốn định ra công viên chạy bộ, không ngờ vừa ra khỏi cửa thì mưa to, đành về nhà tập trong phòng khách.',
   },
   {
-    parts: ['所以决定明年再考一次', '这次考试他只差三分', '成绩出来以后他有点儿失望'],
-    ans: [1, 2, 0],
-    vi: 'B → C → A: Kỳ thi lần này anh ấy chỉ thiếu ba điểm, có kết quả rồi anh hơi thất vọng, nên quyết định sang năm thi lại.',
-  },
-  {
-    parts: ['后来慢慢地就习惯了', '刚来这个城市的时候我很不适应', '现在反而不想离开了'],
-    ans: [1, 0, 2],
-    vi: 'B → A → C: Mới đến thành phố này tôi rất không quen, sau đó dần dần cũng quen, giờ lại chẳng muốn đi nữa.',
-  },
-  {
-    parts: ['会议就推迟到了下午两点', '因为经理临时有事', '大家可以先去吃午饭'],
-    ans: [1, 0, 2],
-    vi: 'B → A → C: Vì giám đốc bận đột xuất nên cuộc họp dời tới hai giờ chiều, mọi người có thể đi ăn trưa trước.',
-  },
-  {
-    parts: ['结果比自己一个人看快得多', '这道题我看了半天也没弄懂', '于是就去问了同桌'],
-    ans: [1, 2, 0],
-    vi: 'B → C → A: Bài này tôi nhìn mãi vẫn không hiểu, thế là đi hỏi bạn cùng bàn, kết quả nhanh hơn hẳn tự xem một mình.',
-  },
-  {
-    parts: ['但是味道确实不错', '这家店的位置不太好找', '所以每天都有很多人来排队'],
-    ans: [1, 0, 2],
-    vi: 'B → A → C: Quán này vị trí hơi khó tìm, nhưng vị đúng là ngon, nên ngày nào cũng đông người xếp hàng.',
-  },
-  {
-    parts: ['他大学毕业以后就去了南方工作', '每年只有春节才回来一次', '所以我们已经很久没见面了'],
-    ans: [0, 1, 2],
-    vi: 'A → B → C: Anh ấy tốt nghiệp đại học rồi đi miền Nam làm việc, mỗi năm chỉ về một lần dịp Tết, nên chúng tôi lâu rồi không gặp.',
-  },
-  {
-    parts: ['最好提前半个小时出发', '从这儿到机场大概要一个小时', '免得路上堵车来不及'],
-    ans: [1, 0, 2],
-    vi: 'B → A → C: Từ đây ra sân bay mất khoảng một tiếng, tốt nhất đi sớm nửa tiếng, kẻo tắc đường không kịp.',
-  },
-  {
-    parts: ['我才知道原来他就住在我家楼上', '上个月在超市又碰见了他', '第一次见到他是在图书馆'],
+    parts: ['所以决定明年再考一次', '成绩出来以后他有点儿失望', '这次考试他只差三分'],
     ans: [2, 1, 0],
-    vi: 'C → B → A: Lần đầu gặp anh ấy là ở thư viện, tháng trước lại gặp ở siêu thị, tôi mới biết hoá ra anh ấy ở ngay tầng trên nhà tôi.',
+    vi: 'C → B → A: Kỳ thi lần này anh ấy chỉ thiếu ba điểm, có kết quả rồi anh hơi thất vọng, nên quyết định sang năm thi lại.',
   },
   {
-    parts: ['否则很难坚持下去', '很多人减肥失败并不是因为懒', '而是因为一开始目标就定得太高'],
+    parts: ['刚来这个城市的时候我很不适应', '后来慢慢地就习惯了', '现在反而不想离开了'],
+    ans: [0, 1, 2],
+    vi: 'A → B → C: Mới đến thành phố này tôi rất không quen, sau đó dần dần cũng quen, giờ lại chẳng muốn đi nữa.',
+  },
+  {
+    parts: ['因为经理临时有事', '大家可以先去吃午饭', '会议就推迟到了下午两点'],
+    ans: [0, 2, 1],
+    vi: 'A → C → B: Vì giám đốc bận đột xuất nên cuộc họp dời tới hai giờ chiều, mọi người có thể đi ăn trưa trước.',
+  },
+  {
+    parts: ['于是就去问了同桌', '这道题我看了半天也没弄懂', '结果比自己一个人看快得多'],
+    ans: [1, 0, 2],
+    vi: 'B → A → C: Bài này tôi nhìn mãi vẫn không hiểu, thế là đi hỏi bạn cùng bàn, kết quả nhanh hơn hẳn tự xem một mình.',
+  },
+  {
+    parts: ['所以每天都有很多人来排队', '这家店的位置不太好找', '但是味道确实不错'],
     ans: [1, 2, 0],
-    vi: 'B → C → A: Nhiều người giảm cân thất bại không phải vì lười, mà vì ngay từ đầu đặt mục tiêu quá cao, nếu không thì rất khó kiên trì.',
+    vi: 'B → C → A: Quán này vị trí hơi khó tìm, nhưng vị đúng là ngon, nên ngày nào cũng đông người xếp hàng.',
+  },
+  {
+    parts: ['每年只有春节才回来一次', '所以我们已经很久没见面了', '他大学毕业以后就去了南方工作'],
+    ans: [2, 0, 1],
+    vi: 'C → A → B: Anh ấy tốt nghiệp đại học rồi đi miền Nam làm việc, mỗi năm chỉ về một lần dịp Tết, nên chúng tôi lâu rồi không gặp.',
+  },
+  {
+    parts: ['免得路上堵车来不及', '最好提前半个小时出发', '从这儿到机场大概要一个小时'],
+    ans: [2, 1, 0],
+    vi: 'C → B → A: Từ đây ra sân bay mất khoảng một tiếng, tốt nhất đi sớm nửa tiếng, kẻo tắc đường không kịp.',
+  },
+  {
+    parts: ['第一次见到他是在图书馆', '上个月在超市又碰见了他', '我才知道原来他就住在我家楼上'],
+    ans: [0, 1, 2],
+    vi: 'A → B → C: Lần đầu gặp anh ấy là ở thư viện, tháng trước lại gặp ở siêu thị, tôi mới biết hoá ra anh ấy ở ngay tầng trên nhà tôi.',
+  },
+  {
+    parts: ['很多人减肥失败并不是因为懒', '否则很难坚持下去', '而是因为一开始目标就定得太高'],
+    ans: [0, 2, 1],
+    vi: 'A → C → B: Nhiều người giảm cân thất bại không phải vì lười, mà vì ngay từ đầu đặt mục tiêu quá cao, nếu không thì rất khó kiên trì.',
   },
 ];
 

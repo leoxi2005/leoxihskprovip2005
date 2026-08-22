@@ -441,14 +441,14 @@ export const EXAM_1: ExamPaper = {
   // 阅读第二部分：排列顺序 (10)
   read2: [
     {
-      parts: ['后来我才知道，那家店只在周末开门', '上个周三我去买过一次', '结果白跑了一趟'],
-      ans: [1, 2, 0],
-      vi: 'B → C → A: Thứ Tư tuần trước tôi đi mua một lần, kết quả đi không công, sau này mới biết quán đó chỉ mở cuối tuần.',
+      parts: ['上个周三我去买过一次', '结果白跑了一趟', '后来我才知道，那家店只在周末开门'],
+      ans: [0, 1, 2],
+      vi: 'A → B → C: Thứ Tư tuần trước tôi đi mua một lần, kết quả đi không công, sau này mới biết quán đó chỉ mở cuối tuần.',
     },
     {
-      parts: ['所以我决定每天早起半个小时', '我发现早上的效率比晚上高很多', '用来背单词和听新闻'],
-      ans: [1, 0, 2],
-      vi: 'B → A → C: Tôi phát hiện buổi sáng hiệu quả hơn buổi tối nhiều, nên quyết định dậy sớm nửa tiếng, để học từ và nghe tin.',
+      parts: ['我发现早上的效率比晚上高很多', '用来背单词和听新闻', '所以我决定每天早起半个小时'],
+      ans: [0, 2, 1],
+      vi: 'A → C → B: Tôi phát hiện buổi sáng hiệu quả hơn buổi tối nhiều, nên quyết định dậy sớm nửa tiếng, để học từ và nghe tin.',
     },
     {
       parts: ['但是他一句也没有抱怨', '那天他从早上八点一直工作到晚上十点', '这让我们都很佩服'],
@@ -456,34 +456,34 @@ export const EXAM_1: ExamPaper = {
       vi: 'B → A → C: Hôm đó anh ấy làm từ 8 giờ sáng tới 10 giờ tối, nhưng không than một câu, khiến chúng tôi rất nể.',
     },
     {
-      parts: ['请大家提前十分钟到会议室', '明天上午的会议非常重要', '并且带上上次讨论的材料'],
-      ans: [1, 0, 2],
-      vi: 'B → A → C: Cuộc họp sáng mai rất quan trọng, mọi người đến phòng họp sớm 10 phút và mang tài liệu lần trước.',
-    },
-    {
-      parts: ['现在他已经能和中国朋友聊得很开心了', '刚来中国的时候，他连点菜都不敢', '这都是他每天坚持练习的结果'],
-      ans: [1, 0, 2],
-      vi: 'B → A → C: Mới sang Trung Quốc cậu ấy đến gọi món cũng không dám; giờ đã trò chuyện vui vẻ với bạn Trung Quốc — đều nhờ luyện tập mỗi ngày.',
-    },
-    {
-      parts: ['我看了看窗外，果然下起了大雨', '早上出门前妈妈提醒我带伞', '幸好我听了她的话'],
-      ans: [1, 0, 2],
-      vi: 'B → A → C: Sáng ra cửa mẹ nhắc mang ô; tôi nhìn ra cửa sổ, quả nhiên mưa to; may mà tôi nghe lời mẹ.',
-    },
-    {
-      parts: ['因此价格比市中心便宜不少', '这套房子离地铁站有点儿远', '对不着急上班的人来说很合适'],
-      ans: [1, 0, 2],
-      vi: 'B → A → C: Căn này hơi xa ga tàu điện, vì thế giá rẻ hơn trung tâm nhiều, rất hợp với người không vội đi làm.',
-    },
-    {
-      parts: ['第二天他就把钱包送到了警察局', '他在公园里捡到一个钱包', '里面有身份证和一千多块钱'],
+      parts: ['并且带上上次讨论的材料', '明天上午的会议非常重要', '请大家提前十分钟到会议室'],
       ans: [1, 2, 0],
-      vi: 'B → C → A: Anh ấy nhặt được ví trong công viên, bên trong có CMND và hơn nghìn tệ, hôm sau đem nộp đồn công an.',
+      vi: 'B → C → A: Cuộc họp sáng mai rất quan trọng, mọi người đến phòng họp sớm 10 phút và mang tài liệu lần trước.',
     },
     {
-      parts: ['一开始我以为他在开玩笑', '直到看见他的机票才相信', '他真的要去非洲工作两年'],
+      parts: ['现在他已经能和中国朋友聊得很开心了', '这都是他每天坚持练习的结果', '刚来中国的时候，他连点菜都不敢'],
+      ans: [2, 0, 1],
+      vi: 'C → A → B: Mới sang Trung Quốc cậu ấy đến gọi món cũng không dám; giờ đã trò chuyện vui vẻ với bạn Trung Quốc — đều nhờ luyện tập mỗi ngày.',
+    },
+    {
+      parts: ['幸好我听了她的话', '我看了看窗外，果然下起了大雨', '早上出门前妈妈提醒我带伞'],
+      ans: [2, 1, 0],
+      vi: 'C → B → A: Sáng ra cửa mẹ nhắc mang ô; tôi nhìn ra cửa sổ, quả nhiên mưa to; may mà tôi nghe lời mẹ.',
+    },
+    {
+      parts: ['这套房子离地铁站有点儿远', '因此价格比市中心便宜不少', '对不着急上班的人来说很合适'],
       ans: [0, 1, 2],
-      vi: 'A → B → C: Ban đầu tôi tưởng anh ấy đùa, tới khi thấy vé máy bay mới tin, anh ấy thật sự sang châu Phi làm việc hai năm.',
+      vi: 'A → B → C: Căn này hơi xa ga tàu điện, vì thế giá rẻ hơn trung tâm nhiều, rất hợp với người không vội đi làm.',
+    },
+    {
+      parts: ['他在公园里捡到一个钱包', '第二天他就把钱包送到了警察局', '里面有身份证和一千多块钱'],
+      ans: [0, 2, 1],
+      vi: 'A → C → B: Anh ấy nhặt được ví trong công viên, bên trong có CMND và hơn nghìn tệ, hôm sau đem nộp đồn công an.',
+    },
+    {
+      parts: ['直到看见他的机票才相信', '一开始我以为他在开玩笑', '他真的要去非洲工作两年'],
+      ans: [1, 0, 2],
+      vi: 'B → A → C: Ban đầu tôi tưởng anh ấy đùa, tới khi thấy vé máy bay mới tin, anh ấy thật sự sang châu Phi làm việc hai năm.',
     },
     {
       parts: ['这样不但省钱，而且更健康', '越来越多的年轻人开始自己做饭', '虽然要多花一点儿时间'],
@@ -659,10 +659,12 @@ export const EXAM_1: ExamPaper = {
       vi: 'Sáng nào anh ấy cũng rèn luyện sức khoẻ ở công viên.',
     },
     {
-      word: '打扫',
-      scene: 'Một người cầm chổi dọn dẹp phòng khách.',
-      sample: '妈妈正在打扫客厅。',
-      vi: 'Mẹ đang dọn dẹp phòng khách.',
+      // 打扫 đã có trong WRITE2_EXTRA với cảnh đầy đủ hơn; hai mục cùng một từ nghĩa là
+      // rút đề có lần ra hai câu giống nhau, nên chỗ này đổi sang một từ khác.
+      word: '擦',
+      scene: 'Một người đang lau tấm cửa sổ lớn, dưới chân có xô nước.',
+      sample: '他正在擦房间里的窗户。',
+      vi: 'Anh ấy đang lau cửa sổ trong phòng.',
     },
     {
       word: '礼物',

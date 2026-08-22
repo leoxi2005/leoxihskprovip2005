@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IMAGES } from '../../data';
+import { PICS } from '../../data';
 import {
   isAutoGraded,
   isRight,
@@ -210,18 +210,23 @@ export function QuestionView({
       );
 
     case 'pic': {
-      const img = q.item.img ? IMAGES[q.item.img] : IMAGES[q.item.word];
+      // CHỈ tra trong PICS. Bản cũ lùi về `IMAGES[word]` khi không thấy ảnh riêng, và
+      // đúng hai từ (修理, 讨论) có thẻ từ vựng nên lọt vào đây — mà thẻ từ vựng vẽ sẵn
+      // biểu tượng của chính từ đó quanh khung, tức là in đáp án lên đề.
+      const img = PICS[q.item.img ?? q.item.word];
       return (
         <>
-          <Note>Nhìn tranh (hoặc mô tả) và dùng từ cho sẵn viết MỘT câu.</Note>
+          <Note>Nhìn tranh và dùng từ cho sẵn viết MỘT câu.</Note>
           <div style={{ display: 'flex', gap: 16, alignItems: 'center', margin: '14px 0', flexWrap: 'wrap' }}>
             {img ? (
               <div
                 role="img"
                 aria-label={q.item.scene}
                 style={{
-                  width: 150,
-                  height: 150,
+                  // Tranh giờ LÀ đề bài, không còn là ảnh minh hoạ cho một dòng mô tả —
+                  // ở 150px người làm phải nheo mắt đoán cảnh thay vì đọc nó.
+                  width: 'min(280px, 60vw)',
+                  height: 'min(280px, 60vw)',
                   borderRadius: 16,
                   border: `3px solid ${C.ink}`,
                   boxShadow: shadow(3),
