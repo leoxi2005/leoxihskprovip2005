@@ -17,9 +17,16 @@ import {
 import { KEYS, load, save } from '../../engine/storage';
 import { useEngine } from '../../engine/useEngine';
 import { C, F, shadow } from '../../theme';
+import { Prep } from './Prep';
 import { QuestionView, ReviewBody } from './Question';
 
-type Phase = 'guide' | 'practice' | 'done';
+/**
+ * `prep` nằm giữa hướng dẫn và câu hỏi: ôn từ và ngữ pháp của đúng đề vừa rút.
+ *
+ * Không bắt buộc, và cũng không thể bắt buộc — chỗ này là bậc thềm cho người đang
+ * dừng ở 50–60%, còn ai đã quen tay thì nhấc thẳng vào `practice`.
+ */
+type Phase = 'guide' | 'prep' | 'practice' | 'done';
 
 /** Cả kho đề, đã dàn phẳng — dùng chung cho mọi phần. */
 
@@ -195,12 +202,27 @@ export function PartDrill({ part, onExit }: { part: PartId; onExit: () => void }
             Đề thật thì không — nên khi thấy đã quen tay, hãy làm cả đề để tập điều kiện thật.
           </div>
 
-          <button onClick={restart} style={btn(C.red)}>
-            Luyện {qs.length} câu ▶
-          </button>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <button onClick={() => setPhase('prep')} style={btn(C.ochre, C.ink)}>
+              📖 Ôn từ &amp; ngữ pháp trước
+            </button>
+            <button onClick={restart} style={btn(C.red)}>
+              Luyện {qs.length} câu ▶
+            </button>
+          </div>
+          <p style={{ margin: '10px 0 0', fontSize: 12.5, fontWeight: 600, color: C.muted2, lineHeight: 1.5 }}>
+            Bảng ôn lấy từ vựng và ngữ pháp ra từ đúng {qs.length} câu sắp làm — xem xong là gặp lại ngay
+            trong câu. Đang dưới 70% ở phần này thì nên đi qua đó trước.
+          </p>
         </div>
       </Shell>
     );
+  }
+
+  // -- warm-up --------------------------------------------------------------
+
+  if (phase === 'prep') {
+    return <Prep part={part} qs={qs} onStart={restart} onBack={() => setPhase('guide')} />;
   }
 
   // -- summary --------------------------------------------------------------
@@ -219,14 +241,19 @@ export function PartDrill({ part, onExit }: { part: PartId; onExit: () => void }
 
           {pct < 60 && (
             <p style={{ fontSize: 14, color: C.body, fontWeight: 600, maxWidth: 520, margin: '0 auto 14px' }}>
-              Dưới 60% ở một phần đơn lẻ nghĩa là kỹ thuật chưa vào, không phải bạn yếu từ vựng. Đọc lại
-              phần "Cách làm" rồi luyện lại — nhanh hơn nhiều so với cày thêm từ.
+              Dưới 60% ở một phần đơn lẻ thường là một trong hai chỗ, và chúng cần hai cách chữa khác
+              nhau. Nếu hiểu câu mà vẫn chọn sai thì là kỹ thuật — đọc lại "Cách làm". Nếu đọc câu ra mà
+              không biết mấy chữ trong đó nghĩa gì thì đừng luyện lại vội: qua bảng ôn từ &amp; ngữ pháp
+              một lượt rồi hãy làm lại đúng phần này.
             </p>
           )}
 
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <button onClick={restart} style={btn(C.ink, C.soft)}>
               Luyện lại
+            </button>
+            <button onClick={() => setPhase('prep')} style={btn(C.ochre, C.ink)}>
+              📖 Ôn lại từ &amp; ngữ pháp
             </button>
             <button onClick={() => setPhase('guide')} style={btn(C.card, C.ink)}>
               Xem lại cách làm

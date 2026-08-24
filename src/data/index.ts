@@ -9,8 +9,8 @@ import { EXTRA_GRAMMAR, EXTRA_STORIES, EXTRA_VOCAB } from './extra';
 import { EXTRA2_GRAMMAR, EXTRA2_STORIES, EXTRA2_TOPICS, EXTRA2_VOCAB } from './extra2';
 import { EXTRA3_GRAMMAR, EXTRA3_STORIES, EXTRA3_TOPICS, EXTRA3_VOCAB } from './extra3';
 import { EXTRA4_GRAMMAR, EXTRA4_STORIES, EXTRA4_TOPICS, EXTRA4_VOCAB } from './extra4';
-import { splitHsk123 } from './hsk123';
-import { splitHsk4 } from './hsk4';
+import { HSK123_LEVEL, splitHsk123 } from './hsk123';
+import { HSK4_ALL, splitHsk4 } from './hsk4';
 import type { Deck, MySong, Song, Vocab } from './types';
 
 export * from './types';
@@ -67,6 +67,19 @@ export const HSK4_TOPICS = HSK4.topics;
 
 /** Batch topics for the HSK 1–3 base the deck did not cover. */
 export const HSK123_TOPICS = HSK123.topics;
+
+/**
+ * Hanzi → HSK level, across the whole 1–4 syllabus.
+ *
+ * Dùng để biết một từ trong đề là từ vỡ lòng hay từ đáng dừng lại ôn. Từ nào không
+ * có trong hai danh sách chính thức thì không nằm ở đây — chỗ gọi tự quyết định coi
+ * nó là gì, vì deck giáo trình còn mang cả từ ngoài đại cương.
+ */
+export const LEVEL_OF: ReadonlyMap<string, 1 | 2 | 3 | 4> = new Map<string, 1 | 2 | 3 | 4>([
+  ...HSK4_ALL.map((w) => [w.h, 4] as [string, 4]),
+  // 1–3 ghi sau nên đè lên 4: một từ xuất hiện ở cả hai danh sách thì cấp thấp thắng.
+  ...[...HSK123_LEVEL].map(([h, lv]) => [h, lv] as [string, 1 | 2 | 3]),
+]);
 
 export { HSK4_BATCH, HSK4_COUNT } from './hsk4';
 export { HSK123_BATCH, HSK123_COUNT } from './hsk123';

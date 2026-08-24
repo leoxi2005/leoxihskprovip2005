@@ -627,6 +627,17 @@ const LEVELS: [1 | 2 | 3, Row[]][] = [
 
 export const HSK123_COUNT = L1.length + L2.length + L3.length;
 
+/**
+ * Hanzi → the level that first teaches it.
+ *
+ * Chỗ khác cần biết một từ là từ vỡ lòng hay từ mới: bảng ôn trước khi luyện đề mà
+ * bày 我 · 好 · 吃 ra thì phần ôn thành vô dụng, còn người học thì học được đúng con
+ * số không. Đây là bản tra một chiều, không đụng gì tới việc chia đợt của deck.
+ */
+export const HSK123_LEVEL: ReadonlyMap<string, 1 | 2 | 3> = new Map(
+  LEVELS.flatMap(([level, rows]) => rows.map((r) => [r[0], level] as [string, 1 | 2 | 3])),
+);
+
 const batchName = (level: number, i: number): string =>
   `HSK${level} · Đợt ${String(i + 1).padStart(2, '0')}`;
 

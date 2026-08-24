@@ -24,6 +24,8 @@ export const KEYS = {
   plan: 'hskq_plan',
   /** Best result per exam part, from the part-by-part practice mode. */
   drill: 'hskq_drill',
+  /** Từ tự đánh dấu "chưa thuộc" ở bảng ôn trước khi luyện — xem `prep.ts`. */
+  prep: 'hskq_prep',
   /** Vàng, rương, linh thú, nhiệm vụ đã nhận — xem `meta.ts`. */
   meta: 'hskq_meta',
   /** Kỷ lục từng trò chơi. */
