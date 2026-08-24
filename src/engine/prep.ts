@@ -700,6 +700,10 @@ export const CHECK_COUNT = 6;
  * Chỉ để chốt lại là đã thật sự đọc, không phải để chấm trình độ — nên nó hỏi chiều
  * dễ (chữ → nghĩa) và lấy mồi nhử cùng TỪ LOẠI với đáp án. Mồi nhử khác từ loại thì
  * loại được bằng ngữ pháp mà không cần biết từ, tức câu hỏi tự trả lời hộ.
+ *
+ * Hỏi TỪ ĐÁP ÁN trước đã. Bốc đều sáu từ trong mười sáu thì phần lớn lượt kiểm tra
+ * rơi vào những từ chỉ đi ngang qua câu, trong khi từ quyết định điểm lại không được
+ * hỏi lần nào — đúng cái cảm giác "kiểm tra toàn từ khác".
  */
 export function makeCheck(
   words: PrepWord[],
@@ -716,7 +720,10 @@ export function makeCheck(
     return out;
   };
 
-  return shuffle(words)
+  const keys = shuffle(words.filter((w) => w.isKey));
+  const rest = shuffle(words.filter((w) => !w.isKey));
+
+  return [...keys, ...rest]
     .slice(0, n)
     .map(({ v }) => {
       const sameKind = pool.filter((x) => x.pos === v.pos && x.m !== v.m);

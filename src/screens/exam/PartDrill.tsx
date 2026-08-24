@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { EXAM_1 } from '../../data/exam1';
 import {
+  drawPaper,
   flatten,
   guideFor,
   isAutoGraded,
   isRight,
-  countOf,
   partQuestions,
   passageFor,
   writtenMatches,
@@ -83,26 +83,27 @@ export function PartDrill({
   const engine = useEngine();
   const guide = guideFor(part);
   /**
-   * Một buổi luyện lấy đúng số câu của phần đó trong đề thật, rút ngẫu nhiên từ kho.
+   * Một buổi luyện lấy đúng số câu của phần đó, rút bằng CHÍNH luật rút đề thật.
    *
-   * Kho có nhiều hơn số câu một đề cần. Bắt làm hết kho trong một lượt thì buổi luyện
-   * dài gấp mấy lần phần thi thật, còn lấy luôn mười câu đầu thì lần nào cũng đúng
-   * mười câu ấy.
+   * Bản đầu tự xáo lấy: gom mọi câu của phần rồi bốc ngẫu nhiên mười câu. Nhìn thì
+   * hợp lý, nhưng nó xáo ở mức CÂU LẺ trong khi kho được soạn theo CỤM, và hỏng ở
+   * hai chỗ cùng lúc:
+   *
+   *  - 阅读第一部分 in năm câu chung một bảng sáu từ. Bốc câu lẻ thì mười câu rơi vào
+   *    năm bảng khác nhau — ba mươi từ thay vì mười hai, và không lần nào giống đề
+   *    thật. Đây cũng là chỗ bảng ôn trông như lấy từ đâu đâu: nó ôn đúng những từ
+   *    sẽ gặp, nhưng "những từ sẽ gặp" đã bị thổi lên gấp ba nên mười sáu ô không đủ.
+   *  - 听力第三部分 và 阅读第三部分 hỏi hai câu trên một đoạn; câu thứ hai không mang
+   *    đoạn của nó mà đọc ngược lên câu trước. Bốc câu lẻ là tách nó khỏi đoạn, và
+   *    `passageFor` khi ấy không trả về "không có đoạn" — nó trả về ĐOẠN CỦA CÂU
+   *    KHÁC. Người học đọc một đoạn rồi trả lời câu hỏi của đoạn khác, khoảng năm
+   *    câu mỗi buổi hai mươi câu.
+   *
+   * `drawPaper` đã giải xong đúng bài này cho đề đầy đủ, có test riêng. Rút cả đề rồi
+   * lấy ra một phần thì tốn thêm vài trăm phần tử, đổi lại là không có luật rút thứ
+   * hai để lệch khỏi luật thứ nhất.
    */
-  const qs = useMemo(() => {
-    // `flatten` lại từ đầu mỗi phiên chứ không dùng một bản dựng sẵn lúc nạp trang:
-    // nó là chỗ xáo mảnh, nên gọi lại mới ra một cách bày mới. Giữ bản dựng sẵn thì
-    // luyện lại lần hai gặp đúng thế cũ.
-    const all = partQuestions(flatten(EXAM_1), part);
-    const n = countOf(part);
-    if (all.length <= n) return all;
-    const pool = all.slice();
-    for (let k = pool.length - 1; k > 0; k--) {
-      const j = Math.floor(Math.random() * (k + 1));
-      [pool[k], pool[j]] = [pool[j], pool[k]];
-    }
-    return pool.slice(0, n);
-  }, [part]);
+  const qs = useMemo(() => partQuestions(flatten(drawPaper(EXAM_1)), part), [part]);
 
   const [phase, setPhase] = useState<Phase>(start);
   const [i, setI] = useState(0);
