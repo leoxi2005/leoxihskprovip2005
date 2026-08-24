@@ -128,10 +128,29 @@ describe('điểm ngữ pháp rút từ đề', () => {
 });
 
 describe('bảng ôn của từng phần', () => {
-  it('cả tám phần đều có khung ngữ pháp viết tay', () => {
+  /**
+   * Mức sâu phải ĐỀU giữa tám phần.
+   *
+   * Bản đầu viết 书写第一部分 sáu điểm còn bảy phần kia ba điểm, và chỗ mỏng rơi đúng
+   * vào 阅读第二部分 — phần đang thấp điểm nhất. Bảng ôn chỉ dày ở phần mình thấy dễ
+   * viết thì nó ôn hộ người viết, không ôn hộ người học.
+   */
+  it('cả tám phần đều đủ sáu điểm ngữ pháp, mỗi điểm hai ví dụ', () => {
     for (const g of PART_GUIDES) {
-      expect(PART_NOTES[g.id]?.length ?? 0).toBeGreaterThan(0);
-      for (const n of PART_NOTES[g.id]) expect(n.eg.length).toBeGreaterThan(0);
+      const notes = PART_NOTES[g.id] ?? [];
+      expect(notes.length).toBeGreaterThanOrEqual(6);
+      for (const n of notes) {
+        expect(n.eg.length).toBeGreaterThanOrEqual(2);
+        expect(n.why.length).toBeGreaterThan(40);
+        for (const e of n.eg) expect(e.cn).toMatch(/[\u4e00-\u9fff]/);
+      }
+    }
+  });
+
+  it('không có hai điểm ngữ pháp trùng tên trong cùng một phần', () => {
+    for (const g of PART_GUIDES) {
+      const names = (PART_NOTES[g.id] ?? []).map((n) => n.name);
+      expect(new Set(names).size).toBe(names.length);
     }
   });
 
