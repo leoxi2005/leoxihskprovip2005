@@ -70,7 +70,16 @@ const heading = {
  * used up. So this mode teaches the method first and marks every question the moment
  * it is answered — the opposite of the exam on purpose.
  */
-export function PartDrill({ part, onExit }: { part: PartId; onExit: () => void }) {
+export function PartDrill({
+  part,
+  onExit,
+  start = 'guide',
+}: {
+  part: PartId;
+  onExit: () => void;
+  /** Mở thẳng vào bảng ôn khi người dùng bấm "Ôn trước" từ danh sách các phần. */
+  start?: 'guide' | 'prep';
+}) {
   const engine = useEngine();
   const guide = guideFor(part);
   /**
@@ -95,7 +104,7 @@ export function PartDrill({ part, onExit }: { part: PartId; onExit: () => void }
     return pool.slice(0, n);
   }, [part]);
 
-  const [phase, setPhase] = useState<Phase>('guide');
+  const [phase, setPhase] = useState<Phase>(start);
   const [i, setI] = useState(0);
   const [answers, setAnswers] = useState<ExamAnswer[]>(() => Array(qs.length).fill(null));
   const [marks, setMarks] = useState<SelfMark[]>(() => Array(qs.length).fill(undefined));

@@ -88,7 +88,14 @@ export function Exam() {
   const [marks, setMarks] = useState<SelfMark[]>(() => Array(QS.length).fill(undefined));
   const [left, setLeft] = useState(0);
   /** Set while practising a single part instead of sitting the whole paper. */
-  const [drill, setDrill] = useState<PartId | null>(null);
+  /**
+   * Phần đang luyện, và mở thẳng vào đâu.
+   *
+   * `at` có ở đây chứ không nằm trong `PartDrill` vì bảng ôn phải bấm được TỪ DANH
+   * SÁCH. Bản đầu chôn nó sau trang "Cách làm" — người dùng đứng ngay ở màn hình này
+   * và không thấy nó tồn tại, tức nó coi như không có.
+   */
+  const [drill, setDrill] = useState<{ id: PartId; at: 'guide' | 'prep' } | null>(null);
   /** Set while working through a real past paper's own recording. */
   const [real, setReal] = useState(false);
   /** Questions whose recording has already played — the paper plays each one once. */
@@ -202,7 +209,7 @@ export function Exam() {
 
   // -- screens --------------------------------------------------------------
 
-  if (drill) return <PartDrill part={drill} onExit={() => setDrill(null)} />;
+  if (drill) return <PartDrill part={drill.id} start={drill.at} onExit={() => setDrill(null)} />;
   if (real) return <RealPaper onExit={() => setReal(false)} />;
 
   if (phase === 'intro') {
@@ -264,7 +271,7 @@ export function Exam() {
             động chuyển sang phần sau. Không có phản hồi đúng/sai cho tới khi nộp bài.
           </div>
 
-          <PartMenu onPick={setDrill} />
+          <PartMenu onPick={(id, at) => setDrill({ id, at })} />
 
           <button
             onClick={() => setReal(true)}
@@ -484,7 +491,7 @@ function Shell({ children }: { children: React.ReactNode }) {
  * Sitting 95 minutes cold is the wrong first move: it measures you before you have
  * been taught the technique for any single part. This is the way in.
  */
-function PartMenu({ onPick }: { onPick: (id: PartId) => void }) {
+function PartMenu({ onPick }: { onPick: (id: PartId, at: 'guide' | 'prep') => void }) {
   const best = load<DrillBest>(KEYS.drill, {});
 
   return (
@@ -506,15 +513,22 @@ function PartMenu({ onPick }: { onPick: (id: PartId) => void }) {
         không bấm giờ. Ba phần 听力 ở đây đọc bằng bản thu sẵn của app (đúng nhịp băng thi); bản luyện
         bằng <b>chính giọng thu của đề</b> nằm trong 🎧 Nghe bằng đề thật, ngay bên dưới.
       </p>
+      <p style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 600, color: C.gold, lineHeight: 1.5 }}>
+        📖 Bấm <b>Ôn trước</b> ở góc mỗi thẻ để xem từ vựng và ngữ pháp lấy ra từ đúng những câu sắp
+        làm, rồi mới vào luyện. Đang dưới 70% ở phần nào thì nên đi qua đó trước.
+      </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 8 }}>
         {PART_GUIDES.map((g) => {
           const b = best[g.id];
           const pct = b && b.count ? Math.round((b.right / b.count) * 100) : null;
           return (
-            <button
+            /*
+             * Thẻ là DIV chứ không phải BUTTON, vì trong nó có một nút thứ hai.
+             * Lồng button trong button là HTML sai và trình duyệt sẽ tự tháo ra.
+             */
+            <div
               key={g.id}
-              onClick={() => onPick(g.id)}
               className="lift lift-3 lift-static"
               style={{
                 display: 'flex',
@@ -525,19 +539,55 @@ function PartMenu({ onPick }: { onPick: (id: PartId) => void }) {
                 border: `2px solid ${C.ink}`,
                 borderRadius: 14,
                 padding: '10px 14px',
-                cursor: 'pointer',
                 boxShadow: shadow(3, C.edge),
                 fontFamily: F.ui,
                 textAlign: 'left',
               }}
             >
-              <span style={{ fontFamily: F.han, fontSize: 15, fontWeight: 800 }}>{g.id}</span>
-              <span style={{ fontSize: 12.5, fontWeight: 700, color: C.body }}>{g.vi}</span>
-              <span style={{ fontSize: 11.5, fontWeight: 700, color: pct === null ? C.muted2 : pct >= 60 ? C.okInk : C.badInk }}>
-                {partQuestions(BANK_QS, g.id).length} câu
-                {pct === null ? ' · chưa luyện' : ` · tốt nhất ${b!.right}/${b!.count} (${pct}%)`}
-              </span>
-            </button>
+              <button
+                onClick={() => onPick(g.id, 'guide')}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  gap: 2,
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  width: '100%',
+                  cursor: 'pointer',
+                  fontFamily: F.ui,
+                  textAlign: 'left',
+                  color: C.ink,
+                }}
+              >
+                <span style={{ fontFamily: F.han, fontSize: 15, fontWeight: 800 }}>{g.id}</span>
+                <span style={{ fontSize: 12.5, fontWeight: 700, color: C.body }}>{g.vi}</span>
+                <span style={{ fontSize: 11.5, fontWeight: 700, color: pct === null ? C.muted2 : pct >= 60 ? C.okInk : C.badInk }}>
+                  {partQuestions(BANK_QS, g.id).length} câu
+                  {pct === null ? ' · chưa luyện' : ` · tốt nhất ${b!.right}/${b!.count} (${pct}%)`}
+                </span>
+              </button>
+
+              <button
+                onClick={() => onPick(g.id, 'prep')}
+                style={{
+                  marginTop: 7,
+                  alignSelf: 'stretch',
+                  border: `2px solid ${C.ink}`,
+                  background: C.ochre,
+                  color: C.ink,
+                  borderRadius: 99,
+                  padding: '4px 12px',
+                  fontSize: 12,
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  fontFamily: F.ui,
+                }}
+              >
+                📖 Ôn từ &amp; ngữ pháp trước
+              </button>
+            </div>
           );
         })}
       </div>
