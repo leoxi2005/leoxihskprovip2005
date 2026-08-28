@@ -434,6 +434,30 @@ const scrambleOrder = (o: OrderItem): OrderItem => {
 };
 
 /**
+ * Xáo bốn lựa chọn của một câu trắc nghiệm và ánh xạ lại đáp án.
+ *
+ * Kho được soạn tay, và người soạn tay có thói quen: đo trên kho hiện có thì đáp án
+ * đúng là B ở 65–67% số câu, còn D đúng ĐÚNG MỘT lần trong năm mươi lăm câu. Ai luyện
+ * nhiều sẽ tự học được "cứ chọn B, đừng bao giờ chọn D" — một mẹo ăn điểm ở đây mà vô
+ * dụng ở đề thật, tức luyện càng nhiều càng lệch.
+ *
+ * Vá bằng cách xáo lúc bày đề chứ không đi cân lại tay năm mươi lăm câu: cân tay thì
+ * chỉ đúng cho kho hôm nay, còn câu viết thêm ngày mai lại lệch theo thói quen cũ.
+ *
+ * Thứ tự lựa chọn không mang thông tin — A/B/C/D chỉ là nhãn. Đổi lại, dãy lựa chọn
+ * là con số hay giờ giấc sẽ không còn tăng dần; đề thật hay in tăng dần, nhưng mất
+ * một nét trình bày rẻ hơn nhiều so với việc để nguyên một mẹo đoán 65%.
+ */
+const scrambleQa = (q: QaItem): QaItem => {
+  const pick = shuffled([0, 1, 2, 3]);
+  return {
+    ...q,
+    opts: pick.map((i) => q.opts[i]) as [string, string, string, string],
+    ans: pick.indexOf(q.ans),
+  };
+};
+
+/**
  * Rút một đề 100 câu từ kho.
  *
  * Kho chứa nhiều hơn số câu của một đề — làm lại lần hai mà gặp đúng 100 câu cũ thì
@@ -520,10 +544,10 @@ export function flatten(p: ExamPaper): { section: SectionId; q: ExamQ }[] {
 
   p.listen1.forEach((item) => push('listen', { kind: 'tf', part: '听力第一部分', item } as never));
   p.listen2.forEach((item) =>
-    push('listen', { kind: 'qa', part: '听力第二部分', item, heard: false } as never),
+    push('listen', { kind: 'qa', part: '听力第二部分', item: scrambleQa(item), heard: false } as never),
   );
   p.listen3.forEach((item) =>
-    push('listen', { kind: 'qa', part: '听力第三部分', item, heard: false } as never),
+    push('listen', { kind: 'qa', part: '听力第三部分', item: scrambleQa(item), heard: false } as never),
   );
   p.read1.forEach((group) =>
     group.items.forEach((_, at) => push('read', { kind: 'fill', part: '阅读第一部分', group, at } as never)),
@@ -532,7 +556,7 @@ export function flatten(p: ExamPaper): { section: SectionId; q: ExamQ }[] {
     push('read', { kind: 'order', part: '阅读第二部分', item: scrambleOrder(item) } as never),
   );
   p.read3.forEach((item) =>
-    push('read', { kind: 'qa', part: '阅读第三部分', item, heard: true } as never),
+    push('read', { kind: 'qa', part: '阅读第三部分', item: scrambleQa(item), heard: true } as never),
   );
   p.write1.forEach((item) =>
     push('write', { kind: 'sent', part: '书写第一部分', item: scrambleSent(item) } as never),

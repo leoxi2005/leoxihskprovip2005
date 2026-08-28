@@ -27,6 +27,40 @@ import {
  */
 const QS = flatten(drawPaper(EXAM_1));
 
+/**
+ * Không được có mẹo đoán nào ăn điểm ở đây mà vô dụng ở đề thật.
+ *
+ * Kho soạn tay để đáp án B đúng 65–67% số câu và D đúng một lần trong năm mươi lăm.
+ * Luyện trên một kho như thế là tập một phản xạ sai.
+ */
+describe('đoán mò không được ăn điểm', () => {
+  it('bốn lựa chọn đều có cơ hội đúng ngang nhau', () => {
+    for (const part of ['听力第二部分', '听力第三部分', '阅读第三部分'] as const) {
+      const c = [0, 0, 0, 0];
+      let n = 0;
+      for (let t = 0; t < 60; t++) {
+        for (const { q } of partQuestions(flatten(drawPaper(EXAM_1)), part)) {
+          if (q.kind === 'qa') {
+            c[q.item.ans]++;
+            n++;
+          }
+        }
+      }
+      // Ngẫu nhiên nên không bao giờ đúng 25%; chệch quá 6 điểm phần trăm mới là lệch thật.
+      for (const k of c) expect(Math.abs(k / n - 0.25)).toBeLessThan(0.06);
+    }
+  });
+
+  it('xáo lựa chọn nhưng vẫn trỏ đúng đáp án cũ', () => {
+    for (const { q } of flatten(drawPaper(EXAM_1))) {
+      if (q.kind !== 'qa') continue;
+      // Nội dung đáp án đúng phải còn nguyên trong bộ bốn lựa chọn.
+      expect(q.item.opts).toHaveLength(4);
+      expect(q.item.opts[q.item.ans]).toBeTruthy();
+    }
+  });
+});
+
 describe('paper shape', () => {
   it('matches the official blueprint exactly', () => {
     expect(TOTAL_QUESTIONS).toBe(100);

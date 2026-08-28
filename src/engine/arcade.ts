@@ -168,7 +168,22 @@ export interface ArcadeRound {
 export function arcadeRound(pool: Vocab[], n: number): ArcadeRound | null {
   if (pool.length < n) return null;
   const word = pool[Math.floor(Math.random() * pool.length)];
-  const others = shuffle(pool.filter((v) => v.h !== word.h && v.m !== word.m)).slice(0, n - 1);
+  /*
+   * Loại trùng nghĩa GIỮA CÁC MỒI NHỬ với nhau, không chỉ trùng với đáp án.
+   *
+   * Bản cũ chỉ lọc `v.m !== word.m`, nên hai mồi nhử vẫn trùng nghĩa nhau được —
+   * deck có nhiều cặp cùng dịch ra một chữ tiếng Việt. Khi đó bàn chơi bày ra bốn ô
+   * mà chỉ ba nghĩa, và người chơi không sai: câu hỏi ấy không có đáp án duy nhất.
+   * Hiếm, nhưng có — bắt được ở khoảng một trên mười lần chạy hai trăm lượt.
+   */
+  const seen = new Set([word.m]);
+  const others: Vocab[] = [];
+  for (const v of shuffle(pool)) {
+    if (others.length >= n - 1) break;
+    if (v.h === word.h || seen.has(v.m)) continue;
+    seen.add(v.m);
+    others.push(v);
+  }
   if (others.length < n - 1) return null;
   return { word, opts: shuffle([word, ...others]) };
 }
