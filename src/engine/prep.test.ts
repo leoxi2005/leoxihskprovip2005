@@ -24,11 +24,12 @@ describe('chữ của một câu hỏi', () => {
     expect(textOf(q).all).toContain(q.item.say);
   });
 
-  it('câu điền từ: đáp án là từ trong bảng, không phải cả câu', () => {
+  it('câu điền từ: cả sáu từ trong bảng đều là từ phải biết, không riêng từ đúng', () => {
     const q = forPart('阅读第一部分')[0].q;
     if (q.kind !== 'fill') throw new Error('sai loại câu');
-    const { key } = textOf(q);
-    expect(key).toEqual([q.group.bank[q.group.items[q.at].ans]]);
+    // Phần này hỏi bằng cách bắt chọn giữa sáu từ; không hiểu năm từ kia thì
+    // loại trừ không chạy, nên cả sáu đều đáng ôn.
+    expect(textOf(q).key).toEqual(q.group.bank);
   });
 
   it('câu trắc nghiệm: chỉ đáp án đúng vào phần key', () => {

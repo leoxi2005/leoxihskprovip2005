@@ -3,6 +3,14 @@ import type { ExamPaper } from '../engine/exam';
 // Node, mà Node không tự đoán đuôi như Vite. Thiếu đuôi là gãy đường thu giọng đọc.
 import { WRITE1_BANK } from './write1.ts';
 import { READ1_EXTRA, READ2_EXTRA, WRITE2_EXTRA } from './reading.ts';
+import {
+  LISTEN1_EXTRA,
+  LISTEN2_EXTRA,
+  LISTEN3_EXTRA,
+  READ1_EXTRA2,
+  READ2_EXTRA2,
+  READ3_EXTRA2,
+} from './exam2.ts';
 
 /**
  * Mock paper 1 — HSK（四级）模拟试卷.
@@ -82,6 +90,7 @@ export const EXAM_1: ExamPaper = {
       ok: true,
       vi: 'Đừng lo, còn hai mươi phút nữa mới soát vé, mình đi mua hai chai nước rồi thong thả qua vẫn kịp. → Thời gian vẫn còn kịp. (ĐÚNG)',
     },
+      ...LISTEN1_EXTRA,
   ],
 
   // 听力第二部分：短对话 + 一个问题 (15)
@@ -191,6 +200,7 @@ export const EXAM_1: ExamPaper = {
       ans: 0,
       vi: 'Nam: Cái thùng này nặng quá, một mình anh khiêng không nổi. / Nữ: Để em phụ anh khiêng. → Cô ấy giúp khiêng đồ.',
     },
+      ...LISTEN2_EXTRA,
   ],
 
   // 听力第三部分：长对话 / 短文，每段问一到两个问题 (20)
@@ -396,6 +406,7 @@ export const EXAM_1: ExamPaper = {
       ans: 0,
       vi: 'Anh ấy cho rằng nấu ăn giống như học tập.',
     },
+      ...LISTEN3_EXTRA,
   ],
   // 阅读第一部分：选词填空，六选五 (10)
   read1: [
@@ -436,6 +447,7 @@ export const EXAM_1: ExamPaper = {
       ],
     },
     ...READ1_EXTRA,
+      ...READ1_EXTRA2,
   ],
 
   // 阅读第二部分：排列顺序 (10)
@@ -491,6 +503,7 @@ export const EXAM_1: ExamPaper = {
       vi: 'Ngày càng nhiều người trẻ tự nấu ăn, tuy tốn thêm chút thời gian, nhưng vừa tiết kiệm vừa khoẻ hơn.',
     },
     ...READ2_EXTRA,
+      ...READ2_EXTRA2,
   ],
 
   // 阅读第三部分：短文 + 一到两个问题 (20)
@@ -645,6 +658,7 @@ export const EXAM_1: ExamPaper = {
       ans: 2,
       vi: 'Tác giả cho rằng mấu chốt của du lịch là sự tò mò.',
     },
+      ...READ3_EXTRA2,
   ],
 
   // 书写第一部分：完成句子 — kho 51 câu, mỗi đề rút 10 (xem write1.ts)

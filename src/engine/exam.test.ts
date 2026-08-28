@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { DECK } from '../data';
 import imagesRaw from '../data/images.json';
 import picsRaw from '../data/pics.json';
 import { EXAM_1 } from '../data/exam1';
@@ -151,6 +152,53 @@ describe('paper content', () => {
     // như vậy, nên bỏ riêng hai nhãn đó ra rồi mới soi phần chữ Hán.
     const speakers = /^[AB]：/gm;
     chinese.forEach((s) => expect(s.replace(speakers, ''), s).not.toMatch(/[A-Za-zА-Яа-я]/));
+  });
+
+  /**
+   * Mọi phần đều phải có nhiều câu hơn một đề cần.
+   *
+   * Bốn phần từng đứng ở đúng 1.0x — 听力 cả ba phần và 阅读第三部分. Ở mức đó thì
+   * "rút ngẫu nhiên" không rút được gì: buổi luyện thứ hai gặp lại nguyên buổi thứ
+   * nhất, và từ lần ba trở đi nó đo trí nhớ về đề chứ không đo trình độ.
+   */
+  it('kho của mỗi phần lớn hơn một đề ít nhất 2.5 lần', () => {
+    const all = flatten(EXAM_1);
+    for (const g of PART_GUIDES) {
+      const have = partQuestions(all, g.id).length;
+      expect(have / countOf(g.id), `${g.id} chỉ có ${have} câu`).toBeGreaterThanOrEqual(2.5);
+    }
+  });
+
+  /**
+   * Từ trong bảng chọn phải tra được nghĩa.
+   *
+   * Bảng ôn dựng thẻ từ bằng deck. Một từ trong bảng mà deck không có thì nó không
+   * bao giờ lên thẻ — ôn xong vẫn gặp một lựa chọn chưa từng thấy, đúng thứ mà bảng
+   * ôn sinh ra để chặn.
+   */
+  it('阅读第一部分: mọi từ trong bảng chọn đều có trong deck', () => {
+    const dict = new Set(DECK.vocab.map((v) => v.h));
+    EXAM_1.read1.forEach((g, gi) =>
+      g.bank.forEach((w) => {
+        const h = w.replace(/[^\u4e00-\u9fff]/g, '');
+        expect(dict.has(h), `nhóm ${gi}: ${h} không có trong deck`).toBe(true);
+      }),
+    );
+  });
+
+  it('阅读第三部分: đoạn dài đúng tầm đề thật, không ngắn hơn', () => {
+    const lens = EXAM_1.read3.filter((x) => x.text).map((x) => x.text!.replace(/[^\u4e00-\u9fff]/g, '').length);
+    const avg = lens.reduce((a, b) => a + b, 0) / lens.length;
+    // Đề thật 80–120 chữ. Đoạn ngắn thì đọc lướt cũng ra, tức phần khó thật không được luyện.
+    expect(avg).toBeGreaterThanOrEqual(85);
+    expect(Math.max(...lens)).toBeLessThanOrEqual(160);
+  });
+
+  it('听力第一部分: số câu ĐÚNG và SAI không lệch nhau quá xa', () => {
+    const yes = EXAM_1.listen1.filter((x) => x.ok).length;
+    const n = EXAM_1.listen1.length;
+    // Lệch quá thì đoán bừa một phía đã ăn hơn nửa số điểm.
+    expect(Math.abs(yes / n - 0.5)).toBeLessThan(0.15);
   });
 
   it('阅读第一部分: bảng luôn sáu từ cho năm chỗ trống, thừa đúng một từ', () => {

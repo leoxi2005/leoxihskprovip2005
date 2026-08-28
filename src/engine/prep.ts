@@ -62,8 +62,16 @@ export function textOf(q: ExamQ): QText {
         key: [q.item.opts[q.item.ans]],
       };
     case 'fill': {
+      /*
+       * CẢ SÁU từ trong bảng đều là "từ đáp án", không chỉ từ đúng.
+       *
+       * Sáu từ ấy hiện nguyên trên đề, và việc phần này hỏi chính là chọn giữa chúng —
+       * không hiểu năm từ kia thì loại trừ không chạy. Bản đầu chỉ đánh dấu từ đúng,
+       * nên năm từ còn lại phải tranh chỗ với từ trong câu theo cấp độ, và có lần bị
+       * đẩy khỏi bảng ôn — ôn xong vẫn gặp một lựa chọn chưa từng thấy.
+       */
       const item = q.group.items[q.at];
-      return { all: [item.sent, ...q.group.bank], key: [q.group.bank[item.ans]] };
+      return { all: [item.sent, ...q.group.bank], key: q.group.bank.slice() };
     }
     case 'order':
       return { all: q.item.parts.slice(), key: [] };
