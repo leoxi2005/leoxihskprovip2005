@@ -15,6 +15,7 @@ import {
   partOfDay,
   partQuestions,
   audioFor,
+  borrowsAudio,
   passageFor,
   score,
   sectionRanges,
@@ -419,6 +420,15 @@ describe('paper content', () => {
       if (q.part.startsWith('听力')) {
         expect(audioFor(QS, i).length, `câu ${i + 1}`).toBeGreaterThan(0);
       }
+    });
+  });
+
+  it('chỉ câu đi mượn mới bị đánh dấu là dùng lại đoạn', () => {
+    QS.forEach(({ q }, i) => {
+      const borrowed = q.kind === 'qa' && !q.item.say?.length && Boolean(q.item.sameAudio);
+      // 阅读第三部分 cũng có sameAudio nhưng nó mượn ĐOẠN VĂN, không mượn băng — không
+      // có câu trước nào mang `say` nên không được hiện dòng nhắc "nghe lại đoạn".
+      expect(borrowsAudio(QS, i)).toBe(borrowed && q.part.startsWith('听力'));
     });
   });
 

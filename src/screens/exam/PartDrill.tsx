@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { EXAM_1 } from '../../data/exam1';
 import {
   audioFor,
+  borrowsAudio,
   drawPaper,
   flatten,
   guideFor,
@@ -337,12 +338,39 @@ export function PartDrill({
           />
 
           {isListening && !checked && (
-            <button
-              onClick={speak}
-              style={{ ...btn(C.purple), marginTop: 14, padding: '8px 20px', fontSize: 14 }}
-            >
-              🔊 Nghe lại
-            </button>
+            <>
+              {borrowsAudio(qs, i) && (
+                /*
+                 * Nói thẳng ra là đoạn này dùng lại của câu trước.
+                 *
+                 * Đề in một đoạn rồi hỏi HAI câu, mà phần nghe không in câu hỏi ra màn
+                 * hình — nên câu thứ hai nghe gần như y hệt câu đầu và trông như app
+                 * phát nhầm băng. Thứ đổi nằm ở dòng 问 cuối băng, chỗ dễ bỏ lỡ nhất.
+                 */
+                <div
+                  style={{
+                    marginTop: 14,
+                    background: C.soft,
+                    border: `2px dashed ${C.edge}`,
+                    borderRadius: 14,
+                    padding: '9px 13px',
+                    fontSize: 12.5,
+                    fontWeight: 700,
+                    color: C.body,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  🔁 Câu thứ hai của cùng một đoạn — như đề thật: một đoạn hỏi hai câu.
+                  Đoạn giống hệt câu trước, chỉ <b>câu hỏi ở cuối băng</b> là khác, nghe kỹ chỗ đó.
+                </div>
+              )}
+              <button
+                onClick={speak}
+                style={{ ...btn(C.purple), marginTop: 14, padding: '8px 20px', fontSize: 14 }}
+              >
+                {borrowsAudio(qs, i) ? '🔊 Nghe lại đoạn + câu hỏi' : '🔊 Nghe lại'}
+              </button>
+            </>
           )}
         </div>
 

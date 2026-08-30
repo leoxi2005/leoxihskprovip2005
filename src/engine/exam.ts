@@ -724,6 +724,25 @@ export function audioFor(
   return [];
 }
 
+/**
+ * Câu này có đang dùng lại đoạn của câu trước không.
+ *
+ * 听力第三部分 hỏi hai câu trên một đoạn, mà phần nghe thì không in câu hỏi ra màn
+ * hình — nên câu thứ hai nghe *gần như* y hệt câu đầu (chỉ dòng 问 cuối băng là khác)
+ * và trông như app phát nhầm. Màn luyện dùng cái này để nói thẳng ra điều đó.
+ */
+export function borrowsAudio(qs: { q: ExamQ }[], i: number): boolean {
+  const here = qs[i]?.q;
+  if (!here || here.kind !== 'qa' || here.item.say?.length || !here.item.sameAudio) return false;
+  for (let k = i - 1; k >= 0; k--) {
+    const q = qs[k].q;
+    if (q.kind !== 'qa') return false;
+    if (q.item.say?.length) return true;
+    if (!q.item.sameAudio) return false;
+  }
+  return false;
+}
+
 /** Just one part of the paper, for practising it on its own. */
 export const partQuestions = (
   qs: { section: SectionId; q: ExamQ }[],
