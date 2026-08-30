@@ -422,18 +422,27 @@ describe('paper content', () => {
     });
   });
 
-  it('băng đi mượn bỏ dòng 问 — nó hỏi câu TRƯỚC, không hỏi câu đang hiện', () => {
+  it('câu đi mượn đoạn: bỏ 问 của câu trước, thêm 问 của chính nó', () => {
     const at = QS.findIndex(
       ({ q }, i) => q.kind === 'qa' && q.part === '听力第三部分' && !q.item.say?.length && i > 0,
     );
     expect(at).toBeGreaterThan(0);
-    const lines = audioFor(QS, at);
+    const here = QS[at].q;
     const own = QS[at - 1].q;
-    if (own.kind !== 'qa') throw new Error('câu mang băng phải là câu trắc nghiệm');
-    expect(lines.some((l) => l.startsWith('问'))).toBe(false);
-    expect(lines.length).toBe((own.item.say ?? []).filter((l) => !l.startsWith('问')).length);
-    // Câu MANG băng thì giữ nguyên dòng 问: đó là câu hỏi của chính nó.
+    if (here.kind !== 'qa' || own.kind !== 'qa') throw new Error('cặp này phải là câu trắc nghiệm');
+
+    const drill = audioFor(QS, at);
+    // Phần nghe không in câu hỏi ra màn hình. Đoạn không có dòng 问 nào thì bốn lựa
+    // chọn chẳng biết đang hỏi gì; dòng 问 cũ thì lại hỏi câu TRƯỚC.
+    expect(drill.filter((l) => l.startsWith('问'))).toEqual([`问：${here.item.q}`]);
+    expect(drill.slice(0, -1)).toEqual((own.item.say ?? []).filter((l) => !l.startsWith('问')));
+
+    // Phòng thi đọc đoạn đúng một lần: câu sau chỉ được nghe câu hỏi.
+    expect(audioFor(QS, at, 'exam')).toEqual([`问：${here.item.q}`]);
+
+    // Câu MANG đoạn thì giữ nguyên, cả hai chế độ.
     expect(audioFor(QS, at - 1)).toEqual(own.item.say);
+    expect(audioFor(QS, at - 1, 'exam')).toEqual(own.item.say);
   });
 });
 

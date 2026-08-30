@@ -11,7 +11,7 @@
  * 13 December 2026, so this format is the one that paper will use.
  */
 
-import { withoutAsk } from './tts';
+import { askLine, borrowedLines } from './tts';
 
 export type SectionId = 'listen' | 'read' | 'write';
 
@@ -686,18 +686,26 @@ export function passageFor(qs: { q: ExamQ }[], i: number): string | undefined {
 }
 
 /**
- * Dòng thoại phải phát cho câu thứ `i`, kể cả khi câu ấy MƯỢN băng của câu trước.
+ * Dòng thoại phải phát cho câu thứ `i`, kể cả khi câu ấy MƯỢN đoạn của câu trước.
  *
- * 听力第三部分 in một đoạn rồi hỏi hai câu; câu thứ hai mang `sameAudio` và `say: []`
- * — trong đề thi thật thì đúng như vậy, băng đã chạy một lần cho cả hai câu. Nhưng ở
- * chế độ LUYỆN, nơi có nút "Nghe lại", `say: []` biến thành một nút bấm không kêu:
- * câu 1 có tiếng, sang câu 2 im hẳn, mà đề vẫn bắt nghe rồi chọn.
+ * 听力第三部分 phát một đoạn rồi hỏi hai câu; câu thứ hai mang `sameAudio` và `say: []`
+ * vì đoạn đã nằm ở câu trước. Đọc thẳng `say` là ra mảng rỗng — câu 1 có tiếng, sang
+ * câu 2 im hẳn, mà đề vẫn bắt nghe rồi chọn.
  *
- * Dòng `问：…` bị cắt khi đi mượn, và đó là cả điểm của việc mượn. Nó là câu hỏi của
- * câu TRƯỚC; phát nguyên si trong lúc màn hình đang hỏi câu sau thì băng bảo một
- * đằng, đề hỏi một nẻo.
+ * Câu đi mượn KHÔNG phát lại nguyên si. Dòng `问：…` của câu trước bị cắt (nó hỏi câu
+ * trước), và thay vào đó là câu hỏi của chính câu này — phần nghe không in câu hỏi ra
+ * màn hình, nên một đoạn không có 问 nào là bốn lựa chọn chẳng biết đang hỏi gì.
+ *
+ * Hai chế độ khác nhau ở chỗ CÓ PHÁT LẠI ĐOẠN hay không:
+ *  - `drill`: đoạn + 问 của câu này. Đây là chỗ đang tập nghe, và có nút "Nghe lại".
+ *  - `exam`: chỉ dòng 问. Băng thi đọc đoạn đúng một lần rồi hỏi lần lượt hai câu;
+ *    phát lại cả đoạn là cho thí sinh một lần nghe mà phòng thi không cho.
  */
-export function audioFor(qs: { q: ExamQ }[], i: number): string[] {
+export function audioFor(
+  qs: { q: ExamQ }[],
+  i: number,
+  mode: 'drill' | 'exam' = 'drill',
+): string[] {
   const here = qs[i]?.q;
   if (!here) return [];
   if (here.kind === 'tf') return [here.item.say];
@@ -707,7 +715,10 @@ export function audioFor(qs: { q: ExamQ }[], i: number): string[] {
     const q = qs[k].q;
     if (q.kind !== 'qa') return [];
     const say = q.item.say ?? [];
-    if (say.length) return k === i ? say.slice() : withoutAsk(say);
+    if (say.length) {
+      if (k === i) return say.slice();
+      return mode === 'exam' ? [askLine(here.item.q)] : borrowedLines(say, here.item.q);
+    }
     if (!q.item.sameAudio) return [];
   }
   return [];

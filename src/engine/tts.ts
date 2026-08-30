@@ -25,11 +25,26 @@ export function ttsKeyOf(lines: string[]): string {
  * Bỏ dòng `问：…` khỏi một lượt nghe.
  *
  * 听力第三部分 phát một đoạn rồi hỏi hai câu, nhưng dữ liệu chỉ chép dòng 问 của câu
- * đầu. Câu thứ hai đi mượn băng của câu đầu, và nếu mượn nguyên si thì băng hỏi một
- * đằng còn màn hình hỏi một nẻo — nên bản đi mượn cắt dòng 问 đi.
- *
- * Ở đây chứ không ở `exam.ts`, vì `tools/tts/collect.mjs` phải cắt y hệt để thu đúng
- * bản mượn: lệch một dòng là lệch khoá băm, và câu đó lặng lẽ rơi về giọng máy.
+ * đầu. Câu thứ hai đi mượn đoạn ấy, và dòng 问 cũ phải rơi ra — nó hỏi câu TRƯỚC.
  */
 export const withoutAsk = (lines: readonly string[]): string[] =>
   lines.filter((l) => !/^问\s*[:：]/.test(l.trim()));
+
+/** Dòng người dẫn đọc câu hỏi, đúng cách băng thi dẫn: `问：…`. */
+export const askLine = (q: string): string => `问：${q}`;
+
+/**
+ * Băng của câu thứ hai trong một cặp: đoạn cũ, rồi câu hỏi CỦA CHÍNH NÓ.
+ *
+ * Không chỉ cắt dòng 问 đi là xong. Phần nghe không in câu hỏi ra màn hình — câu hỏi
+ * nằm trong băng — nên đoạn không có 问 nào là bốn lựa chọn chẳng biết đang hỏi gì.
+ * Băng thi thật cũng đọc hai lần 问 sau một đoạn; dữ liệu chỉ chép lần đầu, nên lần
+ * thứ hai được dựng lại ở đây từ chính `q` của câu.
+ *
+ * Ở `tts.ts` vì `tools/tts/collect.mjs` phải dựng chuỗi Y HỆT để thu: lệch một chữ
+ * là lệch khoá băm, và câu đó lặng lẽ rơi về giọng máy.
+ */
+export const borrowedLines = (passage: readonly string[], ask: string): string[] => [
+  ...withoutAsk(passage),
+  askLine(ask),
+];

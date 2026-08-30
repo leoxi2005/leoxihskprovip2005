@@ -5,6 +5,7 @@ import {
   EXAM_SPEC,
   PART_GUIDES,
   PASS_MARK,
+  audioFor,
   flatten,
   isAutoGraded,
   partQuestions,
@@ -162,12 +163,15 @@ export function Exam() {
     if (phase !== 'sitting' || section !== 'listen') return;
     if (played.current.has(i)) return;
     played.current.add(i);
-    const lines = q.kind === 'tf' ? [q.item.say] : q.kind === 'qa' ? (q.item.say ?? []) : [];
+    // Câu thứ hai của một cặp không mang đoạn của nó: ở phòng thi băng đã đọc đoạn
+    // một lần rồi hỏi tiếp câu sau, nên chế độ 'exam' chỉ phát dòng 问 của câu này —
+    // không im lặng (thí sinh sẽ không biết đang hỏi gì) mà cũng không cho nghe lại.
+    const lines = audioFor(QS, i, 'exam');
     if (!lines.length) return;
     // Đúng tốc độ băng thi, bất kể tốc độ luyện đang để bao nhiêu: băng thi không
     // chậm lại cho ai, mà cũng không nhanh lên cho ai.
     engine.audio.speakExam(lines);
-  }, [i, phase, section, q, engine]);
+  }, [i, phase, section, q, QS, engine]);
 
   // -- answering ------------------------------------------------------------
 

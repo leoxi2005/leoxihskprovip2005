@@ -25,7 +25,7 @@ import deck from '../../src/data/deck.json' with { type: 'json' };
 import songs from '../../src/data/songs.json' with { type: 'json' };
 import { COLLOCATIONS, FIXES } from '../../src/data/drills.ts';
 import { NUM_DRILLS } from '../../src/engine/numbers.ts';
-import { ttsKey, withoutAsk } from '../../src/engine/tts.ts';
+import { askLine, borrowedLines, ttsKey } from '../../src/engine/tts.ts';
 import { PART_NOTES } from '../../src/engine/partnotes.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -89,7 +89,10 @@ for (const part of [EXAM_1.listen1, EXAM_1.listen2, EXAM_1.listen3]) {
       for (let k = i - 1; k >= 0; k--) {
         const prev = items[k];
         if (prev.say?.length) {
-          add(withoutAsk(prev.say), 'đề mô phỏng · nghe lại cho câu sau');
+          // Hai bản, vì hai chế độ nghe khác nhau: luyện thì phát lại cả đoạn rồi hỏi,
+          // thi thử thì băng đã đọc đoạn một lần nên chỉ còn dòng 问 của câu này.
+          add(borrowedLines(prev.say, q.q), 'đề mô phỏng · nghe lại cho câu sau');
+          add([askLine(q.q)], 'đề mô phỏng · chỉ câu hỏi');
           break;
         }
         if (!prev.sameAudio) break;

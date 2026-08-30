@@ -4,7 +4,7 @@ import { NUM_DRILLS } from '../engine/numbers';
 import { EXAM_1 } from './exam1';
 import clipKeys from './tts.json';
 import { PART_NOTES } from '../engine/partnotes';
-import { ttsKey, withoutAsk } from '../engine/tts';
+import { askLine, borrowedLines, ttsKey } from '../engine/tts';
 
 /**
  * Mọi câu app có thể đọc đều phải có bản thu sẵn.
@@ -55,15 +55,17 @@ function everythingSpoken(): [string, string][] {
         out.push([`đề mô phỏng ${name}`, lines.join('\n')]);
         return;
       }
-      // Câu thứ hai của một cặp phát LẠI băng câu trước, đã cắt dòng 问 — chuỗi khác
-      // thì khoá khác, nên nó là một bản thu riêng chứ không dùng chung với câu trước.
+      // Câu thứ hai của một cặp đi mượn đoạn của câu trước, và mượn theo HAI cách:
+      // luyện thì đoạn + 问 của chính nó, thi thử thì chỉ còn dòng 问. Cả hai là chuỗi
+      // mới, tức khoá mới — không thu là đúng câu đó rơi về giọng máy.
       if (!('sameAudio' in q) || !q.sameAudio) return;
       for (let k = i - 1; k >= 0; k--) {
         const prev = items[k];
         const psay = ('say' in prev ? prev.say : undefined) ?? [];
         const plines = (Array.isArray(psay) ? psay : [psay]).filter((l) => l && HAN.test(l));
         if (plines.length) {
-          out.push([`đề mô phỏng ${name} · câu mượn băng`, withoutAsk(plines).join('\n')]);
+          out.push([`${name} · câu mượn đoạn`, borrowedLines(plines, q.q).join('\n')]);
+          out.push([`${name} · chỉ câu hỏi`, askLine(q.q)]);
           return;
         }
         if (!('sameAudio' in prev) || !prev.sameAudio) return;
