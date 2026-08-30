@@ -25,7 +25,8 @@ import deck from '../../src/data/deck.json' with { type: 'json' };
 import songs from '../../src/data/songs.json' with { type: 'json' };
 import { COLLOCATIONS, FIXES } from '../../src/data/drills.ts';
 import { NUM_DRILLS } from '../../src/engine/numbers.ts';
-import { ttsKey } from '../../src/engine/tts.ts';
+import { ttsKey, withoutAsk } from '../../src/engine/tts.ts';
+import { PART_NOTES } from '../../src/engine/partnotes.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const HAN = /[一-鿿]/;
@@ -78,7 +79,28 @@ for (const c of COLLOCATIONS) add(c.frame.replace('____', c.a), 'kết hợp t�
 // giọng chuẩn là cách nhanh nhất để nhớ nhầm.
 for (const f of FIXES) add(f.right, 'bắt lỗi sai');
 for (const part of [EXAM_1.listen1, EXAM_1.listen2, EXAM_1.listen3]) {
-  for (const q of part ?? []) if (q.say) add(q.say, 'đề mô phỏng · nghe');
+  const items = part ?? [];
+  items.forEach((q, i) => {
+    if (q.say) add(q.say, 'đề mô phỏng · nghe');
+    // Câu thứ hai của một cặp 听力第三部分 không mang băng của nó: nó phát lại băng
+    // của câu trước, đã cắt dòng 问. Chuỗi khác thì khoá khác — không thu bản này thì
+    // đúng câu 2 rơi về giọng máy, mà câu 1 ngay trước đó vẫn là giọng thu.
+    if (q.sameAudio && !q.say?.length) {
+      for (let k = i - 1; k >= 0; k--) {
+        const prev = items[k];
+        if (prev.say?.length) {
+          add(withoutAsk(prev.say), 'đề mô phỏng · nghe lại cho câu sau');
+          break;
+        }
+        if (!prev.sameAudio) break;
+      }
+    }
+  });
+}
+// Ví dụ của bảng "Ôn trước khi luyện": bước ② bấm vào là đọc, và vòng ⑤ của bộ kiểm
+// tra đọc chúng lên như một câu nghe.
+for (const notes of Object.values(PART_NOTES)) {
+  for (const n of notes) for (const e of n.eg) add(e.cn, 'ôn trước · ví dụ ngữ pháp');
 }
 
 const corpus = [...out.values()];

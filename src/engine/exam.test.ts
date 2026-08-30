@@ -14,6 +14,7 @@ import {
   isRight,
   partOfDay,
   partQuestions,
+  audioFor,
   passageFor,
   score,
   sectionRanges,
@@ -409,6 +410,30 @@ describe('paper content', () => {
         expect(passageFor(QS, i), `câu ${i + 1}`).toBeTruthy();
       }
     });
+  });
+
+  it('mọi câu nghe đều có tiếng, kể cả câu thứ hai của một cặp 听力第三部分', () => {
+    // Câu thứ hai mang `say: []`. Đọc thẳng `say` thì nút "Nghe lại" của chế độ luyện
+    // bấm mà không kêu — câu 1 có tiếng, câu 2 im, mà đề vẫn bắt nghe rồi chọn.
+    QS.forEach(({ q }, i) => {
+      if (q.part.startsWith('听力')) {
+        expect(audioFor(QS, i).length, `câu ${i + 1}`).toBeGreaterThan(0);
+      }
+    });
+  });
+
+  it('băng đi mượn bỏ dòng 问 — nó hỏi câu TRƯỚC, không hỏi câu đang hiện', () => {
+    const at = QS.findIndex(
+      ({ q }, i) => q.kind === 'qa' && q.part === '听力第三部分' && !q.item.say?.length && i > 0,
+    );
+    expect(at).toBeGreaterThan(0);
+    const lines = audioFor(QS, at);
+    const own = QS[at - 1].q;
+    if (own.kind !== 'qa') throw new Error('câu mang băng phải là câu trắc nghiệm');
+    expect(lines.some((l) => l.startsWith('问'))).toBe(false);
+    expect(lines.length).toBe((own.item.say ?? []).filter((l) => !l.startsWith('问')).length);
+    // Câu MANG băng thì giữ nguyên dòng 问: đó là câu hỏi của chính nó.
+    expect(audioFor(QS, at - 1)).toEqual(own.item.say);
   });
 });
 

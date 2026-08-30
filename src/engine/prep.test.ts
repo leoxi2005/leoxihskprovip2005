@@ -3,13 +3,17 @@ import { DECK, LEVEL_OF } from '../data';
 import { EXAM_1 } from '../data/exam1';
 import { PART_GUIDES, countOf, drawPaper, flatten, partQuestions, type PartId } from './exam';
 import {
+  MAX_GRAMMAR_QS,
   MAX_WORDS,
   PART_NOTES,
+  buildCheck,
   buildPrep,
+  grammarQs,
   levelOf,
   makeCheck,
   prepGrammar,
   prepWords,
+  soundsClose,
   textOf,
   toggleShaky,
 } from './prep';
@@ -223,7 +227,7 @@ describe('kiểm tra nhanh', () => {
     for (const q of makeCheck(words)) {
       expect(q.opts.length).toBe(4);
       expect(new Set(q.opts).size).toBe(4);
-      expect(q.opts[q.ans]).toBe(q.v.m);
+      expect(q.opts[q.ans]).toBe(q.v?.m);
     }
   });
 
@@ -237,7 +241,7 @@ describe('kiểm tra nhanh', () => {
     const keys = w.filter((x) => x.isKey).length;
     const asked = makeCheck(w);
     // Còn dư chỗ thì mọi từ đáp án phải được hỏi; hết chỗ thì cả sáu câu là từ đáp án.
-    expect(asked.filter((q) => w.find((x) => x.v.h === q.v.h)?.isKey).length).toBe(
+    expect(asked.filter((q) => w.find((x) => x.v.h === q.h)?.isKey).length).toBe(
       Math.min(keys, asked.length),
     );
   });
@@ -245,7 +249,9 @@ describe('kiểm tra nhanh', () => {
   it('mồi nhử cùng từ loại, để không loại được bằng ngữ pháp', () => {
     const pool = DECK.vocab;
     for (const q of makeCheck(words)) {
-      const sameKind = pool.filter((x) => x.pos === q.v.pos && x.m !== q.v.m);
+      const v = q.v;
+      if (!v) throw new Error('câu hỏi nghĩa phải gắn với một từ');
+      const sameKind = pool.filter((x) => x.pos === v.pos && x.m !== v.m);
       if (sameKind.length < 3) continue;
       /*
        * Hỏi "có TỪ NÀO cùng từ loại mang nghĩa này không", chứ không tra ngược nghĩa
@@ -253,9 +259,145 @@ describe('kiểm tra nhanh', () => {
        * `find` theo nghĩa trả về từ nào là chuyện may rủi, không phải chuyện đúng sai.
        */
       for (const m of q.opts) {
-        expect(pool.some((x) => x.m === m && x.pos === q.v.pos)).toBe(true);
+        expect(pool.some((x) => x.m === m && x.pos === v.pos)).toBe(true);
       }
     }
+  });
+});
+
+describe('bộ kiểm tra nhiều vòng', () => {
+  const packOf = (id: PartId) => buildPrep(id, forPart(id));
+  const ALL_PARTS = PART_GUIDES.map((g) => g.id);
+
+  it('mọi câu của mọi vòng đều có bốn lựa chọn khác nhau và đúng một đáp án', () => {
+    for (const id of ALL_PARTS) {
+      for (const r of buildCheck(packOf(id), id)) {
+        expect(r.qs.length).toBeGreaterThan(0);
+        for (const q of r.qs) {
+          expect(q.opts.length).toBe(4);
+          expect(new Set(q.opts).size).toBe(4);
+          expect(q.ans).toBeGreaterThanOrEqual(0);
+          expect(q.opts[q.ans]).toBeTruthy();
+        }
+      }
+    }
+  });
+
+  it('TẤT CẢ từ của bảng ôn đều được hỏi, ở cả ba chiều nhận biết', () => {
+    for (const id of ALL_PARTS) {
+      const pack = packOf(id);
+      if (!pack.words.length) continue;
+      const rounds = buildCheck(pack, id);
+      const all = pack.words.map((w) => w.v.h).sort();
+      for (const kind of ['mean', 'listen', 'recall'] as const) {
+        const r = rounds.find((x) => x.id === kind);
+        if (!r) throw new Error(`thiếu vòng ${kind} ở ${id}`);
+        // Sáu câu trên mười sáu từ là mười từ không được hỏi lần nào — đúng cái cảm
+        // giác "kiểm tra toàn từ khác" mà bản đầu để lại. Vòng nào cũng phải phủ hết.
+        expect(r.qs.map((q) => q.h).sort()).toEqual(all);
+      }
+    }
+  });
+
+  it('vòng nghe KHÔNG hiện chữ ra, và lựa chọn là chữ Hán', () => {
+    for (const id of ALL_PARTS) {
+      const r = buildCheck(packOf(id), id).find((x) => x.id === 'listen');
+      for (const q of r?.qs ?? []) {
+        // Hiện 银行 rồi bật tiếng thì câu hỏi tự trả lời hộ: mắt đọc xong trước tai.
+        expect(q.prompt).toBe('');
+        expect(q.say).toBe(q.h);
+        expect(q.hanOpts).toBe(true);
+      }
+    }
+  });
+
+  it('mồi nhử của vòng nghe cùng số chữ với đáp án khi deck còn từ để lấy', () => {
+    const r = buildCheck(packOf('听力第三部分'), '听力第三部分').find((x) => x.id === 'listen');
+    for (const q of r?.qs ?? []) {
+      const v = q.v;
+      if (!v) throw new Error('câu nghe phải gắn với một từ');
+      if (DECK.vocab.filter((x) => soundsClose(v, x) && x.h !== v.h).length < 3) continue;
+      // Bốn lựa chọn một từ hai chữ và ba từ một chữ thì nghe thấy hai nhịp là xong.
+      for (const o of q.opts) expect(o.length).toBe(v.h.length);
+    }
+  });
+
+  it('vòng điền từ lấy ví dụ của DECK, không lấy câu trong đề', () => {
+    for (const id of ALL_PARTS) {
+      const r = buildCheck(packOf(id), id).find((x) => x.id === 'usage');
+      for (const q of r?.qs ?? []) {
+        const v = q.v;
+        if (!v?.ex) throw new Error('câu điền từ phải có ví dụ của deck');
+        expect(q.prompt).toBe(v.ex.replace(v.h, '＿＿'));
+        expect(q.prompt).not.toContain(v.h);
+      }
+    }
+  });
+
+  it('không câu nào in ra câu văn của đề sắp làm', () => {
+    for (const id of ALL_PARTS) {
+      const qs = forPart(id);
+      const paper = qs.map(({ q }) => textOf(q).all.join('')).join('|');
+      for (const r of buildCheck(buildPrep(id, qs), id)) {
+        // Vòng ngữ pháp được miễn: khung viết tay của phần nghe DẠY bằng chính câu
+        // hỏi mẫu của đề (关于男的，可以知道什么？). Đó là câu hỏi chung của cả phần,
+        // không phải nội dung đoạn — biết trước nó là điều bảng ôn muốn.
+        if (r.id === 'grammar') continue;
+        for (const q of r.qs) {
+          const shown = q.prompt.replace(/[＿_]/g, '');
+          // Từ lẻ thì trùng là chuyện đương nhiên — bảng ôn sinh ra từ chính đề. Cái
+          // phải chặn là CÂU: đọc trước nguyên câu của bài nghe thì buổi luyện chỉ
+          // còn kiểm tra trí nhớ ngắn hạn, mà thứ đang cần luyện là nghe.
+          if (shown.length < 8) continue;
+          expect(paper.includes(shown)).toBe(false);
+        }
+      }
+    }
+  });
+
+  it('câu khoét lỗ không in sẵn bản dịch — dịch là đọc hộ luôn từ phải chọn', () => {
+    for (const id of ALL_PARTS) {
+      for (const r of buildCheck(packOf(id), id)) {
+        for (const q of r.qs) {
+          if (!q.prompt.includes('＿＿')) continue;
+          // "Cuốn sách này rất ĐÁNG đọc" nằm ngay trên bốn lựa chọn có 值得 thì câu
+          // hỏi tự trả lời hộ. Nghĩa cả câu để dành cho `note`, hiện sau khi chọn.
+          expect(q.sub).toBeUndefined();
+          expect(q.note).toBeTruthy();
+        }
+      }
+    }
+  });
+
+  it('vòng ngữ pháp chạm tới mọi khung của phần, và vẫn còn chỗ cho mục của deck', () => {
+    for (const id of ALL_PARTS) {
+      const pack = packOf(id);
+      const qs = grammarQs(pack.points, pack.notes, Math.random);
+      for (const n of pack.notes) {
+        expect(qs.some((q) => q.note?.startsWith(n.name))).toBe(true);
+      }
+      // Mục của deck bị cắt hết là lỗi thứ tự đã sửa một lần: xếp hết ví dụ của khung
+      // lên trước thì `max` ăn sạch phần deck, và bước ② vừa hứa xong là hỏi lại.
+      const usable = pack.points.filter((g) => g.sent.includes('____'));
+      expect(qs.filter((q) => q.hanOpts).length).toBe(usable.length);
+      expect(qs.length).toBeLessThanOrEqual(MAX_GRAMMAR_QS);
+    }
+  });
+
+  it('phần nghe kiểm tra tai ngay sau vòng nghĩa; phần đọc/viết thì để sau', () => {
+    const order = (id: PartId) => buildCheck(packOf(id), id).map((r) => r.id);
+    expect(order('听力第三部分').slice(0, 2)).toEqual(['mean', 'listen']);
+    expect(order('阅读第一部分').indexOf('listen')).toBeGreaterThan(1);
+  });
+
+  it('hai từ nghe lẫn nhau phải cùng số chữ và giống âm', () => {
+    const v = (h: string) => {
+      const x = DECK.vocab.find((y) => y.h === h);
+      if (!x) throw new Error('thiếu từ ' + h);
+      return x;
+    };
+    expect(soundsClose(v('银行'), v('印象'))).toBe(true); // yínháng · yìnxiàng
+    expect(soundsClose(v('银行'), v('饿'))).toBe(false); // khác số chữ
   });
 });
 

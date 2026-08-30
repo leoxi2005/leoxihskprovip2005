@@ -11,6 +11,8 @@
  * 13 December 2026, so this format is the one that paper will use.
  */
 
+import { withoutAsk } from './tts';
+
 export type SectionId = 'listen' | 'read' | 'write';
 
 export interface PartSpec {
@@ -681,6 +683,34 @@ export function passageFor(qs: { q: ExamQ }[], i: number): string | undefined {
     if (!q.item.sameAudio) return undefined;
   }
   return undefined;
+}
+
+/**
+ * Dòng thoại phải phát cho câu thứ `i`, kể cả khi câu ấy MƯỢN băng của câu trước.
+ *
+ * 听力第三部分 in một đoạn rồi hỏi hai câu; câu thứ hai mang `sameAudio` và `say: []`
+ * — trong đề thi thật thì đúng như vậy, băng đã chạy một lần cho cả hai câu. Nhưng ở
+ * chế độ LUYỆN, nơi có nút "Nghe lại", `say: []` biến thành một nút bấm không kêu:
+ * câu 1 có tiếng, sang câu 2 im hẳn, mà đề vẫn bắt nghe rồi chọn.
+ *
+ * Dòng `问：…` bị cắt khi đi mượn, và đó là cả điểm của việc mượn. Nó là câu hỏi của
+ * câu TRƯỚC; phát nguyên si trong lúc màn hình đang hỏi câu sau thì băng bảo một
+ * đằng, đề hỏi một nẻo.
+ */
+export function audioFor(qs: { q: ExamQ }[], i: number): string[] {
+  const here = qs[i]?.q;
+  if (!here) return [];
+  if (here.kind === 'tf') return [here.item.say];
+  if (here.kind !== 'qa') return [];
+
+  for (let k = i; k >= 0; k--) {
+    const q = qs[k].q;
+    if (q.kind !== 'qa') return [];
+    const say = q.item.say ?? [];
+    if (say.length) return k === i ? say.slice() : withoutAsk(say);
+    if (!q.item.sameAudio) return [];
+  }
+  return [];
 }
 
 /** Just one part of the paper, for practising it on its own. */

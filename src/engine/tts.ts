@@ -20,3 +20,16 @@ export function ttsKey(text: string): string {
 export function ttsKeyOf(lines: string[]): string {
   return ttsKey(lines.join('\n'));
 }
+
+/**
+ * Bỏ dòng `问：…` khỏi một lượt nghe.
+ *
+ * 听力第三部分 phát một đoạn rồi hỏi hai câu, nhưng dữ liệu chỉ chép dòng 问 của câu
+ * đầu. Câu thứ hai đi mượn băng của câu đầu, và nếu mượn nguyên si thì băng hỏi một
+ * đằng còn màn hình hỏi một nẻo — nên bản đi mượn cắt dòng 问 đi.
+ *
+ * Ở đây chứ không ở `exam.ts`, vì `tools/tts/collect.mjs` phải cắt y hệt để thu đúng
+ * bản mượn: lệch một dòng là lệch khoá băm, và câu đó lặng lẽ rơi về giọng máy.
+ */
+export const withoutAsk = (lines: readonly string[]): string[] =>
+  lines.filter((l) => !/^问\s*[:：]/.test(l.trim()));

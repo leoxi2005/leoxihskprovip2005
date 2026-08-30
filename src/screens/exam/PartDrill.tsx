@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { EXAM_1 } from '../../data/exam1';
 import {
+  audioFor,
   drawPaper,
   flatten,
   guideFor,
@@ -117,7 +118,10 @@ export function PartDrill({
   const isListening = guide.section === 'listen';
 
   const speak = () => {
-    const lines = q.kind === 'tf' ? [q.item.say] : q.kind === 'qa' ? (q.item.say ?? []) : [];
+    // `audioFor`, không phải `q.item.say`: câu thứ hai của một cặp 听力第三部分 không
+    // mang băng của nó, nên đọc thẳng `say` là ra mảng rỗng — nút "Nghe lại" bấm mà
+    // không kêu, đúng lỗi "câu 1 có tiếng, câu 2 im".
+    const lines = audioFor(qs, i);
     // Practice keeps the learner's own rate — this is where you are still building
     // the ear, so a slower pass is a legitimate thing to want.
     if (lines.length) engine.audio.speakDialogue(lines);

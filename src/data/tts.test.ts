@@ -3,7 +3,8 @@ import { COLLOCATIONS, CONFUSABLES, DECK, FIXES, SONGS } from './index';
 import { NUM_DRILLS } from '../engine/numbers';
 import { EXAM_1 } from './exam1';
 import clipKeys from './tts.json';
-import { ttsKey } from '../engine/tts';
+import { PART_NOTES } from '../engine/partnotes';
+import { ttsKey, withoutAsk } from '../engine/tts';
 
 /**
  * Mọi câu app có thể đọc đều phải có bản thu sẵn.
@@ -46,12 +47,33 @@ function everythingSpoken(): [string, string][] {
     ['listen2', EXAM_1.listen2],
     ['listen3', EXAM_1.listen3],
   ] as const) {
-    for (const q of part ?? []) {
+    const items = part ?? [];
+    items.forEach((q, i) => {
       const say = 'say' in q ? q.say : undefined;
-      if (!say) continue;
-      const lines = (Array.isArray(say) ? say : [say]).filter((l) => l && HAN.test(l));
-      if (lines.length) out.push([`đề mô phỏng ${name}`, lines.join('\n')]);
-    }
+      const lines = (Array.isArray(say) ? say : say ? [say] : []).filter((l) => l && HAN.test(l));
+      if (lines.length) {
+        out.push([`đề mô phỏng ${name}`, lines.join('\n')]);
+        return;
+      }
+      // Câu thứ hai của một cặp phát LẠI băng câu trước, đã cắt dòng 问 — chuỗi khác
+      // thì khoá khác, nên nó là một bản thu riêng chứ không dùng chung với câu trước.
+      if (!('sameAudio' in q) || !q.sameAudio) return;
+      for (let k = i - 1; k >= 0; k--) {
+        const prev = items[k];
+        const psay = ('say' in prev ? prev.say : undefined) ?? [];
+        const plines = (Array.isArray(psay) ? psay : [psay]).filter((l) => l && HAN.test(l));
+        if (plines.length) {
+          out.push([`đề mô phỏng ${name} · câu mượn băng`, withoutAsk(plines).join('\n')]);
+          return;
+        }
+        if (!('sameAudio' in prev) || !prev.sameAudio) return;
+      }
+    });
+  }
+  // Ví dụ của bảng ôn trước khi luyện: bước ② bấm vào là đọc, vòng ⑤ của bộ kiểm tra
+  // phát chúng lên như một câu nghe.
+  for (const [part, notes] of Object.entries(PART_NOTES)) {
+    for (const n of notes) for (const e of n.eg) out.push([`ôn trước ${part}`, e.cn]);
   }
   return out;
 }
