@@ -24,6 +24,12 @@ import { EXAM_1 } from '../../src/data/exam1.ts';
 import deck from '../../src/data/deck.json' with { type: 'json' };
 import songs from '../../src/data/songs.json' with { type: 'json' };
 import { COLLOCATIONS, FIXES } from '../../src/data/drills.ts';
+import {
+  WEAK1_COLLOCATIONS,
+  WEAK1_CONFUSABLES,
+  WEAK1_GRAMMAR,
+  WEAK1_VOCAB,
+} from '../../src/data/weak1.ts';
 import { NUM_DRILLS } from '../../src/engine/numbers.ts';
 import { askLine, borrowedLines, ttsKey } from '../../src/engine/tts.ts';
 import { PART_NOTES } from '../../src/engine/partnotes.ts';
@@ -31,7 +37,14 @@ import { PART_NOTES } from '../../src/engine/partnotes.ts';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const HAN = /[一-鿿]/;
 
-const textbook = [...deck.vocab, ...EXTRA_VOCAB, ...EXTRA2_VOCAB, ...EXTRA3_VOCAB, ...EXTRA4_VOCAB];
+const textbook = [
+  ...deck.vocab,
+  ...EXTRA_VOCAB,
+  ...EXTRA2_VOCAB,
+  ...EXTRA3_VOCAB,
+  ...EXTRA4_VOCAB,
+  ...WEAK1_VOCAB,
+];
 const hsk4 = splitHsk4(new Set(textbook.map((v) => v.h)));
 const hsk123 = splitHsk123(new Set([...textbook.map((v) => v.h), ...hsk4.fresh.map((v) => v.h)]));
 const vocab = [
@@ -47,6 +60,7 @@ const grammar = [
   ...EXTRA2_GRAMMAR,
   ...EXTRA3_GRAMMAR,
   ...EXTRA4_GRAMMAR,
+  ...WEAK1_GRAMMAR,
 ];
 
 const out = new Map();
@@ -62,7 +76,7 @@ for (const v of vocab) {
   if (v.ex) add(v.ex, 'ví dụ');
 }
 for (const g of grammar) add(g.full, 'ngữ pháp');
-for (const c of CONFUSABLES) add(c.full, 'dễ nhầm');
+for (const c of [...CONFUSABLES, ...WEAK1_CONFUSABLES]) add(c.full, 'dễ nhầm');
 for (const s of deck.sentences ?? []) add(s.cn, 'câu');
 for (const p of deck.passages ?? []) add(p.text, 'đoạn đọc');
 for (const o of deck.orders ?? []) add(o.tokens.join(''), 'sắp câu');
@@ -74,7 +88,8 @@ for (const song of songs) {
   }
 }
 for (const d of NUM_DRILLS) add(d.say, 'bẫy số');
-for (const c of COLLOCATIONS) add(c.frame.replace('____', c.a), 'kết hợp từ');
+for (const c of [...COLLOCATIONS, ...WEAK1_COLLOCATIONS])
+  add(c.frame.replace('____', c.a), 'kết hợp từ');
 // Chỉ thu câu ĐÃ SỬA. Câu sai không bao giờ được đọc lên — nghe một câu sai bằng
 // giọng chuẩn là cách nhanh nhất để nhớ nhầm.
 for (const f of FIXES) add(f.right, 'bắt lỗi sai');

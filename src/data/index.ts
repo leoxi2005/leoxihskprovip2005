@@ -9,13 +9,33 @@ import { EXTRA_GRAMMAR, EXTRA_STORIES, EXTRA_VOCAB } from './extra';
 import { EXTRA2_GRAMMAR, EXTRA2_STORIES, EXTRA2_TOPICS, EXTRA2_VOCAB } from './extra2';
 import { EXTRA3_GRAMMAR, EXTRA3_STORIES, EXTRA3_TOPICS, EXTRA3_VOCAB } from './extra3';
 import { EXTRA4_GRAMMAR, EXTRA4_STORIES, EXTRA4_TOPICS, EXTRA4_VOCAB } from './extra4';
+import {
+  WEAK1_COLLOCATIONS,
+  WEAK1_CONFUSABLES,
+  WEAK1_GRAMMAR,
+  WEAK1_STORIES,
+  WEAK1_VOCAB,
+} from './weak1';
+import { COLLOCATIONS as BASE_COLLOCATIONS } from './drills';
+import { CONFUSABLES as BASE_CONFUSABLES } from './extra';
 import { HSK123_LEVEL, splitHsk123 } from './hsk123';
 import { HSK4_ALL, splitHsk4 } from './hsk4';
 import type { Deck, MySong, Song, Vocab } from './types';
 
 export * from './types';
-export { COLLOCATIONS, FIXES, type Collocation, type FixItem } from './drills';
-export { CONFUSABLES, EXTRA_TOPIC, type Confusable } from './extra';
+export { FIXES, type Collocation, type FixItem } from './drills';
+export { EXTRA_TOPIC, type Confusable } from './extra';
+export { WEAK1_FILL, WEAK1_ORDER, WEAK1_READ3, WEAK1_TOPIC, WEAK1_WORD_TOPIC } from './weak1';
+
+/**
+ * Hai bộ luyện tay, cộng thêm đợt chữa đề.
+ *
+ * Đợt chữa đề (`weak1.ts`) đi thẳng vào đây chứ không thành một vòng chơi riêng: cặp
+ * dễ nhầm mới phải nằm chung một cỗ bài với 经过/通过 cũ thì SRS mới xếp lịch cho cả
+ * hai, còn tách ra là có một nửa số bài không bao giờ đến hạn.
+ */
+export const COLLOCATIONS = [...BASE_COLLOCATIONS, ...WEAK1_COLLOCATIONS];
+export const CONFUSABLES = [...BASE_CONFUSABLES, ...WEAK1_CONFUSABLES];
 export { EXTRA2_TOPICS, TOPIC_ART, TOPIC_JOB, TOPIC_LANG, TOPIC_STUDY } from './extra2';
 export { EXTRA3_TOPICS, TOPIC_ATT, TOPIC_BODY, TOPIC_LIFE } from './extra3';
 export {
@@ -43,6 +63,7 @@ const TEXTBOOK: Vocab[] = [
   ...EXTRA2_VOCAB,
   ...EXTRA3_VOCAB,
   ...EXTRA4_VOCAB,
+  ...WEAK1_VOCAB,
 ];
 
 const HSK4 = splitHsk4(new Set(TEXTBOOK.map((v) => v.h)));
@@ -107,6 +128,7 @@ export const DECK: Deck = {
     ...EXTRA2_GRAMMAR,
     ...EXTRA3_GRAMMAR,
     ...EXTRA4_GRAMMAR,
+    ...WEAK1_GRAMMAR,
   ],
 };
 
@@ -147,6 +169,7 @@ export const STORIES: Record<string, string> = {
   ...EXTRA2_STORIES,
   ...EXTRA3_STORIES,
   ...EXTRA4_STORIES,
+  ...WEAK1_STORIES,
 };
 
 /** Built-in vocabulary chants. */

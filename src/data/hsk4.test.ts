@@ -15,6 +15,7 @@ import { EXTRA_VOCAB } from './extra';
 import { EXTRA2_VOCAB } from './extra2';
 import { EXTRA3_VOCAB } from './extra3';
 import { EXTRA4_VOCAB } from './extra4';
+import { WEAK1_VOCAB } from './weak1';
 import { splitHsk123 } from './hsk123';
 import { HSK4_ALL, splitHsk4 } from './hsk4';
 import { toneSpots } from '../engine/pinyin';
@@ -31,7 +32,8 @@ const TEXTBOOK_COUNT =
   EXTRA_VOCAB.length +
   EXTRA2_VOCAB.length +
   EXTRA3_VOCAB.length +
-  EXTRA4_VOCAB.length;
+  EXTRA4_VOCAB.length +
+  WEAK1_VOCAB.length;
 
 /** Every HSK 1–3 row, before deduplication — `splitHsk123` with nothing to exclude. */
 const L1_L2_L3 = () => splitHsk123(new Set<string>()).fresh;

@@ -188,12 +188,17 @@ export const PART_NOTES: Record<PartId, PartNote[]> = {
   ],
   '阅读第一部分': [
     {
-      name: 'Nhìn chỗ trống đoán TỪ LOẠI trước khi đọc bảng từ',
+      name: 'Đoán TỪ LOẠI trước, làm chỗ chắc trước, gạch từ đã dùng',
       formula: '很 / 非常 + ____ → tính từ · ____ + 地 → tính từ · 地 + ____ → động từ · 一个 ____ → danh từ',
-      why: 'Sáu từ cho năm chỗ. Loại theo từ loại thường chỉ còn một hai ứng viên cho mỗi chỗ, nhanh hơn hẳn đọc nghĩa từng từ.',
+      why: 'Năm chỗ trống KHÔNG phải năm câu rời: sáu từ dùng chung, nên một chỗ điền bừa ăn mất từ của chỗ khác và kéo theo câu thứ hai sai — trượt hai câu vì một lần đoán. Quy trình: dán nhãn từ loại cho cả sáu từ, làm những chỗ chắc chắn trước rồi gạch từ đã dùng đi, chỗ khó tự lộ ra.',
       eg: [
         { cn: '街上非常（热闹）。', vi: 'Ngoài phố rất náo nhiệt. → sau 非常 phải là tính từ' },
         { cn: '请你（仔细）检查一遍。', vi: 'Bạn kiểm tra kỹ lại một lượt. → trước động từ là trạng ngữ' },
+        { cn: '离（春节）还有段时间。', vi: 'Sau 离 là một mốc thời gian → danh từ. Bảng chỉ có một danh từ: chốt ngay, gạch đi.' },
+        {
+          cn: '心情会（随着）天气的变化而变化。',
+          vi: 'Câu đã có động từ 变化 ở cuối, nên chỗ trống KHÔNG phải động từ — chỉ còn giới từ duy nhất trong bảng.',
+        },
       ],
     },
     {
@@ -261,12 +266,23 @@ export const PART_NOTES: Record<PartId, PartNote[]> = {
       ],
     },
     {
-      name: 'Liên từ chỉ ra vế của nó: 但是 · 所以 · 而且 · 于是 · 因此 · 结果',
-      formula: '因为…→ 所以… · 虽然…→ 但是… · 不但…→ 而且…',
-      why: 'Mảnh mang vế SAU của cặp thì chắc chắn không đứng đầu, và mảnh mang vế TRƯỚC thì chắc chắn không đứng cuối. Hai đầu chốt lại là ra thứ tự.',
+      name: 'Cặp liên từ: nửa sau không mở đoạn, và hai nửa phải DÍNH nhau',
+      formula: '因为…所以… · 虽然…但是… · 不仅仅…而且还… · 无论…还是…都… · 一…就…',
+      why: 'Hai luật trong một. (1) Mảnh mang nửa sau (所以 · 但是 · 而且 · 都 · 就) không bao giờ đứng đầu, mảnh mang nửa trước không bao giờ đứng cuối. (2) Giữa hai nửa KHÔNG được chen mảnh thứ ba. Luật (2) mạnh hơn luật đại từ — khi cả hai cách xếp đều hợp luật đại từ thì chính nó phân xử, và đó là chỗ hay mất điểm nhất.',
       eg: [
         { cn: '① 所以我决定明年再考一次 ② 这次成绩不太理想', vi: '→ ② trước ①.' },
-        { cn: '① 虽然只学了半年 ② 但是他已经能简单交流了', vi: '→ ① trước ②.' },
+        {
+          cn: '① 茶不仅仅是一种饮料 ② 它在中国有着几千年的历史 ③ 而且还是一种文化',
+          vi: '→ ①③② : 而且 phải dính ngay sau 不仅仅, mảnh ② bị đẩy xuống cuối. Xếp ①②③ là chen ② vào giữa cặp.',
+        },
+        {
+          cn: '① 因为工作的需要 ② 所以我去过那里几次 ③ 对当地的文化有一些简单的了解',
+          vi: '→ ①②③ : không được chen ③ vào giữa 因为 và 所以.',
+        },
+        {
+          cn: '① 无论从价格方面看 ② 还是从材料的质量上看 ③ 这种盒子都是值得考虑的',
+          vi: '→ ①②③ : mảnh mang 都 là câu kết luận, luôn nằm CUỐI.',
+        },
       ],
     },
     {
@@ -330,19 +346,24 @@ export const PART_NOTES: Record<PartId, PartNote[]> = {
       ],
     },
     {
-      name: 'Loại đáp án nói QUÁ: 最 · 都 · 一定 · 永远 · 所有 · 从来不',
-      why: 'Bài đọc HSK viết rất chừng mực (很多人 · 有些 · 往往). Đáp án nào tuyệt đối hoá thì gần như chắc chắn sai, kể cả khi nó dùng đúng từ của bài.',
+      name: 'Loại đáp án nói QUÁ: 只 · 最 · 都 · 一定 · 永远 · 所有 · 从来不',
+      why: 'Bài đọc HSK viết rất chừng mực (很多人 · 更多的 · 有些 · 往往). Đáp án nào tuyệt đối hoá thì gần như chắc chắn sai, KỂ CẢ khi nó chép đúng chữ của bài và nằm đúng nửa đoạn mang đáp án — chữ 只 một mình đủ để loại.',
       eg: [
         { cn: '文中：很多人喜欢 → 选项：所有人都喜欢', vi: 'Bài: nhiều người thích → Đáp án: mọi người đều thích. → nói quá, loại.' },
         { cn: '文中：这个办法往往有效 → 选项：这个办法一定有效', vi: 'Bài: cách này thường hiệu quả → Đáp án: cách này chắc chắn hiệu quả. → loại.' },
       ],
     },
     {
-      name: 'Bài thuyết minh đi theo khung: 现象 → 原因 → 建议',
-      why: 'Đoạn nêu một hiện tượng, giải thích vì sao, rồi khuyên nên làm gì. Câu hỏi "tác giả khuyên điều gì" luôn lấy ở phần cuối, đừng tìm ở giữa.',
+      name: 'Khung 现象 → 原因 → 建议, và 如果 KHÔNG phải 因为',
+      why: 'Đoạn nêu hiện tượng, giải thích vì sao, rồi khuyên nên làm gì. Câu hỏi "khuyên điều gì" lấy ở phần cuối. Câu hỏi có 为什么 · 是因为 thì CHỈ nhận thông tin nằm sau chữ 因为 — vế 如果/只要 nói "phải có sẵn gì mới làm được", đó là điều kiện, đúng chữ trong bài nhưng sai loại thông tin.',
       eg: [
         { cn: '所以，睡前最好别看手机。', vi: 'Vì vậy, trước khi ngủ tốt nhất đừng xem điện thoại.' },
         { cn: '因此，我们应该多给孩子一些时间。', vi: 'Do đó, chúng ta nên cho trẻ thêm thời gian.' },
+        {
+          cn: '如果你有一定的语言基础和经济条件，那么出国是最好的选择。',
+          vi: 'Vế 如果 = điều kiện để đi được, KHÔNG phải lý do nên đi.',
+        },
+        { cn: '因为语言环境对学习语言有重要的作用。', vi: 'Vế 因为 mới là lý do — đáp án nằm ở đây.' },
       ],
     },
   ],

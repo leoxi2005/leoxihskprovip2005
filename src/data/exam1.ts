@@ -3,6 +3,8 @@ import type { ExamPaper } from '../engine/exam';
 // Node, mà Node không tự đoán đuôi như Vite. Thiếu đuôi là gãy đường thu giọng đọc.
 import { WRITE1_BANK } from './write1.ts';
 import { READ1_EXTRA, READ2_EXTRA, WRITE2_EXTRA } from './reading.ts';
+// Đợt chữa đề: xem `weak1.ts` — nội dung dựng từ đúng những câu đã sai của bài thi thử.
+import { WEAK1_FILL, WEAK1_ORDER, WEAK1_READ3 } from './weak1.ts';
 import {
   LISTEN1_EXTRA,
   LISTEN2_EXTRA,
@@ -448,6 +450,7 @@ export const EXAM_1: ExamPaper = {
     },
     ...READ1_EXTRA,
       ...READ1_EXTRA2,
+    ...WEAK1_FILL,
   ],
 
   // 阅读第二部分：排列顺序 (10)
@@ -504,6 +507,7 @@ export const EXAM_1: ExamPaper = {
     },
     ...READ2_EXTRA,
       ...READ2_EXTRA2,
+    ...WEAK1_ORDER,
   ],
 
   // 阅读第三部分：短文 + 一到两个问题 (20)
@@ -659,6 +663,7 @@ export const EXAM_1: ExamPaper = {
       vi: 'Tác giả cho rằng mấu chốt của du lịch là sự tò mò.',
     },
       ...READ3_EXTRA2,
+    ...WEAK1_READ3,
   ],
 
   // 书写第一部分：完成句子 — kho 51 câu, mỗi đề rút 10 (xem write1.ts)
