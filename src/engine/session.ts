@@ -14,6 +14,12 @@ import {
   type Sentence,
   type Vocab,
 } from '../data';
+import {
+  WEAK1_COLLOCATIONS,
+  WEAK1_CONFUSABLES,
+  WEAK1_GRAMMAR,
+  WEAK1_VOCAB,
+} from '../data/weak1';
 import { NUM_DRILLS } from './numbers';
 import {
   buildBoss,
@@ -317,7 +323,9 @@ export function nextFinale(vocab: Vocab[]): Question[] {
 /** Builds a session for a game mode. Returns `[]` when the pools are too thin. */
 export function buildSession(g: GameId, sel: TopicSel, srs: SrsMap, settings: Settings): Question[] {
   const P = pools(sel);
-  if (!P.vocab.length) return [];
+  // Vòng chữa đề là gói bài của một bài thi cụ thể, không phải của chủ đề nào — nó
+  // phải chạy được cả khi người học vừa bỏ chọn hết chip để cày riêng một chủ đề.
+  if (!P.vocab.length && g !== 'cure') return [];
   const size = Math.max(8, Math.min(40, settings.sessionSize));
   const session: Question[] = [];
   // Zero is a legitimate value here, not a mistake: the last week of the study plan
@@ -471,6 +479,33 @@ export function buildSession(g: GameId, sel: TopicSel, srs: SrsMap, settings: Se
         ),
       );
       break;
+    /*
+     * Vòng chữa đề: gói bài dựng từ đúng những câu đã sai của một bài thi thử.
+     *
+     * Khác mọi vòng khác ở hai chỗ, và cả hai đều là chủ ý. Nó KHÔNG lọc theo chủ đề
+     * đang bật — gói này là của bài thi đó, tắt chip không được phép làm nó biến mất.
+     * Và nó trộn bốn loại bài trong một phiên (cặp dễ nhầm · ngữ pháp · kết hợp từ ·
+     * từ mới) vì mười hai câu sai kia cũng không nằm gọn trong một loại nào.
+     *
+     * Vẫn đi qua `pickDue`, nên bài chưa gặp ra trước, bài tới hạn ra sau, và làm lại
+     * nhiều lượt thì phủ hết bộ chứ không lặp lại đúng mười sáu câu đầu.
+     */
+    case 'cure': {
+      const words = pickDue(srs, WEAK1_VOCAB, (x) => 'w:' + x.h, 4, 'cureword');
+      session.push(
+        ...shuffle([
+          ...pickDue(srs, WEAK1_CONFUSABLES, (x) => x.id, 6, 'cureconf').map((o) => makeConfQ(o.x)),
+          ...pickDue(srs, WEAK1_GRAMMAR, (x) => x.id, 4, 'curegram').map((o) => makeGramQ(o.x)),
+          ...pickDue(srs, WEAK1_COLLOCATIONS, (x) => x.id, 3, 'curecollo').map((o) =>
+            makeColloQ(o.x),
+          ),
+          ...words.map((o, i) =>
+            makeWordQ(o.x, o.e?.box ?? 0, DECK.vocab, DECK.vocab, i % 2 ? 'h2m' : 'm2h'),
+          ),
+        ]),
+      );
+      break;
+    }
     case 'leech': {
       // Nothing here is on schedule — these are the words that keep being forgotten,
       // drilled recognition-first because recall clearly isn't landing yet.

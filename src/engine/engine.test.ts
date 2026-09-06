@@ -14,6 +14,12 @@ import {
 import { EXTRA2_GRAMMAR, EXTRA2_VOCAB } from '../data/extra2';
 import { EXTRA3_GRAMMAR, EXTRA3_VOCAB } from '../data/extra3';
 import { EXTRA4_VOCAB } from '../data/extra4';
+import {
+  WEAK1_COLLOCATIONS,
+  WEAK1_CONFUSABLES,
+  WEAK1_GRAMMAR,
+  WEAK1_VOCAB,
+} from '../data/weak1';
 import { GameEngine } from './GameEngine';
 import { stripTones, tonePattern } from './pinyin';
 import { ttsFor } from './questions';
@@ -618,5 +624,35 @@ describe('leech mode', () => {
 
   it('is empty when nothing has gone wrong enough to qualify', () => {
     expect(build('leech')).toHaveLength(0);
+  });
+});
+
+/**
+ * Vòng chữa đề đứng riêng vì một lý do rất cụ thể: nội dung của nó CŨNG nằm trong các
+ * vòng cũ, và ở đó thì nó chìm nghỉm giữa hơn một nghìn mục. Hai bài dưới đây chốt
+ * đúng hai tính chất làm nên chỗ đứng riêng ấy — không lệ thuộc chip chủ đề, và không
+ * lẫn một mục nào của đợt cũ vào.
+ */
+describe('vòng chữa đề', () => {
+  it('vẫn dựng được khi mọi chủ đề đều tắt — gói này không thuộc chip nào', () => {
+    const session = buildSession('cure', {}, {}, DEFAULT_SETTINGS);
+    expect(session.length).toBeGreaterThanOrEqual(12);
+    const kinds = new Set(session.map((q) => q.kind));
+    expect(kinds.has('conf')).toBe(true);
+    expect(kinds.has('gram')).toBe(true);
+    expect(kinds.has('collo')).toBe(true);
+    expect(session.some((q) => q.kind === 'm2h' || q.kind === 'h2m')).toBe(true);
+  });
+
+  it('chỉ lấy bài của chính đợt chữa đề', () => {
+    const mine = new Set([
+      ...WEAK1_CONFUSABLES.map((c) => c.id),
+      ...WEAK1_GRAMMAR.map((g) => g.id),
+      ...WEAK1_COLLOCATIONS.map((c) => c.id),
+      ...WEAK1_VOCAB.map((v) => 'w:' + v.h),
+    ]);
+    for (const q of buildSession('cure', ALL_TOPICS, {}, DEFAULT_SETTINGS)) {
+      expect(mine.has(q.id ?? ''), q.id ?? '(không id)').toBe(true);
+    }
   });
 });

@@ -59,7 +59,8 @@ export type GameId =
   | 'sdict'
   | 'num'
   | 'fix'
-  | 'collo';
+  | 'collo'
+  | 'cure';
 
 interface Base {
   kind: Kind;

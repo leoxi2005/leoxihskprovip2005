@@ -20,6 +20,14 @@ export interface GameCard {
  * a card can never drift out of sync with the key printed on it.
  */
 export const GAME_CARDS: GameCard[] = [
+  {
+    icon: '🩺',
+    name: 'Chữa Đề 06/09',
+    desc: '12 câu sai · 44 bài',
+    bg: '#a8324a',
+    g: 'cure',
+    key: 'h',
+  },
   { icon: '🐉', name: 'Đấu Trùm', desc: '8 câu · 3 tim', bg: C.bossDark, g: 'boss', key: '1' },
   { icon: '⚡', name: 'Tia Chớp', desc: '12 câu · 6 giây/câu', bg: '#b07f1f', g: 'tf', key: '2' },
   { icon: '✍️', name: 'Luyện Viết', desc: 'Ghép · gõ · nghe viết', bg: C.green, g: 'write', key: '3' },

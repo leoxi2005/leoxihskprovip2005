@@ -195,6 +195,87 @@ export function Home() {
 
         <Quests />
 
+        {/*
+          Khối chữa đề đứng riêng, ngay dưới nhiệm vụ hôm nay.
+
+          Nội dung của nó vốn đã nằm trong các vòng cũ (Cặp Dễ Nhầm, Ngữ pháp, Kết Hợp
+          Từ) — và đó chính là vấn đề: trộn vào một cỗ bài nghìn mục thì người học
+          không thấy nó ở đâu, nên phần đáng làm nhất sau một bài thi lại là phần khó
+          bấm tới nhất. Ở đây nó có một chỗ của riêng nó, kèm luôn đường đi tới hai
+          bảng ghi chú không nằm trong vòng chơi nào.
+        */}
+        <section
+          style={{
+            textAlign: 'left',
+            margin: '18px 0 0',
+            background: C.card,
+            border: `3px solid ${C.ink}`,
+            borderLeft: `10px solid #a8324a`,
+            borderRadius: 16,
+            padding: '14px 16px',
+            boxShadow: shadow(4),
+          }}
+        >
+          <div style={{ fontSize: 17, fontWeight: 800, marginBottom: 4 }}>
+            🩺 Chữa đề — bài thi thử 06/09
+          </div>
+          <p style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 600, color: C.body, lineHeight: 1.55 }}>
+            12 câu sai gom lại chỉ còn <b>ba lỗi</b>: chen mảnh vào giữa cặp liên từ (4 câu
+            排列顺序), chọn từ bằng nghĩa thay vì bằng khung ngữ pháp (6 câu 选词填空), và
+            đáp án tuyệt đối hoá <b>只 · 都 · 一定</b> (đọc hiểu). Gói dưới đây dựng từ đúng
+            những câu đó: 16 cặp dễ nhầm · 10 mục ngữ pháp · 8 cụm kết hợp từ · 10 từ deck
+            chưa từng có.
+          </p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button
+              onClick={() => engine.startGame('cure')}
+              disabled={!canPlay}
+              className={canPlay ? 'lift lift-4' : undefined}
+              title="Phím H"
+              style={{
+                background: '#a8324a',
+                color: '#fff',
+                border: `3px solid ${C.ink}`,
+                borderRadius: 14,
+                padding: '10px 20px',
+                fontSize: 15,
+                fontWeight: 800,
+                cursor: canPlay ? 'pointer' : 'not-allowed',
+                opacity: canPlay ? 1 : 0.5,
+                fontFamily: F.ui,
+                boxShadow: canPlay ? shadow(4) : 'none',
+              }}
+            >
+              🩺 Luyện gói chữa đề (phím H)
+            </button>
+            <button
+              onClick={engine.openExam}
+              className="lift lift-4 lift-static"
+              style={{
+                background: C.soft,
+                color: C.ink,
+                border: `3px solid ${C.ink}`,
+                borderRadius: 14,
+                padding: '10px 20px',
+                fontSize: 15,
+                fontWeight: 800,
+                cursor: 'pointer',
+                fontFamily: F.ui,
+                boxShadow: shadow(4),
+              }}
+            >
+              📖 Luật xếp câu 排列顺序 →
+            </button>
+          </div>
+          <p style={{ margin: '9px 0 0', fontSize: 12, fontWeight: 600, color: C.muted2, lineHeight: 1.5 }}>
+            Nút phải mở trang thi thử: kéo xuống <b>“Hoặc luyện từng phần một”</b> → thẻ{' '}
+            <b>阅读第二部分</b> → <b>📖 Ôn từ &amp; ngữ pháp trước</b> → tab <b>② Ngữ pháp</b>.
+            Ghi chú <i>“Cặp liên từ: nửa sau không mở đoạn, và hai nửa phải DÍNH nhau”</i> lấy
+            ví dụ từ chính câu 57, 60, 62 của bạn. Làm tương tự với thẻ 阅读第一部分 và
+            阅读第三部分.
+          </p>
+        </section>
+
         <section
           style={{
             textAlign: 'left',
