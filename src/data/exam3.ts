@@ -1,29 +1,34 @@
 /**
  * Đợt "bộ 2" — viết sau khi đọc đề thi thử HSK 4 bộ 2 trên chinesetest.online (16/09/2026).
  *
- * KHÔNG chép câu nào của đề đó. Việc đã làm là đo xem đề ấy hỏi **cái gì**, rồi đối chiếu
- * với kho sẵn có. Từ vựng thì kho đã phủ gần hết: trong 93 từ rút ra từ bộ 2 chỉ có 14 từ
- * nằm ngoài deck, và phần lớn là từ ghép ngoài 1200 từ đại cương (降温 · 收款 · 秋季 ·
- * 职员 · 消费者 · 读者 · 毕业生). Cái kho THIẾU là **khung câu**, đo bằng số lần xuất hiện
- * trong exam1 + exam2 + weak1 + write1:
+ * Thứ lấy từ đề đó là **bản đồ**, không phải câu chữ: phần nào hỏi khung ngữ pháp gì,
+ * tầng từ vựng nào, gài bẫy kiểu gì. Từ vựng hoá ra không phải chỗ thiếu — 93 từ rút ra
+ * từ bộ 2 thì 79 từ deck đã có, 14 từ còn lại phần lớn nằm ngoài 1200 từ đại cương
+ * (降温 · 秋季 · 职员 · 消费者 · 读者 · 毕业生). Cái kho THIẾU là **khung câu**, đo bằng
+ * số lần xuất hiện trong exam1 + exam2 + weak1 + write1:
  *
  * | Khung bộ 2 hỏi | Có sẵn trong kho |
  * |---|---|
- * | 难道…吗 (câu phản vấn) | 1 |
- * | 兼语句 让/请 + người + 通知/做 | 3, không câu nào ở 完成句子 |
+ * | 难道…？ (câu phản vấn) | 1 |
+ * | 兼语句 让/请 + người + 通知/提醒 | 3, không câu nào ở 完成句子 |
  * | 对…的理解和支持 · 对…很热情 (对 làm giới từ) | 0 |
  * | 给…提供…条件 (câu hai tân ngữ) | 0 ở 完成句子 |
  * | 比…多了一倍 (bội số) | 4, không câu nào ở 完成句子 |
  * | 竟然 (ngoài dự đoán) | 1 |
  * | 实际上 · 往往 · 按照经验 → 但研究证明 (bác kinh nghiệm) | 0 |
  *
- * Nên đợt này viết dày vào đúng bảy dòng đó, và ba điều dưới đây được giữ chặt — cùng
- * luật với `exam2.ts`, chép lại ở đây vì đây là chỗ dễ viết dễ dãi nhất:
+ * **Tình huống và câu chữ ở đây là viết mới, không phải viết lại đề gốc.** Bản đầu của
+ * tệp này đã phạm đúng lỗi đó — bảy câu 完成句子 dùng y nguyên bộ mảnh của câu 86–92,
+ * mấy câu 排列顺序 giữ nguyên mảnh, và tám đoạn đọc hiểu là cùng chủ đề + cùng lập luận
+ * + cùng câu hỏi + cùng đáp án. Luyện trên bản chép lại thì điểm lên là do nhớ đề, và
+ * đúng những câu ấy sẽ không xuất hiện ở phòng thi. Giữ lại khung, thay hết nội dung.
+ *
+ * Ba luật còn lại, cùng với `exam2.ts`, vì đây là chỗ dễ viết dễ dãi nhất:
  *
  * **Mồi nhử phải sai vì một lý do thật**: đúng chữ trong bài nhưng sai chỗ, đúng một nửa,
  * hoặc nói quá (最 · 都 · 一定). Không bao giờ loại được bằng cách nhìn độ dài.
  *
- * **Đoạn 阅读第三部分 phải đủ dài** (88–132 chữ). Đoạn ngắn thì đọc lướt cũng ra, và cái
+ * **Đoạn 阅读第三部分 phải đủ dài** (90–130 chữ). Đoạn ngắn thì đọc lướt cũng ra, và cái
  * khó thật của phần này — giữ được ý qua một đoạn dài — không bao giờ được luyện.
  *
  * **排列顺序 phải trải đều sáu hoán vị.** Mười câu ở đây đóng góp 4 lần mảnh A đứng đầu,
@@ -36,9 +41,9 @@ import type { FillGroup, OrderItem, QaItem, SentItem, TfItem } from '../engine/e
 /**
  * 听力第一部分 — 判断对错.
  *
- * Bẫy ở đây đều là bẫy của bộ 2: 竟然 · 本来…后来 · 难道 · so sánh với quá khứ (比过去…了),
- * và câu châm ngôn kiểu 不要总是羡慕别人 — nghe ra chữ thì dễ, giữ đúng CHIỀU của câu mới khó.
- * Nửa đúng nửa sai để tỉ lệ không đoán được.
+ * Bẫy lấy theo bộ 2: 竟然 · 本来…后来 · 难道 · so sánh với quá khứ (比过去…了) và câu
+ * châm ngôn — nghe ra chữ thì dễ, giữ đúng CHIỀU của câu mới khó. Năm đúng năm sai để
+ * tỉ lệ không đoán được.
  */
 export const LISTEN1_B2: TfItem[] = [
   {
@@ -60,16 +65,16 @@ export const LISTEN1_B2: TfItem[] = [
     vi: 'Tài liệu này lẽ nào anh không kiểm tra lại đã nộp? Lần sau nhất định xem trước rồi nộp. → Anh ấy mong đối phương kiểm tra trước khi nộp. (ĐÚNG — 难道 là trách, vế sau mới là yêu cầu)',
   },
   {
-    say: '他现在做事比过去仔细多了，交上来的表格已经三个月没出过错。',
-    stmt: '★ 他做事还是很马虎。',
+    say: '他现在写字比过去工整多了，本子上几乎找不到涂改的地方。',
+    stmt: '★ 他的字还是很难看。',
     ok: false,
-    vi: 'Giờ anh ấy làm việc cẩn thận hơn trước nhiều, bảng biểu nộp lên ba tháng nay chưa sai lần nào. → Anh ấy vẫn cẩu thả. (SAI — 比过去…多了 nghĩa là đã khác)',
+    vi: 'Giờ chữ anh ấy ngay ngắn hơn trước nhiều, trong vở gần như không tìm thấy chỗ tẩy xoá. → Chữ anh ấy vẫn xấu. (SAI — 比过去…多了 nghĩa là đã khác)',
   },
   {
-    say: '不要总是羡慕别人的生活，你没看见的是他们为这些付出了多少。',
-    stmt: '★ 别人的生活都比自己轻松。',
+    say: '别人看到的只是他今天的成绩，很少有人知道他为这件事准备了三年。',
+    stmt: '★ 他很快就做成了这件事。',
     ok: false,
-    vi: 'Đừng lúc nào cũng ghen tị với cuộc sống người khác, cái bạn không thấy là họ đã đánh đổi bao nhiêu. → Cuộc sống người khác đều nhẹ hơn mình. (SAI — nói quá bằng 都)',
+    vi: 'Người ta chỉ thấy thành tích hôm nay của anh ấy, ít ai biết anh ấy đã chuẩn bị ba năm. → Anh ấy làm xong việc này rất nhanh. (SAI — 三年 là ngược lại)',
   },
   {
     say: '今年报名参加汉语比赛的学生比去年多了一倍，教室都快坐不下了。',
@@ -90,16 +95,16 @@ export const LISTEN1_B2: TfItem[] = [
     vi: 'Trường cấp cho chúng tôi điều kiện học rất tốt, thư viện mở 24 tiếng. → Điều kiện học của trường khá tốt. (ĐÚNG)',
   },
   {
-    say: '大使馆昨天通知我，我的留学申请已经通过了，下个月就能走。',
-    stmt: '★ 他的申请还在等结果。',
+    say: '房东通知我下个月房租要涨，我已经开始找新的房子了。',
+    stmt: '★ 他打算继续住在原来的地方。',
     ok: false,
-    vi: 'Đại sứ quán hôm qua báo tôi, đơn xin du học đã được duyệt, tháng sau là đi được. → Đơn của anh ấy còn chờ kết quả. (SAI — 已经通过了)',
+    vi: 'Chủ nhà báo tôi tháng sau tiền nhà tăng, tôi đã bắt đầu tìm nhà mới. → Anh ấy định ở tiếp chỗ cũ. (SAI — 已经开始找新的房子)',
   },
   {
-    say: '我并不是不想帮你搬家，只是那天正好要去机场接一个客户。',
-    stmt: '★ 他不愿意帮忙。',
-    ok: false,
-    vi: 'Không phải tôi không muốn giúp bạn chuyển nhà, chỉ là hôm đó đúng lúc phải ra sân bay đón khách. → Anh ấy không muốn giúp. (SAI — 并不是不 là hai lần phủ định)',
+    say: '这次的活动我恐怕去不了，那天要陪父母去医院复查。',
+    stmt: '★ 他那天要去医院。',
+    ok: true,
+    vi: 'Hoạt động lần này tôi e là không đi được, hôm đó phải đưa bố mẹ đi tái khám. → Hôm đó anh ấy phải tới bệnh viện. (ĐÚNG — 恐怕 là từ chối, lý do mới là đáp án)',
   },
 ];
 
@@ -112,11 +117,11 @@ export const LISTEN1_B2: TfItem[] = [
  */
 export const LISTEN2_B2: QaItem[] = [
   {
-    say: ['男：您好，我想把这笔钱存成一年的。', '女：好的，请把身份证给我，再填一下这张表。', '问：男的要做什么？'],
+    say: ['男：您好，我想存一笔钱，存一年定期。', '女：好的，请把证件给我，再填一下这张表。', '问：男的要做什么？'],
     q: '男的要做什么？',
     opts: ['取钱', '存钱', '换钱', '借钱'],
     ans: 1,
-    vi: 'Nam: Chào chị, tôi muốn gửi khoản này kỳ hạn một năm. / Nữ: Vâng, cho tôi xin giấy tờ và điền tờ này. → Gửi tiền. (存 chứ không phải 取)',
+    vi: 'Nam: Chào chị, tôi muốn gửi một khoản, kỳ hạn một năm. / Nữ: Vâng, cho tôi xin giấy tờ và điền tờ này. → Gửi tiền. (存 chứ không phải 取)',
   },
   {
     say: ['女：这个月的房租你付了吗？', '男：还没，我一会儿下班顺路去交。', '问：男的打算什么时候付房租？'],
@@ -189,11 +194,11 @@ export const LISTEN2_B2: QaItem[] = [
     vi: 'Nam: Em thấy đồng nghiệp mới thế nào? / Nữ: Làm việc rất cẩn thận, chỉ là đôi khi căng thẳng quá. → Rất cẩn thận. (就是 bẻ nhẹ, không đổi ý chính)',
   },
   {
-    say: ['女：你的衬衫还挂在外面呢，干了吗？', '男：还没干，今天没什么阳光。', '问：衬衫为什么还没干？'],
-    q: '衬衫为什么还没干？',
-    opts: ['刚洗完', '没有阳光', '挂错地方', '天在下雨'],
+    say: ['女：阳台上的被子还没收吗？', '男：再晒半个小时，今天没什么太阳，干得慢。', '问：被子为什么还没收？'],
+    q: '被子为什么还没收？',
+    opts: ['刚洗完', '还没干', '要送去洗', '忘在楼下'],
     ans: 1,
-    vi: 'Nữ: Áo anh vẫn treo ngoài kia, khô chưa? / Nam: Chưa khô, hôm nay không có nắng. → Vì không có nắng.',
+    vi: 'Nữ: Chăn ngoài ban công chưa thu à? / Nam: Phơi thêm nửa tiếng, hôm nay không nắng nên lâu khô. → Vì chưa khô.',
   },
   {
     say: ['男：周末我们去郊区走走吧，那边空气好。', '女：好啊，不过得早点儿出发，回来的路上容易堵车。', '问：女的提醒男的注意什么？'],
@@ -232,9 +237,9 @@ export const LISTEN3_B2: QaItem[] = [
       '男：昨天通知我了，说材料都通过了，九月份就能走。',
       '女：太好了！那你去哪个城市？',
       '男：南京。学校还给我提供了半年的住宿，条件比我想的好多了。',
-      '问：男的的申请结果怎么样？',
+      '问：男的申请留学的结果怎么样？',
     ],
-    q: '男的的申请结果怎么样？',
+    q: '男的申请留学的结果怎么样？',
     opts: ['还在等', '通过了', '被拒绝了', '材料不全'],
     ans: 1,
     vi: 'Nữ: Đơn du học anh nộp ở đại sứ quán tháng trước có tin chưa? / Nam: Hôm qua báo rồi, hồ sơ qua hết… → Đã được duyệt.',
@@ -249,7 +254,7 @@ export const LISTEN3_B2: QaItem[] = [
   },
   {
     say: [
-      '男：这个月的销售数量出来了吗？',
+      '男：这个月的销售数量统计出来了吗？',
       '女：出来了，比上个月多了一倍还多。',
       '男：这么快？是因为打折吗？',
       '女：打折只是一部分原因，主要是我们换了新的广告，引起了很多年轻人的注意。',
@@ -258,7 +263,7 @@ export const LISTEN3_B2: QaItem[] = [
     q: '这个月的销售数量怎么样？',
     opts: ['和上月差不多', '比上月多一倍还多', '比上月少一点儿', '还没统计出来'],
     ans: 1,
-    vi: 'Nam: Số bán tháng này ra chưa? / Nữ: Ra rồi, hơn gấp đôi tháng trước. → Hơn gấp đôi.',
+    vi: 'Nam: Số bán tháng này thống kê ra chưa? / Nữ: Ra rồi, hơn gấp đôi tháng trước. → Hơn gấp đôi.',
   },
   {
     say: [],
@@ -270,7 +275,7 @@ export const LISTEN3_B2: QaItem[] = [
   },
   {
     say: [
-      '女：你怎么今天才来？会不是九点开的吗？',
+      '女：你怎么今天才来？会议不是九点开始吗？',
       '男：别提了，我本来八点就出门了，结果地铁出了问题，等了四十分钟。',
       '女：那你打车过来多好。',
       '男：外面正刮大风，一辆空车也没有。下次我还是提前一个小时出门吧。',
@@ -279,7 +284,7 @@ export const LISTEN3_B2: QaItem[] = [
     q: '男的为什么迟到了？',
     opts: ['起晚了', '地铁出了问题', '走错了路', '忘记开会'],
     ans: 1,
-    vi: 'Nữ: Sao giờ anh mới tới? / Nam: Đừng nhắc, tôi ra khỏi nhà từ tám giờ, ai ngờ tàu điện ngầm trục trặc… → Vì tàu điện ngầm gặp sự cố.',
+    vi: 'Nữ: Sao giờ anh mới tới? Họp chẳng phải chín giờ à? / Nam: Đừng nhắc, tôi ra khỏi nhà từ tám giờ, ai ngờ tàu điện ngầm trục trặc… → Vì tàu điện ngầm gặp sự cố.',
   },
   {
     say: [],
@@ -360,35 +365,40 @@ export const LISTEN3_B2: QaItem[] = [
  * Bảng sáu từ, năm câu, luôn thừa đúng một từ — chỗ thừa là thứ giữ cho ô cuối không
  * được cho không. Mọi từ trong bảng đều phải nằm trong `DECK.vocab` (bảng ôn trước khi
  * luyện cắt câu bằng chính deck, từ lạ sẽ rơi khỏi bảng). Chỗ trống viết bằng `（　）`.
+ *
+ * Hai luật nhỏ học được khi sửa bản đầu: **từ đáp án của câu này không được nằm sẵn
+ * trong câu khác** (bản đầu để 大部分 trong một câu trong khi 部分 là đáp án của câu
+ * trên), và **đừng mượn khung 不但…并且** — đề thật ghép 不但 với 而且, luyện sai là
+ * mang cả phản xạ sai vào phòng thi.
  */
 export const READ1_B2: FillGroup[] = [
   {
     bank: ['①并且', '②任务', '③引起', '④部分', '⑤偶尔', '⑥否则'],
     items: [
       {
-        sent: '人和人之间要是长期缺少交流，很容易（　）不必要的误会。',
+        sent: '他上课时随口说的那句话，（　）了同学们很长时间的讨论。',
         ans: 2,
-        vi: 'Người với người nếu lâu ngày thiếu trao đổi, rất dễ gây ra hiểu lầm không cần thiết.',
+        vi: 'Câu anh ấy buột miệng nói trong giờ đã làm cả lớp bàn tán rất lâu.',
       },
       {
-        sent: '这次的（　）看起来复杂，其实关键只有一个：先弄清楚客户到底要什么。',
+        sent: '这周的（　）不算重，但每一项都要按时交。',
         ans: 1,
-        vi: 'Nhiệm vụ lần này trông phức tạp, thật ra mấu chốt chỉ một: làm rõ khách hàng thực sự muốn gì.',
+        vi: 'Nhiệm vụ tuần này không nặng, nhưng mục nào cũng phải nộp đúng hạn.',
       },
       {
-        sent: '他不但自己按时完成了工作，（　）还帮新来的同事改了材料。',
+        sent: '这种材料又轻又结实，（　）价格也不算贵。',
         ans: 0,
-        vi: 'Anh ấy không những hoàn thành việc đúng hạn, mà còn giúp đồng nghiệp mới sửa tài liệu.',
+        vi: 'Loại vật liệu này vừa nhẹ vừa chắc, hơn nữa giá cũng không đắt.',
       },
       {
-        sent: '那本小说里写的故事，大（　）都是作者自己经历过的。',
+        sent: '会议的前一（　）讲计划，后面才谈具体怎么做。',
         ans: 3,
-        vi: 'Những câu chuyện trong cuốn tiểu thuyết đó, phần lớn là do chính tác giả trải qua.',
+        vi: 'Phần đầu cuộc họp nói về kế hoạch, phía sau mới bàn cách làm cụ thể.',
       },
       {
-        sent: '除了周末，他大部分时间都在教室，（　）也去图书馆看看杂志。',
+        sent: '他平时不怎么看电视，（　）陪爷爷看一场足球。',
         ans: 4,
-        vi: 'Ngoài cuối tuần, phần lớn thời gian anh ấy ở lớp, thỉnh thoảng cũng ra thư viện xem tạp chí.',
+        vi: 'Bình thường anh ấy ít xem tivi, thỉnh thoảng mới ngồi xem bóng đá với ông.',
       },
     ],
   },
@@ -397,29 +407,29 @@ export const READ1_B2: FillGroup[] = [
     bank: ['①挂', '②干', '③报名', '④郊区', '⑤提供', '⑥热情'],
     items: [
       {
-        sent: 'A：我那件白衬衫呢？你放哪儿了？\nB：洗了，在阳台上（　）着呢，还没干。',
+        sent: 'A：墙上（　）着的那张照片是哪年拍的？\nB：我毕业那年，算起来快十年了。',
         ans: 0,
-        vi: 'A: Cái áo trắng của tôi đâu? B: Giặt rồi, đang treo ngoài ban công, chưa khô.',
+        vi: 'A: Tấm ảnh treo trên tường chụp năm nào vậy? B: Năm tôi tốt nghiệp, tính ra gần mười năm rồi.',
       },
       {
-        sent: 'A：去植物园的一共十二位，现在还有人要（　）吗？\nB：算我一个，我明天正好没事。',
+        sent: 'A：周六的汉语角还能（　）吗？\nB：能，名单下班前交就行。',
         ans: 2,
-        vi: 'A: Đi vườn thực vật tổng cộng mười hai người, giờ còn ai muốn đăng ký không? B: Tính tôi một suất.',
+        vi: 'A: Câu lạc bộ tiếng Hán thứ bảy còn đăng ký được không? B: Được, danh sách nộp trước giờ tan làm là được.',
       },
       {
-        sent: 'A：这两年城里越来越多人喜欢到（　）过周末。\nB：是啊，那边空气新鲜，环境也安静。',
-        ans: 3,
-        vi: 'A: Hai năm nay càng nhiều người trong phố thích ra ngoại ô nghỉ cuối tuần. B: Ừ, ngoài đó không khí trong lành.',
-      },
-      {
-        sent: 'A：这家店的服务员对客人特别（　）。\nB：所以我每次来都愿意多坐一会儿。',
-        ans: 5,
-        vi: 'A: Nhân viên quán này với khách rất nhiệt tình. B: Nên lần nào tới tôi cũng muốn ngồi lâu hơn.',
-      },
-      {
-        sent: 'A：学校能不能给留学生（　）一间练习室？\nB：我去问问，应该没什么问题。',
+        sent: 'A：房间里能不能给客人（　）一把伞？\nB：可以，门口柜子里还有几把。',
         ans: 4,
-        vi: 'A: Trường có thể cấp cho lưu học sinh một phòng tập không? B: Tôi đi hỏi thử, chắc không vấn đề gì.',
+        vi: 'A: Trong phòng có thể để sẵn cho khách một cây dù không? B: Được, trong tủ ngoài cửa còn mấy cây.',
+      },
+      {
+        sent: 'A：昨天那位售货员真（　）。\nB：是啊，帮我换了三次尺码也没嫌麻烦。',
+        ans: 5,
+        vi: 'A: Cô bán hàng hôm qua nhiệt tình thật. B: Ừ, đổi size cho tôi ba lần mà không hề tỏ ra phiền.',
+      },
+      {
+        sent: 'A：外面的被子（　）了吗？\nB：还差一点儿，再晒半个小时吧。',
+        ans: 1,
+        vi: 'A: Chăn ngoài kia khô chưa? B: Còn thiếu chút nữa, phơi thêm nửa tiếng đi.',
       },
     ],
   },
@@ -428,60 +438,60 @@ export const READ1_B2: FillGroup[] = [
 /**
  * 阅读第二部分 — 排列顺序.
  *
- * Mỗi câu gài đúng một mối nối của bộ 2: 竟然 · 只要…就 · 虽然…但 · 本来…但是 ·
- * 因为…所以 · 提醒→忘记→来不及 · câu định nghĩa A 是 B. Vị trí các mảnh xếp theo hạn
- * ngạch ghi ở đầu tệp, không theo thứ tự đọc.
+ * Mỗi câu gài đúng một mối nối của bộ 2: 竟然 · 只要…就 · 虽然…但是 · 本来…但是 ·
+ * 因为…所以 · 提醒→忘→来不及 · câu định nghĩa A 是 B · mệnh đề làm chủ ngữ. Tình huống
+ * viết mới; vị trí các mảnh xếp theo hạn ngạch ghi ở đầu tệp, không theo thứ tự đọc.
  */
 export const READ2_B2: OrderItem[] = [
   {
-    parts: ['妈妈说我小时候最怕去医院', '一看见穿白衣服的人就哭', '她怎么也没想到我长大会当护士'],
+    parts: ['我把行李放在门口就去洗手了', '回来的时候箱子已经不见了', '后来才知道是妹妹帮我搬进屋的'],
     ans: [0, 1, 2],
-    vi: 'Mẹ bảo hồi nhỏ tôi sợ nhất là đi bệnh viện, cứ thấy người mặc áo trắng là khóc, mẹ không ngờ lớn lên tôi lại làm y tá.',
+    vi: 'Tôi để hành lý ở cửa rồi đi rửa tay, lúc quay lại thì vali đã không còn, sau mới biết là em gái mang vào nhà giúp.',
   },
   {
-    parts: ['昨天姐姐提醒我去报名', '但我还是给忘了', '结果现在申请也来不及了'],
+    parts: ['同事一大早就提醒过我交表', '可我一忙起来就给忘了', '等想起来的时候办公室已经锁门了'],
     ans: [0, 1, 2],
-    vi: 'Hôm qua chị nhắc tôi đi đăng ký, nhưng tôi vẫn quên mất, kết quả bây giờ nộp cũng không kịp.',
+    vi: 'Đồng nghiệp nhắc tôi nộp biểu từ sáng sớm, thế mà bận lên là quên bẵng, đến lúc nhớ ra thì văn phòng đã khoá cửa.',
   },
   {
-    parts: ['老师对学生的一个微笑', '它会让学生觉得自己被看见了', '其实是一种肯定和欣赏'],
+    parts: ['一句及时的“谢谢”', '它不花一分钱', '其实是最便宜的礼物'],
     ans: [0, 2, 1],
-    vi: 'Một nụ cười của thầy dành cho học trò thật ra là sự công nhận và trân trọng, nó khiến học trò thấy mình được nhìn thấy.',
+    vi: 'Một tiếng "cảm ơn" đúng lúc thật ra là món quà rẻ nhất, nó không tốn một xu.',
   },
   {
-    parts: ['张老师是专门教汉语语法的', '都说她讲得特别清楚', '那些上过她课的学生'],
+    parts: ['李医生看病特别有耐心', '没有一个说他态度不好', '在他那儿排过队的病人'],
     ans: [0, 2, 1],
-    vi: 'Cô Trương chuyên dạy ngữ pháp tiếng Hán, những sinh viên từng học lớp cô đều nói cô giảng cực rõ.',
+    vi: 'Bác sĩ Lý khám bệnh cực kỳ kiên nhẫn, những bệnh nhân từng xếp hàng chỗ ông không ai nói ông thái độ kém.',
   },
   {
-    parts: ['虽然只能切水果', '那不过是一把很小的刀', '所以别指望用它切大块的肉'],
+    parts: ['但是离家只有两站路', '这份工作虽然工资一般', '算下来反而比以前轻松'],
     ans: [1, 0, 2],
-    vi: 'Đó chẳng qua là con dao rất nhỏ, tuy gọt được hoa quả nhưng đừng mong dùng nó thái miếng thịt to.',
+    vi: 'Công việc này tuy lương bình thường nhưng cách nhà có hai bến, tính ra lại nhẹ hơn trước.',
   },
   {
-    parts: ['付款的地方也排起了长队', '因为很多名牌商品都在打折', '所以购物的人特别多'],
+    parts: ['平时半小时的路走了一个半小时', '因为昨晚下了一场大雪', '今天路上的车都开得特别慢'],
     ans: [1, 2, 0],
-    vi: 'Vì nhiều hàng hiệu đang giảm giá nên người mua sắm rất đông, chỗ thanh toán cũng xếp hàng dài.',
+    vi: 'Vì tối qua tuyết rơi lớn nên hôm nay xe trên đường đều chạy rất chậm, quãng đường thường nửa tiếng đi mất tiếng rưỡi.',
   },
   {
-    parts: ['并且愿意为那个目标一直努力', '那他迟早会做成一些事情', '一个人只要有了清楚的目标'],
+    parts: ['哪怕一次只有十分钟', '一年下来也是不小的进步', '一件事只要每天做一点儿'],
     ans: [2, 0, 1],
-    vi: 'Một người chỉ cần có mục tiêu rõ ràng, lại chịu nỗ lực vì mục tiêu đó, thì sớm muộn cũng làm được việc.',
+    vi: 'Một việc chỉ cần mỗi ngày làm một chút, dù mỗi lần chỉ mười phút, một năm cũng là tiến bộ không nhỏ.',
   },
   {
-    parts: ['但是超市门口的广告太吸引人了', '结果一下子拿了满满一车', '他们本来没打算买这些东西'],
+    parts: ['但是店员介绍得太认真了', '最后拿着两个包走了出来', '我本来只打算进去看一眼'],
     ans: [2, 0, 1],
-    vi: 'Họ vốn không định mua mấy thứ này, nhưng quảng cáo ngoài cửa siêu thị hấp dẫn quá, cuối cùng chất đầy cả xe đẩy.',
+    vi: 'Tôi vốn chỉ định vào ngó một cái, nhưng nhân viên giới thiệu nhiệt tình quá, cuối cùng xách hai cái túi đi ra.',
   },
   {
-    parts: ['这少数人才是真正值得珍惜的朋友', '只有很少的人会问你飞得累不累', '当大多数人都在问你飞得高不高的时候'],
+    parts: ['陪他练了三年的那个人', '却很少有人记得', '大家都记得比赛那天站在台上的人'],
     ans: [2, 1, 0],
-    vi: 'Khi phần đông đều hỏi bạn bay có cao không, chỉ rất ít người hỏi bạn bay có mệt không — số ít ấy mới là bạn đáng trân trọng.',
+    vi: 'Ai cũng nhớ người đứng trên bục hôm thi đấu, nhưng rất ít người nhớ người đã tập cùng anh ấy suốt ba năm.',
   },
   {
-    parts: ['现在连点菜都不用看菜单', '没想到他竟然三个月就适应了', '刚来的时候他一句汉语也不会说'],
+    parts: ['后来还真的骑完了三百公里', '今年竟然报名参加了长途骑行', '他去年连自行车都骑不稳'],
     ans: [2, 1, 0],
-    vi: 'Lúc mới sang anh ấy không nói nổi một câu tiếng Hán, không ngờ ba tháng đã quen, giờ gọi món còn chẳng cần xem thực đơn.',
+    vi: 'Năm ngoái anh ấy còn đạp xe chưa vững, năm nay lại đăng ký đi xe đạp đường dài, rồi đạp hết ba trăm cây số thật.',
   },
 ];
 
@@ -490,100 +500,100 @@ export const READ2_B2: OrderItem[] = [
  *
  * Bộ 2 đi theo bốn kiểu đoạn, kho cũ chỉ có hai kiểu đầu: ① giải nghĩa một khái niệm,
  * ② lời khuyên có đánh số, ③ **bác lại kinh nghiệm chung** (按照经验人们认为…但研究证明),
- * ④ mẩu chuyện có đuôi hài. Đợt này viết đủ bốn. Cặp hai câu dùng `sameAudio` và phải
- * đứng liền nhau.
+ * ④ mẩu chuyện có đuôi. Đợt này viết đủ bốn, chủ đề mới. Cặp hai câu dùng `sameAudio`
+ * và phải đứng liền nhau.
  */
 export const READ3_B2: QaItem[] = [
   {
-    text: '什么叫“及时雨”？其实不难理解。地里干了很久，正着急的时候下了一场雨，这场雨就来得特别是时候。人也一样：你手头的事情正卡住，谁也帮不上，这时候有个朋友走过来说一句“我来”，那这个朋友就是你的“及时雨”。所以这三个字说的不只是雨，更是那种来得正好的帮助。',
-    q: '这段话主要想告诉我们什么？',
-    opts: ['“及时雨”的意思', '雨水对农业很重要', '应该多交朋友', '遇事要靠自己'],
+    text: '做生意的人常说“回头客”。第一次进店的人，可能只是路过，也可能是被门口的牌子吸引住了；但第二次还愿意来的，才是真的认可你。所以一家店好不好，不看一天进来多少人，而看有多少人肯再来一次。这三个字听着简单，其实是给一家店打的最直接的分数。',
+    q: '这段话主要谈的是：',
+    opts: ['“回头客”的意思', '怎么开一家店', '广告有什么用', '顾客爱买什么'],
     ans: 0,
-    vi: 'Đoạn giải nghĩa cụm 及时雨: cơn mưa đến đúng lúc, và người bạn đến đúng lúc. → Nói về nghĩa của cụm từ này.',
-    expl: '“多交朋友” là lời khuyên đoạn không đưa ra — đúng chữ trong bài nhưng sai ý chính.',
+    vi: 'Đoạn giải nghĩa cụm 回头客: người quay lại lần hai mới là thước đo thật của một cửa hàng.',
+    expl: '“怎么开一家店” là chuyện đoạn không bàn — đúng trường nghĩa nhưng sai ý chính.',
   },
   {
-    text: '按照经验，很多人认为夏天出门应该穿白色的衣服，因为白色看起来凉快。但有研究证明，在太阳最厉害的时候，穿红色反而更能挡住对皮肤有害的那部分光。这并不是说白色不好，只是提醒我们：有些经验听起来很有道理，实际上并没有被认真检查过。',
+    text: '按照经验，很多人跑完步喜欢马上坐下来，觉得这样恢复得快。但有研究发现，跑完以后再慢慢走上五到十分钟，心跳降得更稳，第二天腿也不那么酸。这并不是说坐下有多大害处，只是提醒我们：让身体当时觉得舒服的做法，不一定就是对身体最好的做法。',
+    q: '根据这段话，跑完步以后：',
+    opts: ['应该马上坐下', '最好慢走几分钟', '不能马上喝水', '要立刻洗个澡'],
+    ans: 1,
+    vi: 'Nghiên cứu cho thấy đi bộ chậm 5–10 phút sau khi chạy thì nhịp tim hạ ổn hơn, hôm sau chân đỡ mỏi.',
+    expl: '“马上坐下” chính là cái kinh nghiệm đoạn văn bác lại — đúng chữ trong bài nhưng ngược chiều.',
+  },
+  {
+    text: '说明书里的字为什么总写得那么死板？因为它不是给人欣赏的，是给人照着做的。一句话要是有两种理解，用的人就可能装错一次；写得再漂亮，出了错也等于白写。所以写说明书的人第一件事不是想怎么好看，而是把每一句都读一遍，看它会不会被理解成别的意思。',
+    q: '写说明书最重要的是：',
+    opts: ['写得好看', '不能有两种理解', '越短越好', '用词要高级'],
+    ans: 1,
+    vi: 'Câu chữ trong hướng dẫn sử dụng phải không thể hiểu thành hai nghĩa, vì người ta làm theo chứ không thưởng thức.',
+  },
+  {
+    text: '学外语要不要先把语法学清楚，一直有两种说法。有人不弄明白规则就不敢开口，也有人先说了大半年，回头再看语法，才发现原来是这么回事。这两条路都有人走得通。所以真正的问题不在先后，而在你是哪一种人：怕出错的人先学规则会更踏实，怕枯燥的人先开口才坚持得下来。',
+    q: '根据这段话，学外语：',
+    opts: ['必须先学好语法', '先开口的人学得更快', '两条路都走得通', '语法可以不用学'],
+    ans: 2,
+    vi: 'Có người không nắm rõ quy tắc thì không dám mở miệng, có người nói trước rồi mới quay lại xem ngữ pháp — cả hai đường đều có người đi tới.',
+    expl: '“先开口的人学得更快” — đoạn không hề so nhanh chậm, chỉ nói cả hai đường đều đi được.',
+  },
+  {
+    text: '很多人一收到消息就想马上回，好像晚一分钟就是不礼貌。实际上，急着发出去的那句话，往往正是最没想清楚的一句。真要紧的事，对方等你十分钟不会出问题；不要紧的事，本来也不值得你停下手里的活儿。把“马上回”换成“想好了再回”，一天下来会安静很多。',
+    q: '作者认为收到消息：',
+    opts: ['必须马上回', '想清楚再回也不晚', '最好不要回', '只回重要的人'],
+    ans: 1,
+    vi: 'Câu trả lời vội thường là câu chưa nghĩ kỹ; việc quan trọng thì đợi mười phút không sao.',
+  },
+  {
+    text: '关于背生词，有两点比“背了多少个”更要紧。第一，别只记意思，最好连着一整句话一起记——一个词单独放在脑子里，真要用的时候想不起来该放在哪儿。第二，宁可每天十个、天天不断，也别留到周末一口气背两百个。忘记这件事是按天算的，不是按次算的。',
+    q: '作者认为背生词应该：',
+    opts: ['一次背得越多越好', '连着句子一起记', '只记中文意思', '留到周末集中背'],
+    ans: 1,
+    vi: 'Ý thứ nhất: đừng chỉ nhớ nghĩa, hãy nhớ cả câu — từ đứng một mình thì lúc dùng không biết đặt vào đâu.',
+  },
+  {
+    text: '',
+    sameAudio: true,
     q: '根据这段话，可以知道：',
-    opts: ['红色比白色好看', '白色对皮肤最好', '经验有时候不可靠', '夏天不应该出门'],
-    ans: 2,
-    vi: 'Nghiên cứu cho thấy màu đỏ chắn tia hại tốt hơn; ý đoạn là kinh nghiệm chung đôi khi chưa được kiểm chứng.',
-    expl: 'Bẫy ở đây là 最 — đoạn chỉ nói 红色 hơn ở một điểm, không nói 白色 tốt nhất hay tệ.',
-  },
-  {
-    text: '新闻里出现的数字，目的是把事情说清楚，所以它们必须准确。少写一个零和多写一个零，读者得到的印象完全不同。正因为这样，做新闻的人对数字往往比对句子更小心：句子写得不好看，别人只是不爱读；数字写错了，那就是把错的东西交给了相信你的人。',
-    q: '新闻中的数字：',
-    opts: ['不容易理解', '可以随便使用', '比句子更好写', '不能出错'],
-    ans: 3,
-    vi: 'Số liệu trong tin tức phải chính xác; viết sai là đưa cái sai cho người tin mình. → Không được sai.',
-  },
-  {
-    text: '人们一般认为，成年人每天应该睡够七到八个小时。但也有人只睡五六个小时，白天照样有精神，工作也不受影响。所以睡多久并没有一个所有人都适合的数字，真正值得注意的不是时间的长短，而是第二天醒来以后的状态。',
-    q: '根据这段话，睡觉时间：',
-    opts: ['越长越好', '越短越好', '因人而不同', '必须是八小时'],
-    ans: 2,
-    vi: 'Không có con số hợp với tất cả mọi người; cái đáng chú ý là trạng thái sau khi thức dậy. → Tuỳ từng người.',
-    expl: 'Hai lựa chọn 越长越好 / 越短越好 đều là nói quá — đoạn bác cả hai.',
-  },
-  {
-    text: '我朋友在公交车上丢过好几次钱包。有一天他想了个办法：出门前把几张废纸折好放进一个信封，专门放在最容易被拿走的那个口袋里。那天下午，信封果然不见了。第二天他刚上车不久，就发现口袋里又有东西——正是昨天那个信封，上面还写着一行字：“请别开这种玩笑，谢谢配合。”',
-    q: '根据这段话，可以知道：',
-    opts: ['朋友找回了钱包', '小偷被骗了一次', '信封里装着钱', '朋友认识那个小偷'],
-    ans: 1,
-    vi: 'Người bạn nhét giấy vụn vào phong bì làm mồi; tên trộm lấy xong hôm sau trả lại kèm mấy chữ. → Tên trộm bị lừa một vố.',
-  },
-  {
-    text: '有些人喜欢不停地换工作，他们总觉得下一份一定比现在这份好。实际上，适应一个新环境、弄懂它的规矩，一般需要一年左右。不到一年就走，等于每次都只经历了最难受的那一段，把最有意思的部分留给了别人。当然这不是说不能换，而是说换之前最好先问问自己：我到底是在找更好的工作，还是在躲现在的困难。',
-    q: '有些人经常换工作是因为他们：',
-    opts: ['能力不够', '总觉得下一份更好', '身体不好', '喜欢认识新同事'],
-    ans: 1,
-    vi: 'Họ luôn cho rằng công việc tiếp theo nhất định tốt hơn cái hiện tại.',
-  },
-  {
-    text: '',
-    sameAudio: true,
-    q: '作者认为换工作之前应该：',
-    opts: ['先找好下一家', '问清楚工资', '想清楚自己在躲什么', '至少工作五年'],
-    ans: 2,
-    vi: 'Tác giả khuyên trước khi nhảy việc hãy tự hỏi: mình đang tìm việc tốt hơn hay đang trốn cái khó hiện tại.',
-  },
-  {
-    text: '关于读书，有两点值得注意。第一，要养成愿意读下去的习惯，读得多了，看事情的角度自然就多了。第二，也是更容易被忽略的一点：不要把书上写的全部当成对的。作者也会有自己的位置和限制，他说的不一定适合你的情况。否则读得越多，反而越不会自己想问题。',
-    q: '根据这段话，读书要：',
-    opts: ['完全相信作者', '多做读书笔记', '有自己的看法', '读得越快越好'],
-    ans: 2,
-    vi: 'Ý thứ hai: đừng coi mọi thứ trong sách là đúng, nếu không đọc càng nhiều càng không tự nghĩ được. → Phải có chính kiến.',
-  },
-  {
-    text: '',
-    sameAudio: true,
-    q: '根据这段话，阅读可以让人：',
-    opts: ['很快变富', '看问题的角度变多', '更有耐心', '不再需要老师'],
-    ans: 1,
-    vi: 'Ý thứ nhất: đọc nhiều thì góc nhìn tự nhiên nhiều hơn.',
-  },
-  {
-    text: '一种奶茶能受欢迎，光好喝是不够的。现在卖得最好的那几种，往往在颜色上也下了功夫：杯子是透明的，一层一层看得清清楚楚，年轻人拿在手里就想拍一张照片发出去。对做生意的人来说，这等于顾客替你做了广告。所以有人说，这几年的饮料，一半是卖给嘴的，一半是卖给眼睛的。',
-    q: '根据这段话，那几种奶茶卖得好是因为：',
-    opts: ['价格特别便宜', '味道和样子都讲究', '只在网上卖', '广告花了很多钱'],
-    ans: 1,
-    vi: 'Không chỉ ngon mà còn chú trọng màu sắc, ly trong suốt để chụp ảnh. → Cả vị lẫn hình thức.',
-    expl: '广告花了很多钱 ngược với ý đoạn: chính khách hàng làm quảng cáo hộ.',
-  },
-  {
-    text: '',
-    sameAudio: true,
-    q: '“一半是卖给眼睛的”是什么意思？',
-    opts: ['看起来好看也很重要', '眼睛比嘴更重要', '奶茶对眼睛好', '只能看不能喝'],
+    opts: ['每天坚持比一次突击好', '生词不需要复习', '背得快的人记得牢', '应该先学完语法'],
     ans: 0,
-    vi: 'Câu đó nói: trông đẹp mắt cũng là một nửa lý do bán được.',
+    vi: 'Ý thứ hai: thà mỗi ngày mười từ đều đặn còn hơn dồn hai trăm từ vào cuối tuần — quên tính theo ngày, không theo lần.',
   },
   {
-    text: '学校旁边那家小书店开了二十多年。老板不认识几个作家，却记得住常来的每一个人喜欢什么。有学生要考试了，他会从柜台下面拿出一本旧参考书说“这个先拿去用”。后来网上买书越来越方便，店里的人少了一半，但那些毕业多年的人回来，还是会专门绕过去看一眼。老板说，卖书这件事，他早就不指望赚钱了，只是习惯了每天开门。',
+    text: '去年冬天的一个下午，我在地铁口等雨停，旁边一位老人问我要去哪儿。我说就前面两站路。他把自己的伞递过来，说他在这儿等儿子，一会儿就上车，用不着。我问该怎么还给他，他摆摆手说：“下次你也这么给别人就行。”那把伞我用了一个冬天，后来在一个下雨天，交给了一个抱着孩子的姑娘。',
+    q: '老人为什么把伞给“我”？',
+    opts: ['他要回家了', '他在等人，用不着伞', '他本来就认识“我”', '他想把伞卖掉'],
+    ans: 1,
+    vi: 'Ông cụ đợi con ở đó, lát nữa lên xe nên không cần dù.',
+  },
+  {
+    text: '',
+    sameAudio: true,
+    q: '最后那把伞：',
+    opts: ['还给了老人', '被“我”弄丢了', '给了另一个人', '一直放在家里'],
+    ans: 2,
+    vi: 'Một hôm mưa, "tôi" đưa cây dù cho một cô gái đang bế con — đúng điều ông cụ dặn.',
+  },
+  {
+    text: '现在很多饭馆的菜单上，每道菜都配一张照片。有人以为这只是给看不懂菜名的人准备的，其实还有更要紧的一层：照片让人更快做决定。菜单上字一多，人就容易翻来翻去；有了图，十秒钟就能指一个。对饭馆来说，客人坐下到点完菜的时间短了，一张桌子一天就能多接待几拨人。',
+    q: '菜单上放照片主要是为了：',
+    opts: ['让菜看起来更贵', '帮客人快点做决定', '节省纸张', '吸引小孩子'],
+    ans: 1,
+    vi: 'Có ảnh thì mười giây là chỉ được một món, không lật tới lật lui.',
+    expl: '“让菜看起来更贵” là chuyện đoạn không nói — mồi nhử nghe hợp lý nhưng không có trong bài.',
+  },
+  {
+    text: '',
+    sameAudio: true,
+    q: '照片对饭馆的好处是：',
+    opts: ['能多卖贵的菜', '一张桌子能接待更多客人', '不用请服务员', '菜能做得更快'],
+    ans: 1,
+    vi: 'Thời gian từ lúc ngồi xuống tới lúc gọi xong món ngắn lại, một bàn mỗi ngày tiếp được nhiều lượt hơn.',
+  },
+  {
+    text: '学校旁边那家小书店开了二十多年。老板说不出几个作家的名字，却记得住常来的每一个人喜欢什么。有学生要考试了，他会从柜台下面摸出一本旧参考书说“这个先拿去用”。后来网上买书越来越方便，店里的人少了一半，可那些毕业多年的人回来，还是会专门绕过去看一眼。老板说，卖书这件事他早就不指望赚钱了，只是习惯了每天开门。',
     q: '关于那家书店，可以知道什么？',
     opts: ['老板很会做生意', '老板记得客人的喜好', '书店已经关门了', '书店只卖参考书'],
     ans: 1,
-    vi: 'Ông chủ không biết mấy nhà văn nhưng nhớ từng khách quen thích gì.',
+    vi: 'Ông chủ không kể nổi tên mấy nhà văn nhưng nhớ từng khách quen thích gì.',
   },
 ];
 
@@ -591,44 +601,48 @@ export const READ3_B2: QaItem[] = [
  * 书写第一部分 — 完成句子.
  *
  * Đây là phần đợt này nhắm chính: bảy khung của bộ 2 mà kho cũ gần như không có ở dạng
- * xếp câu. Không bao giờ có mảnh thừa — mảnh nào cho là phải dùng hết, đúng một lần.
- * `accept[0]` là đáp án mẫu và bằng đúng các mảnh ghép lại.
+ * xếp câu. Bản đầu của tệp này dùng y nguyên bộ mảnh của câu 86–92 đề gốc — đã thay hết
+ * tình huống, giữ lại đúng khung.
+ *
+ * Không bao giờ có mảnh thừa: mảnh nào cho là phải dùng hết, đúng một lần. `accept[0]`
+ * là đáp án mẫu và bằng đúng các mảnh ghép lại; những mục sau là cách viết khác cũng
+ * chấp nhận (người học GÕ câu trả lời, nên thêm 了 hay đổi vị trí đều có thể xảy ra).
  */
 export const WRITE1_B2: SentItem[] = [
   {
-    words: ['调查', '你没有', '一下', '难道', '先'],
-    accept: ['难道你没有先调查一下？', '你难道没有先调查一下？'],
-    vi: 'Lẽ nào anh không điều tra trước một chút sao? (难道 mở câu phản vấn, 先 đứng trước động từ)',
+    words: ['难道', '这件事', '你', '一点儿也', '不知道'],
+    accept: ['难道这件事你一点儿也不知道？', '这件事难道你一点儿也不知道？'],
+    vi: 'Lẽ nào chuyện này anh không hay biết gì sao? (难道 mở câu phản vấn, đứng đầu câu hoặc ngay sau chủ đề)',
   },
   {
-    words: ['通知', '下午两点开会', '校长让我', '大家'],
-    accept: ['校长让我通知大家下午两点开会。'],
-    vi: 'Hiệu trưởng bảo tôi báo mọi người hai giờ chiều họp. (兼语句: 让 + người + động từ, 通知 lại mang tân ngữ riêng)',
+    words: ['通知', '客户', '老板让小李', '会议改到下周'],
+    accept: ['老板让小李通知客户会议改到下周。'],
+    vi: 'Sếp bảo Tiểu Lý báo khách hàng cuộc họp dời sang tuần sau. (兼语句: 让 + người + động từ, 通知 lại mang tân ngữ riêng)',
   },
   {
-    words: ['我们工作的', '对', '理解和支持', '非常感谢您'],
-    accept: ['非常感谢您对我们工作的理解和支持。'],
-    vi: 'Rất cảm ơn ngài đã thấu hiểu và ủng hộ công việc của chúng tôi. (对…的 + danh từ: cả cụm làm tân ngữ)',
+    words: ['这次活动的', '对', '关心和帮助', '感谢大家'],
+    accept: ['感谢大家对这次活动的关心和帮助。'],
+    vi: 'Cảm ơn mọi người đã quan tâm và giúp đỡ cho hoạt động lần này. (对…的 + danh từ: cả cụm làm tân ngữ)',
   },
   {
-    words: ['通过了', '我的', '大使馆', '通知我', '申请', '留学'],
-    accept: ['大使馆通知我我的留学申请通过了。', '大使馆通知我，我的留学申请通过了。'],
-    vi: 'Đại sứ quán báo tôi đơn du học của tôi đã được duyệt. (兼语句 + mệnh đề làm tân ngữ)',
+    words: ['取消了', '下个月的', '公司', '通知我', '出差'],
+    accept: ['公司通知我下个月的出差取消了。'],
+    vi: 'Công ty báo tôi chuyến công tác tháng sau đã bị huỷ. (兼语句 + cả mệnh đề làm tân ngữ)',
   },
   {
-    words: ['比前年', '今年的', '毕业生数量', '多了一倍'],
-    accept: ['今年的毕业生数量比前年多了一倍。'],
-    vi: 'Số sinh viên tốt nghiệp năm nay gấp đôi năm kia. (比 + đối tượng + tính từ + 了 + bội số — bội số đứng SAU)',
+    words: ['比去年', '这家店', '今年的顾客', '多了一倍'],
+    accept: ['这家店今年的顾客比去年多了一倍。'],
+    vi: 'Khách của quán này năm nay gấp đôi năm ngoái. (比 + đối tượng + tính từ + 了 + bội số — bội số đứng SAU)',
   },
   {
-    words: ['餐厅的', '对', '我们', '很热情', '服务员'],
-    accept: ['餐厅的服务员对我们很热情。'],
-    vi: 'Nhân viên nhà hàng rất nhiệt tình với chúng tôi. (对 + người + tính từ, không dùng 跟)',
+    words: ['对', '那位', '留学生', '特别热情', '老师'],
+    accept: ['那位老师对留学生特别热情。'],
+    vi: 'Thầy giáo đó rất nhiệt tình với lưu học sinh. (对 + người + tính từ, không dùng 跟)',
   },
   {
-    words: ['提供', '给我们', '很好', '的', '学校', '条件'],
-    accept: ['学校给我们提供很好的条件。', '学校给我们提供了很好的条件。'],
-    vi: 'Trường cấp cho chúng tôi điều kiện rất tốt. (给 + người đứng TRƯỚC động từ 提供)',
+    words: ['提供', '给客人', '免费的', '这家饭馆', '茶水'],
+    accept: ['这家饭馆给客人提供免费的茶水。', '这家饭馆给客人提供了免费的茶水。'],
+    vi: 'Quán này phục vụ khách nước trà miễn phí. (给 + người đứng TRƯỚC động từ 提供)',
   },
   {
     words: ['引起', '这件小事', '竟然', '这么大的', '误会'],
