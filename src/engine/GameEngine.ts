@@ -5,6 +5,7 @@ import { DICT_PASS, diffChars } from './diff';
 import { hanOnly } from './segment';
 import { arcadeForKey, arcadeXp, saveBest, type ArcadeId } from './arcade';
 import { gameForKey } from './games';
+import type { PartId } from './exam';
 import { AWARDS, awardStates, kindRightOf, studyDays, type AwardCtx, type AwardState } from './awards';
 import {
   CHEST_COST,
@@ -217,6 +218,22 @@ export class GameEngine {
 
   openExam = (): void => {
     this.hushAll();
+    this.setState({ mode: 'exam' });
+  };
+
+  /**
+   * Phần muốn mở thẳng khi vào màn Thi thử. `Exam.tsx` đọc trong hàm khởi tạo state rồi
+   * xoá trong một effect — KHÔNG xoá ngay lúc đọc, vì StrictMode gọi hàm khởi tạo hai
+   * lần và lần thứ hai sẽ thấy null.
+   *
+   * Có cổng này vì một đợt nội dung trộn vào kho đề là đợt người dùng không nhìn thấy:
+   * họ đứng ở trang chủ, không có nút nào mới, nên với họ là chưa có gì.
+   */
+  pendingPart: PartId | null = null;
+
+  openPart = (part: PartId): void => {
+    this.hushAll();
+    this.pendingPart = part;
     this.setState({ mode: 'exam' });
   };
 

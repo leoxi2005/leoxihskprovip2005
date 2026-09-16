@@ -276,6 +276,96 @@ export function Home() {
           </p>
         </section>
 
+        {/*
+          Đợt "bộ 2" (16/09). Nội dung trộn thẳng vào kho đề nên trên màn hình không có gì
+          mới — và một đợt người dùng không nhìn thấy thì với họ là chưa có gì. Khối này
+          tồn tại để đưa thẳng vào đúng phần chứa nội dung mới, không bắt đi tìm.
+        */}
+        <section
+          style={{
+            textAlign: 'left',
+            margin: '18px 0 0',
+            background: C.card,
+            border: `3px solid ${C.ink}`,
+            borderLeft: `10px solid #2f6f4f`,
+            borderRadius: 16,
+            padding: '14px 16px',
+            boxShadow: shadow(4),
+          }}
+        >
+          <div style={{ fontSize: 17, fontWeight: 800, marginBottom: 4 }}>
+            🧭 Đợt bộ 2 — bảy khung câu kho còn thiếu
+          </div>
+          <p style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 600, color: C.body, lineHeight: 1.55 }}>
+            Đo đề thi thử bộ 2 rồi so với kho: từ vựng đã phủ 79/93 từ, chỗ thiếu là{' '}
+            <b>khung câu</b> — 难道…？ · 让 + người + 通知 · 对…的理解和支持 · 给…提供…条件 ·
+            比…多了一倍 · 竟然 · và kiểu đoạn <i>按照经验…但研究证明</i>. Đã viết mới 10 câu
+            判断对错 · 15 hội thoại ngắn · 6 hội thoại dài · 2 bảng 选词填空 · 10 câu 排列顺序 ·
+            12 câu đọc hiểu · 10 câu 完成句子. Bảy khung nằm dày nhất ở 书写第一部分.
+          </p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button
+              onClick={() => engine.openPart('书写第一部分')}
+              className="lift lift-4 lift-static"
+              style={{
+                background: '#2f6f4f',
+                color: '#fff',
+                border: `3px solid ${C.ink}`,
+                borderRadius: 14,
+                padding: '10px 20px',
+                fontSize: 15,
+                fontWeight: 800,
+                cursor: 'pointer',
+                fontFamily: F.ui,
+                boxShadow: shadow(4),
+              }}
+            >
+              ✍️ Luyện 书写第一部分 (bảy khung mới) →
+            </button>
+            <button
+              onClick={() => engine.openPart('阅读第二部分')}
+              className="lift lift-4 lift-static"
+              style={{
+                background: C.soft,
+                color: C.ink,
+                border: `3px solid ${C.ink}`,
+                borderRadius: 14,
+                padding: '10px 20px',
+                fontSize: 15,
+                fontWeight: 800,
+                cursor: 'pointer',
+                fontFamily: F.ui,
+                boxShadow: shadow(4),
+              }}
+            >
+              📖 Luyện 排列顺序 →
+            </button>
+            <button
+              onClick={() => engine.openPart('听力第二部分')}
+              className="lift lift-4 lift-static"
+              style={{
+                background: C.soft,
+                color: C.ink,
+                border: `3px solid ${C.ink}`,
+                borderRadius: 14,
+                padding: '10px 20px',
+                fontSize: 15,
+                fontWeight: 800,
+                cursor: 'pointer',
+                fontFamily: F.ui,
+                boxShadow: shadow(4),
+              }}
+            >
+              🎧 Luyện 听力第二部分 →
+            </button>
+          </div>
+          <p style={{ margin: '9px 0 0', fontSize: 12, fontWeight: 600, color: C.muted2, lineHeight: 1.5 }}>
+            Ba nút trên mở thẳng vào phần luyện, không phải đi qua trang chọn. Nội dung mới
+            cũng nằm trong đề thi thử 100 câu — mỗi lần bấm “Bắt đầu thi” là rút một đề khác
+            khỏi kho, nên gặp lại là chuyện tự nhiên.
+          </p>
+        </section>
+
         <section
           style={{
             textAlign: 'left',

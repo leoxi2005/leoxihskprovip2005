@@ -96,7 +96,14 @@ export function Exam() {
    * SÁCH. Bản đầu chôn nó sau trang "Cách làm" — người dùng đứng ngay ở màn hình này
    * và không thấy nó tồn tại, tức nó coi như không có.
    */
-  const [drill, setDrill] = useState<{ id: PartId; at: 'guide' | 'prep' } | null>(null);
+  const [drill, setDrill] = useState<{ id: PartId; at: 'guide' | 'prep' } | null>(() =>
+    engine.pendingPart ? { id: engine.pendingPart, at: 'guide' } : null,
+  );
+  // Xoá cờ ở đây chứ không trong hàm khởi tạo trên: StrictMode chạy hàm khởi tạo hai lần,
+  // xoá ngay lúc đọc thì lần thứ hai thấy null và màn hình mở ra trang chọn phần.
+  useEffect(() => {
+    engine.pendingPart = null;
+  }, [engine]);
   /** Set while working through a real past paper's own recording. */
   const [real, setReal] = useState(false);
   /** Questions whose recording has already played — the paper plays each one once. */
