@@ -13,6 +13,17 @@ import {
   READ2_EXTRA2,
   READ3_EXTRA2,
 } from './exam2.ts';
+// Đợt "bộ 2": xem `exam3.ts` — viết sau khi đo đề thi thử bộ 2, nhắm vào bảy khung câu
+// mà kho cũ gần như không có.
+import {
+  LISTEN1_B2,
+  LISTEN2_B2,
+  LISTEN3_B2,
+  READ1_B2,
+  READ2_B2,
+  READ3_B2,
+  WRITE1_B2,
+} from './exam3.ts';
 
 /**
  * Mock paper 1 — HSK（四级）模拟试卷.
@@ -93,6 +104,7 @@ export const EXAM_1: ExamPaper = {
       vi: 'Đừng lo, còn hai mươi phút nữa mới soát vé, mình đi mua hai chai nước rồi thong thả qua vẫn kịp. → Thời gian vẫn còn kịp. (ĐÚNG)',
     },
       ...LISTEN1_EXTRA,
+    ...LISTEN1_B2,
   ],
 
   // 听力第二部分：短对话 + 一个问题 (15)
@@ -203,6 +215,7 @@ export const EXAM_1: ExamPaper = {
       vi: 'Nam: Cái thùng này nặng quá, một mình anh khiêng không nổi. / Nữ: Để em phụ anh khiêng. → Cô ấy giúp khiêng đồ.',
     },
       ...LISTEN2_EXTRA,
+    ...LISTEN2_B2,
   ],
 
   // 听力第三部分：长对话 / 短文，每段问一到两个问题 (20)
@@ -409,6 +422,7 @@ export const EXAM_1: ExamPaper = {
       vi: 'Anh ấy cho rằng nấu ăn giống như học tập.',
     },
       ...LISTEN3_EXTRA,
+    ...LISTEN3_B2,
   ],
   // 阅读第一部分：选词填空，六选五 (10)
   read1: [
@@ -451,6 +465,7 @@ export const EXAM_1: ExamPaper = {
     ...READ1_EXTRA,
       ...READ1_EXTRA2,
     ...WEAK1_FILL,
+    ...READ1_B2,
   ],
 
   // 阅读第二部分：排列顺序 (10)
@@ -508,6 +523,7 @@ export const EXAM_1: ExamPaper = {
     ...READ2_EXTRA,
       ...READ2_EXTRA2,
     ...WEAK1_ORDER,
+    ...READ2_B2,
   ],
 
   // 阅读第三部分：短文 + 一到两个问题 (20)
@@ -664,10 +680,11 @@ export const EXAM_1: ExamPaper = {
     },
       ...READ3_EXTRA2,
     ...WEAK1_READ3,
+    ...READ3_B2,
   ],
 
   // 书写第一部分：完成句子 — kho 51 câu, mỗi đề rút 10 (xem write1.ts)
-  write1: WRITE1_BANK,
+  write1: [...WRITE1_BANK, ...WRITE1_B2],
 
   // 书写第二部分：看图写句子 (5)
   write2: [
