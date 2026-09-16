@@ -32,6 +32,8 @@ export const KEYS = {
   arcade: 'hskq_arcade',
   /** Hạng đấu của trò Đấu Chữ. */
   rank: 'hskq_rank',
+  /** Độ dài buổi Luyện từng phần, tính theo bội số của một đề. */
+  drillLen: 'hskq_drill_len',
 } as const;
 
 /** localStorage can throw (private mode, quota) — progress is best-effort. */

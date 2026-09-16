@@ -518,6 +518,69 @@ export function drawPaper(bank: ExamPaper): ExamPaper {
   };
 }
 
+/** Chỗ mỗi phần nằm trong `ExamPaper` — dùng để rút riêng một phần. */
+const PART_FIELD: Record<PartId, keyof ExamPaper> = {
+  听力第一部分: 'listen1',
+  听力第二部分: 'listen2',
+  听力第三部分: 'listen3',
+  阅读第一部分: 'read1',
+  阅读第二部分: 'read2',
+  阅读第三部分: 'read3',
+  书写第一部分: 'write1',
+  书写第二部分: 'write2',
+};
+
+/**
+ * Một buổi luyện DÀI HƠN một đề: rút thêm lượt cho tới khi đủ `want` câu.
+ *
+ * Luyện từng phần vốn lấy đúng số câu của một đề (mười câu 完成句子, hai mươi câu đọc
+ * hiểu) vì đó là liều đúng để đo "tôi làm phần này được bao nhiêu". Nhưng để LUYỆN thì
+ * mười câu là quá ngắn — hết đúng lúc vừa vào guồng.
+ *
+ * Cách kéo dài duy nhất an toàn là rút thêm lượt, không phải bốc thêm câu lẻ: kho được
+ * soạn theo CỤM (阅读第一部分 năm câu chung một bảng sáu từ; 听力第三部分 và 阅读第三部分
+ * hai câu chung một đoạn) và `drawPaper` là chỗ duy nhất biết luật đó. Mỗi lượt là một
+ * đề hợp lệ, nối lại thì vẫn hợp lệ.
+ *
+ * Trùng thì bỏ: cùng một mục ra ở hai lượt là hai lần trả lời một câu trong một buổi.
+ * Lọc theo danh tính đối tượng, và vì cụm luôn được rút trọn nên cả cụm cùng vào hoặc
+ * cùng bị bỏ — không bao giờ còn câu thứ hai đứng lẻ mất đoạn.
+ */
+export function drawPartPaper(bank: ExamPaper, part: PartId, want: number): ExamPaper {
+  const field = PART_FIELD[part];
+  const perPaper = countOf(part);
+  const qCount = (xs: readonly unknown[]): number =>
+    field === 'read1' ? (xs as FillGroup[]).reduce((n, g) => n + g.items.length, 0) : xs.length;
+
+  const seen = new Set<unknown>();
+  const out: unknown[] = [];
+  // Dừng khi đủ số câu HOẶC khi kho đã cạn — tám lượt liền không thêm được gì nữa thì
+  // không phải xui, mà là phần này chỉ có bấy nhiêu.
+  for (let stall = 0; stall < 8 && qCount(out) < Math.max(perPaper, want); ) {
+    const before = out.length;
+    for (const item of drawPaper(bank)[field] as readonly unknown[]) {
+      if (seen.has(item)) continue;
+      seen.add(item);
+      out.push(item);
+    }
+    stall = out.length === before ? stall + 1 : 0;
+  }
+  // Không cắt cho khớp đúng con số: cắt là có ngày cắt mất câu thứ hai của một đoạn,
+  // hoặc cắt cụt một bảng sáu từ. Thà dư một cụm, và màn hình in ra con số thật.
+  return {
+    ...bank,
+    listen1: [],
+    listen2: [],
+    listen3: [],
+    read1: [],
+    read2: [],
+    read3: [],
+    write1: [],
+    write2: [],
+    [field]: out,
+  } as ExamPaper;
+}
+
 // -- flattening -------------------------------------------------------------
 
 export type ExamQ =

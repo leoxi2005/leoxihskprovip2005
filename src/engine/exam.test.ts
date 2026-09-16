@@ -10,6 +10,7 @@ import {
   TOTAL_QUESTIONS,
   countOf,
   drawPaper,
+  drawPartPaper,
   flatten,
   isRight,
   partOfDay,
@@ -568,6 +569,62 @@ describe('part-by-part practice', () => {
   it('never goes out of range, whatever the countdown says', () => {
     [-9, 0, 1, 365].forEach((d) => {
       expect(PART_GUIDES.some((g) => g.id === partOfDay(d)), String(d)).toBe(true);
+    });
+  });
+
+  /**
+   * Buổi luyện dài hơn một đề.
+   *
+   * Kéo dài bằng cách rút thêm LƯỢT, không phải bốc thêm câu lẻ — nếu không thì mọi bẫy
+   * mà `drawPaper` đã gỡ (bảng sáu từ bị cắt cụt, câu thứ hai tách khỏi đoạn của nó) quay
+   * lại ngay, và lần này ở chế độ người học dùng nhiều nhất.
+   */
+  describe('drawPartPaper', () => {
+    it('gives exactly one paper worth at ×1, and more when asked for more', () => {
+      PART_GUIDES.forEach((g) => {
+        const one = partQuestions(flatten(drawPartPaper(EXAM_1, g.id, countOf(g.id))), g.id);
+        expect(one.length, `${g.id} ×1`).toBe(countOf(g.id));
+        const many = partQuestions(flatten(drawPartPaper(EXAM_1, g.id, countOf(g.id) * 3)), g.id);
+        expect(many.length, `${g.id} ×3`).toBeGreaterThan(one.length);
+      });
+    });
+
+    it('never asks the same question twice in one session', () => {
+      PART_GUIDES.forEach((g) => {
+        const qs = partQuestions(flatten(drawPartPaper(EXAM_1, g.id, countOf(g.id) * 5)), g.id);
+        const keys = qs.map(({ q }) =>
+          q.kind === 'fill' ? `${EXAM_1.read1.indexOf(q.group)}#${q.at}` : JSON.stringify(q.item),
+        );
+        expect(new Set(keys).size, `${g.id} có câu lặp`).toBe(keys.length);
+      });
+    });
+
+    it('keeps clusters whole — no orphaned second question, no half a word bank', () => {
+      PART_GUIDES.forEach((g) => {
+        const qs = partQuestions(flatten(drawPartPaper(EXAM_1, g.id, countOf(g.id) * 5)), g.id);
+        qs.forEach(({ q }, k) => {
+          // Câu thứ hai của một cặp phải đứng ngay sau câu mang đoạn của nó.
+          if (q.kind === 'qa' && q.item.sameAudio) {
+            const prev = qs[k - 1]?.q;
+            expect(prev && prev.kind === 'qa', `${g.id} câu ${k} mồ côi`).toBe(true);
+          }
+          // Và một bảng sáu từ phải ra đủ cả năm ô, đúng thứ tự.
+          if (q.kind === 'fill') {
+            expect(q.at, `${g.id} bảng từ hụt ô`).toBe(
+              qs.slice(0, k).filter((x) => x.q.kind === 'fill' && x.q.group === q.group).length,
+            );
+          }
+        });
+      });
+    });
+
+    it('stops at the size of the bank instead of looping for ever', () => {
+      PART_GUIDES.forEach((g) => {
+        const qs = partQuestions(flatten(drawPartPaper(EXAM_1, g.id, 9999)), g.id);
+        const whole = partQuestions(flatten(EXAM_1), g.id);
+        expect(qs.length, `${g.id} vượt cả kho`).toBeLessThanOrEqual(whole.length);
+        expect(qs.length, `${g.id} rút được quá ít`).toBeGreaterThanOrEqual(countOf(g.id));
+      });
     });
   });
 });

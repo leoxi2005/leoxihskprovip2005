@@ -3,7 +3,8 @@ import { EXAM_1 } from '../../data/exam1';
 import {
   audioFor,
   borrowsAudio,
-  drawPaper,
+  countOf,
+  drawPartPaper,
   flatten,
   guideFor,
   isAutoGraded,
@@ -105,7 +106,16 @@ export function PartDrill({
    * lấy ra một phần thì tốn thêm vài trăm phần tử, đổi lại là không có luật rút thứ
    * hai để lệch khỏi luật thứ nhất.
    */
-  const qs = useMemo(() => partQuestions(flatten(drawPaper(EXAM_1)), part), [part]);
+  /**
+   * Bội số so với một đề. Mười câu là liều đúng để ĐO ("phần này tôi được bao nhiêu"),
+   * nhưng để LUYỆN thì hết đúng lúc vừa vào guồng — nên độ dài để người học tự chọn, và
+   * nhớ lại lần sau.
+   */
+  const [mult, setMult] = useState<number>(() => load<number>(KEYS.drillLen, 2));
+  const qs = useMemo(
+    () => partQuestions(flatten(drawPartPaper(EXAM_1, part, countOf(part) * mult)), part),
+    [part, mult],
+  );
 
   const [phase, setPhase] = useState<Phase>(start);
   const [i, setI] = useState(0);
@@ -215,6 +225,34 @@ export function PartDrill({
           >
             💡 Chế độ luyện: chấm ngay từng câu, có giải thích, và {isListening ? 'ĐƯỢC nghe lại' : 'không bấm giờ'}.
             Đề thật thì không — nên khi thấy đã quen tay, hãy làm cả đề để tập điều kiện thật.
+          </div>
+
+          <div style={{ margin: '0 0 12px' }}>
+            <div style={{ ...heading, margin: '0 0 8px' }}>Độ dài buổi luyện</div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {[1, 2, 3, 5].map((m) => (
+                <button
+                  key={m}
+                  onClick={() => {
+                    setMult(m);
+                    save(KEYS.drillLen, m);
+                  }}
+                  style={{
+                    background: m === mult ? C.ink : C.panel,
+                    color: m === mult ? '#fff' : C.ink,
+                    border: `2px solid ${C.ink}`,
+                    borderRadius: 999,
+                    padding: '7px 16px',
+                    fontSize: 14,
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    fontFamily: F.ui,
+                  }}
+                >
+                  {m === 1 ? `${countOf(part)} câu · đúng một đề` : `×${m}`}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
